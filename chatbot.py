@@ -8,23 +8,24 @@ load_dotenv()
 client = openai.Client()
 
 def chatbot(openai_api_key):
-    st.header("Chatbot Interface")
-    
-    if 'messages' not in st.session_state:
-        st.session_state['messages'] = []
 
-    user_input = st.text_input("You: ", key="input")
+    if "messages" not in st.session_state:
+        st.session_state["messages"] = [{"role": "assistant", "content": "Hej, tu sam! Pitaj me što god želiš 😎"}]
 
-    if user_input:
-        st.session_state['messages'].append({"role": "user", "content": user_input})
-        response = get_chatbot_response(user_input, openai_api_key)
-        st.session_state['messages'].append({"role": "bot", "content": response})
+    for msg in st.session_state.messages:
+        st.chat_message(msg["role"]).write(msg["content"])
 
-    for message in st.session_state['messages']:
-        if message['role'] == 'user':
-            st.write(f"You: {message['content']}")
-        else:
-            st.write(f"Bot: {message['content']}")
+    if prompt := st.chat_input("Postavi mi pitanje ovdje..."):
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        st.chat_message("user").write(prompt)
+        try:
+            answer = get_chatbot_response(prompt, openai_api_key)
+            if answer:
+                st.session_state.messages.append({"role": "assistant", "content": answer})
+                st.chat_message("assistant").write(answer)
+        except Exception as e:
+            st.error(f"Error: {e}")
+            return
 
 def get_chatbot_response(user_input, openai_api_key):
     openai.api_key = openai_api_key

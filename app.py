@@ -12,8 +12,6 @@ st.set_page_config(
 
 st.title('🤖🎓EduBot')
 
-"st/session_state_object:", st.session_state
-
 config = load_config()
 authenticator = get_authenticator(config)
 
@@ -25,6 +23,7 @@ name, authentication_status, username = login(authenticator)
 if authentication_status:
     st.write(f'Hej *{name}*')
     st.write('Uspješna prijava. Huuray! 🎉')
+    st.write("""Tu sam da ti pomognem na tvojem studentskom putovanju na Fakultetu informatike. Mogu ti pomoći s pitanjima o studiju, predmetima, profesorima, projektima i još mnogo toga. Pitaj me što god želiš! 🤖🎓""")
 
     authenticator.logout("Odjava")
 
