@@ -27,13 +27,15 @@ def chatbot(openai_api_key):
             st.error(f"Error: {e}")
             return
 
-def get_chatbot_response(user_input, openai_api_key):
+SYSTEM_CONTENT = "You are a helpful assistant for students at the Faculty of Informatics."
+
+def get_chatbot_response(prompt, openai_api_key):
     openai.api_key = openai_api_key
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages= [
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": user_input}
+            {"role": "system", "content": SYSTEM_CONTENT},
+            {"role": "user", "content": prompt}
         ],
         temperature=0.1,
         max_tokens=150,

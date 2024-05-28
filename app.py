@@ -26,10 +26,12 @@ if authentication_status:
     st.write("""Tu sam da ti pomognem na tvojem studentskom putovanju na Fakultetu informatike. Mogu ti pomoći s pitanjima o studiju, predmetima, profesorima, projektima i još mnogo toga. Pitaj me što god želiš! 🤖🎓""")
 
     authenticator.logout("Odjava")
-
+    
     openai_api_key = get_openai_key()
 
     chatbot(openai_api_key)
+    
+    
 
 elif authentication_status is False:
     st.error('Korisničko ime/lozinka nisu ispravni. Molimo pokušajte ponovo.')
