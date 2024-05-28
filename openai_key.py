@@ -1,6 +1,6 @@
 import streamlit as st
-import os
 from dotenv import load_dotenv
+import os
 
 def get_openai_key():
     use_env_key = st.sidebar.checkbox("Učitaj OpenAI API ključ iz okruženja")
