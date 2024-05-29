@@ -1,9 +1,15 @@
 import streamlit as st
 import os
 
-from auth import load_config, get_authenticator, login, register_user
+from streamlit_google_auth import Authenticate
 from openai_key import get_openai_key
 from chatbot import chatbot
+from dotenv import load_dotenv
+
+#import logging
+#logging.basicConfig(level=logging.DEBUG)
+
+load_dotenv()
 
 st.set_page_config(
     page_title="EduBot",
@@ -12,41 +18,41 @@ st.set_page_config(
 
 st.title('🤖🎓EduBot')
 
-config = load_config()
-authenticator = get_authenticator(config)
 
-if 'view' not in st.session_state:
-    st.session_state['view'] = 'login'
+#"st.session_state", st.session_state
 
-name, authentication_status, username = login(authenticator)
+authenticator = Authenticate(
+    secret_credentials_path = 'google_credentials.json',
+    cookie_name='edubot_cookie',
+    cookie_key=os.getenv('COOKIE_KEY'),
+    cookie_expiry_days=30,
+    redirect_uri = 'http://localhost:8501',
+)
 
-if authentication_status:
-    st.write(f'Hej *{name}*')
-    st.write('Uspješna prijava. Huuray! 🎉')
-    st.write("""Tu sam da ti pomognem na tvojem studentskom putovanju na Fakultetu informatike. Mogu ti pomoći s pitanjima o studiju, predmetima, profesorima, projektima i još mnogo toga. Pitaj me što god želiš! 🤖🎓""")
+# Catch the login event
+authenticator.check_authentification()
 
-    authenticator.logout("Odjava")
-    
+
+if st.session_state['connected']:
+    #st.image(st.session_state['user_info'].get('picture'))
+    st.write(f"Hej, {st.session_state['user_info'].get('name')}👋🏻")
+    st.write("Uspješna prijava! Huuray! 🎉")
+    st.write("""Tu sam da ti olakšam tvoju studentsku avanturu na Fakultetu informatike. Mogu ti pomoći s pitanjima o studiju, predmetima, profesorima, projektima i još mnogo toga. Pitaj me što god želiš! 🤖🎓""")
+
+    if st.button('Odjava'):
+        authenticator.logout()
+
     openai_api_key = get_openai_key()
+    
 
     chatbot(openai_api_key)
     
     
-
-elif authentication_status is False:
-    st.error('Korisničko ime/lozinka nisu ispravni. Molimo pokušajte ponovo.')
-elif authentication_status is None:
-    st.warning('Molimo unesite korisničko ime i lozinku.')
-
-if not authentication_status:
-    if st.session_state['view'] == 'login':
-        if st.button("Prvi put si ovdje?"):
-            st.session_state['view'] = 'register'
-            st.rerun()
-    else:
-        if st.button("Povratak na prijavu"):
-            st.session_state['view'] = 'login'
-            st.rerun()
-
-if st.session_state['view'] == 'register':
-    register_user(authenticator, config)
+    
+else:
+    st.write("Bok👋🏻 Kako bi mogao koristiti EduBot, moraš se prijaviti.")
+    
+    authenticator.login(justify_content="start")
+    
+    
+    
