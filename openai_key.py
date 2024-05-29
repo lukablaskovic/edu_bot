@@ -24,8 +24,9 @@ def get_openai_key():
     else:
         openai_api_key = st.sidebar.text_input("OpenAI API ključ", type="password", value=st.session_state.openai_api_key)
         if not openai_api_key:
-            st.error("Greška: Nemam OpenAI API ključ.")
             st.write("> Ipak, prije nego nastaviš, molim unesi svoj OpenAI API ključ. Ako ga nemaš, možeš ga dobiti na [OpenAI](https://platform.openai.com/signup).")
+            st.error("Greška: Nemam OpenAI API ključ.")
+
             st.stop()
         else:
             st.session_state.openai_api_key = openai_api_key

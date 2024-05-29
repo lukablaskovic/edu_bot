@@ -41,7 +41,7 @@ def chatbot(openai_api_key: str):
             st.error(f"Error: {e}")
             return
 
-SYSTEM_CONTENT = "You are a helpful assistant for students at the Faculty of Informatics."
+SYSTEM_CONTENT = "You are a helpful assistant for students at the Faculty of Informatics. Respond to user queries and provide information about tools and resources available to students in Croatian language."
 
 def get_chatbot_response(prompt: str, openai_api_key: str):
     openai.api_key = openai_api_key

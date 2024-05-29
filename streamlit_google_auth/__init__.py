@@ -58,7 +58,6 @@ class Authenticate:
     def check_authentification(self):
         if not st.session_state['connected']:
             token = self.cookie_handler.get_cookie()
-            print("I HAVE TOKEN", token)
             if token:
                 user_info = {
                     'name': token['name'],

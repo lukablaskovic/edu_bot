@@ -39,16 +39,14 @@ if st.session_state['connected']:
     st.write("Uspješna prijava! Huuray! 🎉")
     st.write("""Tu sam da ti olakšam tvoju studentsku avanturu na Fakultetu informatike. Mogu ti pomoći s pitanjima o studiju, predmetima, profesorima, projektima i još mnogo toga. Pitaj me što god želiš! 🤖🎓""")
 
-    if st.button('Odjava'):
-        authenticator.logout()
-
     openai_api_key = get_openai_key()
-    
 
+    with st.sidebar:
+        if st.button('Odjava'):
+            authenticator.logout()
+        
     chatbot(openai_api_key)
-    
-    
-    
+
 else:
     st.write("Bok👋🏻 Kako bi mogao koristiti EduBot, moraš se prijaviti.")
     
