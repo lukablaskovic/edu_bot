@@ -5,6 +5,8 @@ from query_router import select_tool, get_tool_metadata_by_index
 from dotenv import load_dotenv
 from llama_index.core.tools import ToolMetadata
 
+
+
 load_dotenv()
 
 client = openai.Client()
@@ -21,9 +23,9 @@ def chatbot(openai_api_key: str):
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.chat_message("user").write(prompt)
         try:
-            with st.spinner("Odabirem alat..."):
+            with st.spinner("Odabirem alat..." if st.session_state.debug_mode else "..."):
                 selected_tool = select_tool(prompt)
-                if selected_tool:
+                if selected_tool and st.session_state.debug_mode == True:
                     if len(selected_tool) == 1:
                         tool_metadata = get_tool_metadata_by_index(selected_tool[0].index)
                         st.success(f"Odabrao sam alat: {tool_metadata.name}")
