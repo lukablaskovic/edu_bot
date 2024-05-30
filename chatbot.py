@@ -5,7 +5,8 @@ from query_router import select_tool, get_tool_metadata_by_index
 from dotenv import load_dotenv
 from llama_index.core.tools import ToolMetadata
 
-from modules.raptor import RAPTORRetriever
+from modules.raptor_module.velociraptor import process_or_load_raptor
+from llama_index.core import SimpleDirectoryReader
 
 
 load_dotenv()
@@ -38,11 +39,10 @@ def render_chatbot():
                     st.success(f"Odabrao sam sljedeće alate:\n{tools_list}")
 
                 if 'raptor' in tool_dict.values():
-                    raptor_retriever = RAPTORRetriever(documents_path='./uploaded_files/PJS1.pdf', db_path='./raptor_db', collection_name='raptor_collection')
-                    nodes = raptor_retriever.retrieve_nodes(prompt, mode="collapsed")
-                    raptor_content = ' '.join(node.text for node in nodes)
-                    print(raptor_content)
-                    answer = get_chatbot_response(raptor_content, prompt)  # Use RAPTOR's output as input to GPT
+                    
+                    RA = process_or_load_raptor(file_path="./uploaded_files")
+                    print("Tree constructed!")
+                    answer = RA.answer_question(question=prompt)
                 else:
                     answer = get_chatbot_response(prompt)
 

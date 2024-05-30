@@ -23,7 +23,7 @@ st.sidebar.write("Chatbot za personalizaciju nastavnih materijala")
 
 st.sidebar.write("Autor: [Luka Blašković](https://github.com/lukablaskovic)")
 
-st.sidebar.write("Repozitorij: [EduBot](https://github.com/lukablaskovic/edu_bot)")
+st.sidebar.write("Source kod dostupan [ovdje](https://github.com/lukablaskovic/edu_bot).")
 
 
 
