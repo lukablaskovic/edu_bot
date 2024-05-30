@@ -15,7 +15,7 @@ client = openai.Client()
 def render_chatbot():
     openai_api_key = st.session_state["openai_api_key"]
     if "messages" not in st.session_state:
-        st.session_state["messages"] = [{"role": "assistant", "content": "Hej, tu sam! Pitaj me što god želiš 😎"}]
+        st.session_state["messages"] = [{"role": "assistant", "content": "Hej, tu sam!"}]
 
     for msg in st.session_state.messages:
         st.chat_message(msg["role"]).write(msg["content"])
@@ -25,7 +25,7 @@ def render_chatbot():
         st.chat_message("user").write(prompt)
         
         if(st.button("Resetiraj razgovor")):
-            st.session_state["messages"] = [{"role": "assistant", "content": "Hej, tu sam! Pitaj me što god želiš 😎"}]
+            st.session_state["messages"] = [{"role": "assistant", "content": "Hej, tu sam!"}]
         
         try:
             with st.spinner("Odabirem alat..." if st.session_state.debug_mode else "..."):

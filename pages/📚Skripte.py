@@ -1,5 +1,6 @@
 import streamlit as st
 import streamlit_shadcn_ui as ui
+import pandas as pd
 
 import os
 
@@ -16,28 +17,29 @@ def save_uploaded_file(uploaded_file):
                 f.write(uploaded_file.getbuffer())
             st.success(f"Pohranjena datoteka: {uploaded_file.name}")
 
-def delete_files(selected_files):
-    for file in selected_files:
-        file_path = os.path.join(UPLOAD_DIR, file)
-        os.remove(file_path)
-        st.success(f"Deleted file: {file}")
-
-def list_uploaded_files(delete_mode=False):
+def list_uploaded_files():
     files = os.listdir(UPLOAD_DIR)
     if not files:
         st.write("Prazno! 😔")
     else:
-        selected_files = []
-        for file in files:
-            if delete_mode:
-                is_checked = st.checkbox(file, key=f"delete_{file}", value=True)
-            else:
-                is_checked = st.checkbox(file, key=f"normal_{file}", value=True)
-            if is_checked:
-                selected_files.append(file)
-        return selected_files
+        data = {
+            "Naziv datoteke": files,
+            "is_used": [True] * len(files) 
+        }
+        df = pd.DataFrame(data)
+        st.data_editor(data=df,
+                       num_rows="dynamic",
+                       column_config={
+            "Naziv datoteke": {},
+            "is_used": {"selector_type": "boolean"}
+        }, 
+        width=700, 
+        height=300,
+        disabled=["Naziv datoteke"]
+        )
+
     
-st.title("Skripte")
+st.title("📚Skripte")
 st.write("Ovde možeš učitati skripte ili druge datoteke koje želiš podijeliti samnom kako bi ti pomogao u učenju.")
 st.write("Jednom kad učitaš skripte, bolje ću razumijeti gradivo kolegija koje me pitaš i ponudit ću ti kvalitetnije odgovore 🤖")
 st.write("Učitane datoteke će biti pohranjene na ovom serveru i bit će dostupne samo tebi. Naravno, možeš ih obrisati kad god poželiš.")
