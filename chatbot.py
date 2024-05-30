@@ -12,8 +12,8 @@ load_dotenv()
 
 client = openai.Client()
 
-def chatbot(openai_api_key: str):
-
+def render_chatbot():
+    openai_api_key = st.session_state["openai_api_key"]
     if "messages" not in st.session_state:
         st.session_state["messages"] = [{"role": "assistant", "content": "Hej, tu sam! Pitaj me što god želiš 😎"}]
 
@@ -23,11 +23,14 @@ def chatbot(openai_api_key: str):
     if prompt := st.chat_input("Postavi mi pitanje ovdje..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.chat_message("user").write(prompt)
+        
+        if(st.button("Resetiraj razgovor")):
+            st.session_state["messages"] = [{"role": "assistant", "content": "Hej, tu sam! Pitaj me što god želiš 😎"}]
+        
         try:
             with st.spinner("Odabirem alat..." if st.session_state.debug_mode else "..."):
                 selected_tools = select_tool(prompt)
 
-                # Create a dictionary to map selected tools by their names
                 tool_dict = {tool.index: get_tool_metadata_by_index(tool.index).name for tool in selected_tools}
 
                 if selected_tools and st.session_state.debug_mode:
@@ -39,9 +42,9 @@ def chatbot(openai_api_key: str):
                     nodes = raptor_retriever.retrieve_nodes(prompt, mode="collapsed")
                     raptor_content = ' '.join(node.text for node in nodes)
                     print(raptor_content)
-                    answer = get_chatbot_response(raptor_content, prompt, openai_api_key)  # Use RAPTOR's output as input to GPT
+                    answer = get_chatbot_response(raptor_content, prompt)  # Use RAPTOR's output as input to GPT
                 else:
-                    answer = get_chatbot_response(prompt, openai_api_key)
+                    answer = get_chatbot_response(prompt)
 
                 if answer:
                     st.session_state.messages.append({"role": "assistant", "content": answer})
@@ -53,8 +56,8 @@ def chatbot(openai_api_key: str):
 
 SYSTEM_CONTENT = "You are a helpful assistant for students at the Faculty of Informatics. Respond to user queries and provide information about tools and resources available to students in Croatian language."
 
-def get_chatbot_response(user_prompt, raptor_content, openai_api_key: str):
-    openai.api_key = openai_api_key
+def get_chatbot_response(user_prompt, raptor_content):
+    openai.api_key = st.session_state["openai_api_key"]
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[

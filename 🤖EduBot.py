@@ -3,22 +3,32 @@ import os
 
 from streamlit_google_auth import Authenticate
 from openai_key import get_openai_key
-from chatbot import chatbot
+from chatbot import render_chatbot
 from dotenv import load_dotenv
 
 # Import logging
 # logging.basicConfig(level=logging.DEBUG)
 
-load_dotenv()
+
 
 st.set_page_config(
     page_title="EduBot",
     page_icon="🤖",
 )
-
+load_dotenv()
 st.title('🤖🎓EduBot')
 
-"st.session_state", st.session_state
+st.sidebar.title('🤖🎓EduBot')
+st.sidebar.write("Chatbot za personalizaciju nastavnih materijala")
+
+st.sidebar.write("Autor: [Luka Blašković](https://github.com/lukablaskovic)")
+
+st.sidebar.write("Repozitorij: [EduBot](https://github.com/lukablaskovic/edu_bot)")
+
+
+
+
+#"st.session_state", st.session_state
 
 authenticator = Authenticate(
     secret_credentials_path='google_credentials.json',
@@ -42,13 +52,18 @@ if st.session_state['connected']:
     with col2:
         debug_mode_on = st.toggle("Debug mode", key="debug_mode")
 
-    openai_api_key = get_openai_key()
+    if "openai_api_key" not in st.session_state:
+        st.session_state["openai_api_key"] = get_openai_key()
 
     with st.sidebar:
         if st.button('Odjava'):
             authenticator.logout()
-        
-    chatbot(openai_api_key)
+        container = st.sidebar.container(border=True)
+        container.write("Postavke")
+    
+    render_chatbot()
+    
+    
 
 else:
     st.write("Bok👋🏻 Kako bi mogao koristiti EduBot, moraš se prijaviti.")
