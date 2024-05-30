@@ -79,6 +79,5 @@ if __name__ == "__main__":
     print(len(nodes_tree_traversal))
     print(nodes_tree_traversal[0].text)
 
-    # Querying using the query engine
     response = retriever.query("What baselines was RAPTOR compared against?")
     print(str(response))

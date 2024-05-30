@@ -18,7 +18,7 @@ st.set_page_config(
 
 st.title('🤖🎓EduBot')
 
-# "st.session_state", st.session_state
+"st.session_state", st.session_state
 
 authenticator = Authenticate(
     secret_credentials_path='google_credentials.json',
@@ -28,7 +28,6 @@ authenticator = Authenticate(
     redirect_uri='http://localhost:8501',
 )
 
-# Catch the login event
 authenticator.check_authentification()
 
 if st.session_state['connected']:
@@ -41,7 +40,7 @@ if st.session_state['connected']:
         st.write("""Tu sam da ti olakšam tvoju studentsku avanturu na Fakultetu informatike. Mogu ti pomoći s pitanjima o studiju, predmetima, profesorima, projektima i još mnogo toga. Pitaj me što god želiš! 🤖🎓""")
 
     with col2:
-        debug_mode_on = st.checkbox("Debug mode", key="debug_mode")
+        debug_mode_on = st.toggle("Debug mode", key="debug_mode")
 
     openai_api_key = get_openai_key()
 
