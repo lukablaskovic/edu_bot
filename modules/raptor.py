@@ -11,6 +11,17 @@ import chromadb
 from llama_index.packs.raptor import RaptorPack, RaptorRetriever
 from llama_index.core.query_engine import RetrieverQueryEngine
 
+import streamlit as st
+
+from llama_index.core import Settings
+
+if "openai_api_key" not in st.session_state:
+    st.session_state.openai_api_key = ""
+
+embed_model = OpenAIEmbedding(embed_batch_size=10, api_key=st.session_state.openai_api_key)
+Settings.embed_model = embed_model
+
+
 class RAPTORRetriever:
     def __init__(self, documents_path, db_path, collection_name):
         self.documents_path = documents_path
