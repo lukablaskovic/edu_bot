@@ -24,14 +24,14 @@ if st.session_state['connected']:
     st.title('👤Korisnički profil')
     st.markdown(f'Hej {st.session_state["user_info"].get("name")} 👋')
     st.markdown('Ovdje možeš ažurirati neke svoje osobne podatke. ')
-    st.sidebar.markdown("# Korisnički profil")
-    st.sidebar.markdown(f"👤 {st.session_state['user_info'].get('name')}")
+
     
     with st.form(key="profile_form"):
         st.text_input("Ime i prezime", value=st.session_state['user_info'].get('name'), disabled=True)
         st.text_input("Email",  value=st.session_state['user_info'].get('email'), disabled=True)
         st.selectbox("Godina studija", ["1. prijediplomski", "2. prijediplomski", "3. prijediplomski", "1. diplomski", "2. diplomski"], key="study_year")
-
+        st.text_area("O meni", key="about_me", help="Opiši mi kakav si student i na koji način najbolje učiš.")
+        st.slider("Znanje iz programiranja", min_value=0, max_value=10, key="programming_knowledge", help="Ocijeni svoje znanje iz programiranja od 0 do 10.")
         st.form_submit_button("Ažuriraj")
 
 
