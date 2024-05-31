@@ -22,7 +22,7 @@ openn_ai_client = openai.Client()
 def render_chatbot():
     
     if "messages" not in st.session_state:
-        st.session_state["messages"] = [{"role": "assistant", "content": "Hej, tu sam!"}]
+        st.session_state["messages"] = [{"role": "assistant", "content": "Tu sam! Kako ti pomogu pomoći?🤖"}]
 
     for msg in st.session_state.messages:
         st.chat_message(msg["role"]).write(msg["content"])
@@ -38,6 +38,7 @@ def render_chatbot():
         print("__________________________INTENT___________________________", intent)
         
         try:
+            # change this
             with st.spinner("Odabirem alat..." if st.session_state.debug_mode else "..."):
                 selected_tools = select_tool(prompt)
 
@@ -62,6 +63,7 @@ def render_chatbot():
             st.error(f"Greška: {e}")
             return
 
+# will be removed
 SYSTEM_CONTENT = "You are a helpful assistant for students at the Faculty of Informatics. Respond to user queries and provide information about tools and resources available to students in Croatian language."
 
 def get_chatbot_response(user_prompt, raptor_content):

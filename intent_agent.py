@@ -40,6 +40,7 @@ class LlmQueryEngine(CustomQueryEngine):
         llm_response = self.llm.complete(llm_prompt)
         return str(llm_response)
 
+# new intent recognition function
 def intent_recognition(prompt: str, velociraptor: RAPTOR):
     llm_query_engine = LlmQueryEngine(llm=OpenAI(model="gpt-3.5-turbo"), prompt=direct_llm_prompt)
 
@@ -62,7 +63,7 @@ def intent_recognition(prompt: str, velociraptor: RAPTOR):
         "javascript, python, classes at the Faculty of Informatics, scripts and pdf files,"
         "courses details, and help with programming assignments and exercises."),
     )
-    
+    # might change to custom selector
     router_query_engine = RouterQueryEngine(
         selector=LLMSingleSelector.from_defaults(),
         query_engine_tools=[
@@ -70,11 +71,11 @@ def intent_recognition(prompt: str, velociraptor: RAPTOR):
             raptor_tool,
         ],
     )
-
+    
     response = router_query_engine.query(prompt)
     return response
 
-
+# to remove
 def select_tool(query: str):
     
     selector = LLMMultiSelector.from_defaults()

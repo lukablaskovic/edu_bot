@@ -65,7 +65,7 @@ if st.session_state['connected']:
 
     # Reset conversation
     if(st.button("Resetiraj razgovor")):
-        st.session_state["messages"] = [{"role": "assistant", "content": "Hej, tu sam!"}]
+        st.session_state["messages"] = [{"role": "assistant", "content": "Tu sam! Kako ti pomogu pomoći?🤖"}]
         st.rerun()
 
     
