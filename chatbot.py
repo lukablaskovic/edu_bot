@@ -1,33 +1,20 @@
 import streamlit as st
 import openai
 import os
-from query_router import select_tool, get_tool_metadata_by_index
+from intent_agent import select_tool, get_tool_metadata_by_index
 from dotenv import load_dotenv
 from llama_index.core.tools import ToolMetadata
 
 from llama_index.core import SimpleDirectoryReader, VectorStoreIndex
 
 from llama_index.core.node_parser import SentenceSplitter
-from llama_index.llms.openai import OpenAI
-from llama_index.embeddings.openai import OpenAIEmbedding
-from llama_index.packs.raptor import RaptorPack
-from llama_index.packs.raptor import RaptorRetriever
-from llama_index.core.query_engine import RetrieverQueryEngine
-from llama_index.vector_stores.chroma import ChromaVectorStore
-import chromadb
+
+from modules.raptor_module import RAPTOR
+
+
 import logging
 
 # Configure logging
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
-
-client = chromadb.PersistentClient()
-collection = client.get_or_create_collection("pjs")
-
-vector_store = ChromaVectorStore(chroma_collection=collection)
-
-
-load_dotenv()
 
 openn_ai_client = openai.Client()
 
@@ -59,37 +46,9 @@ def render_chatbot():
 
                 if 'summarizer' in tool_dict.values():
 
-                    """
-                    documents = SimpleDirectoryReader(input_files=["./uploaded_files/PJS1 - JavaScript osnove.pdf"]).load_data()
-                    
-                    raptor_pack = RaptorPack(
-                        documents,
-                        embed_model=OpenAIEmbedding(
-                            model="text-embedding-3-small"
-                        ),  # used for embedding clusters
-                        llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1, api_key=st.session_state["openai_api_key"]), 
-                        vector_store=vector_store,
-                        similarity_top_k=2,
-                        mode="collapsed", 
-                        
-                    )
-                    """
+                    velociraptor = RAPTOR(file_path="./uploaded_files/PJS1 - JavaScript osnove.pdf", collection_name="pjs")
 
-                    retriever = RaptorRetriever(
-                        [],
-                        embed_model=OpenAIEmbedding(
-                            model="text-embedding-3-small"
-                        ),  # used for embedding clusters
-                        llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1, api_key=st.session_state["openai_api_key"]), 
-                        vector_store=vector_store, 
-                        similarity_top_k=2,  
-                        mode="collapsed", 
-                    )
-        
-                    query_engine = RetrieverQueryEngine.from_args(
-                        retriever, llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1, api_key=st.session_state["openai_api_key"])
-                    )
-                    response = query_engine.query(prompt)
+                    response = velociraptor.get_response(prompt)
                     
                     if (response):
                         st.session_state.messages.append({"role": "assistant", "content": str(response)})
@@ -97,7 +56,7 @@ def render_chatbot():
                     
                 
         except Exception as e:
-            st.error(f"Error: {e}")
+            st.error(f"Greška: {e}")
             return
 
 SYSTEM_CONTENT = "You are a helpful assistant for students at the Faculty of Informatics. Respond to user queries and provide information about tools and resources available to students in Croatian language."
