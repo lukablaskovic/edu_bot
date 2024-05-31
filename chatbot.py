@@ -5,15 +5,31 @@ from query_router import select_tool, get_tool_metadata_by_index
 from dotenv import load_dotenv
 from llama_index.core.tools import ToolMetadata
 
-from llama_index.core import SimpleDirectoryReader
+from llama_index.core import SimpleDirectoryReader, VectorStoreIndex
 
-from modules.raptor import RAPTORRetriever
+from llama_index.core.node_parser import SentenceSplitter
+from llama_index.llms.openai import OpenAI
+from llama_index.embeddings.openai import OpenAIEmbedding
+from llama_index.packs.raptor import RaptorPack
+from llama_index.packs.raptor import RaptorRetriever
+from llama_index.core.query_engine import RetrieverQueryEngine
+from llama_index.vector_stores.chroma import ChromaVectorStore
+import chromadb
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
+client = chromadb.PersistentClient()
+collection = client.get_or_create_collection("pjs")
+
+vector_store = ChromaVectorStore(chroma_collection=collection)
 
 
 load_dotenv()
 
-client = openai.Client()
-
+openn_ai_client = openai.Client()
 
 def render_chatbot():
     openai_api_key = st.session_state["openai_api_key"]
@@ -42,19 +58,45 @@ def render_chatbot():
                     st.success(f"Odabrao sam sljedeće alate:\n{tools_list}")
 
                 if 'summarizer' in tool_dict.values():
-                    RR = RAPTORRetriever(
-                        documents_path="./uploaded_files/PJS1 - JavaScript osnove.pdf", 
-                        db_path="data/chroma.db", 
-                        collection_name="chroma"
-                        )
-                    nodes_collapsed = RR.retrieve_nodes(prompt, mode="collapsed")
-                    raptor_context = nodes_collapsed[0].text
-                    answer = get_chatbot_response(prompt, raptor_context)
 
-              
-                if answer:
-                    st.session_state.messages.append({"role": "assistant", "content": answer})
-                    st.chat_message("assistant").write(answer)
+
+                    documents = SimpleDirectoryReader(input_files=["./uploaded_files/PJS1 - JavaScript osnove.pdf"]).load_data()
+                    
+                    raptor_pack = RaptorPack(
+                        documents,
+                        embed_model=OpenAIEmbedding(
+                            model="text-embedding-3-small"
+                        ),  # used for embedding clusters
+                        llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1),  # used for generating summaries
+                        vector_store=vector_store,  # used for storage
+                        similarity_top_k=2,  # top k for each layer, or overall top-k for collapsed
+                        mode="collapsed",  # sets default mode
+                        
+                    )
+                    
+                    nodes = raptor_pack.run(query=prompt, mode="collapsed")
+                    #print(len(nodes))
+                    #print(nodes[0].text)
+
+                    
+                    retriever = RaptorRetriever(
+                        [],
+                        embed_model=OpenAIEmbedding(
+                            model="text-embedding-3-small"
+                        ),  # used for embedding clusters
+                        llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1),  # used for generating summaries
+                        vector_store=vector_store,  # used for storage
+                        similarity_top_k=2,  # top k for each layer, or overall top-k for collapsed
+                        mode="collapsed",  # sets default mode
+                    )
+        
+                    query_engine = RetrieverQueryEngine.from_args(
+                        retriever, llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1)
+                    )
+                    response = query_engine.query(prompt)
+                    print(str(response))
+                    st.write(str(response))
+                
         except Exception as e:
             st.error(f"Error: {e}")
             return
@@ -63,7 +105,7 @@ SYSTEM_CONTENT = "You are a helpful assistant for students at the Faculty of Inf
 
 def get_chatbot_response(user_prompt, raptor_content):
     openai.api_key = st.session_state["openai_api_key"]
-    response = client.chat.completions.create(
+    response = openn_ai_client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": SYSTEM_CONTENT},
