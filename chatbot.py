@@ -27,9 +27,10 @@ def render_chatbot():
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.chat_message("user").write(prompt)
         
+        # Reset conversation
         if(st.button("Resetiraj razgovor")):
             st.session_state["messages"] = [{"role": "assistant", "content": "Hej, tu sam!"}]
-        
+            st.rerun()
         try:
             with st.spinner("Odabirem alat..." if st.session_state.debug_mode else "..."):
                 selected_tools = select_tool(prompt)
@@ -41,7 +42,11 @@ def render_chatbot():
                     st.success(f"Odabrao sam sljedeće alate:\n{tools_list}")
 
                 if 'summarizer' in tool_dict.values():
-                    RR = RAPTORRetriever("./uploaded_files/PJS1 - JavaScript osnove.pdf", "data/chroma.db", "chroma")
+                    RR = RAPTORRetriever(
+                        documents_path="./uploaded_files/PJS1 - JavaScript osnove.pdf", 
+                        db_path="data/chroma.db", 
+                        collection_name="chroma"
+                        )
                     nodes_collapsed = RR.retrieve_nodes(prompt, mode="collapsed")
                     raptor_context = nodes_collapsed[0].text
                     answer = get_chatbot_response(prompt, raptor_context)

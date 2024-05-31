@@ -2,42 +2,26 @@ import os
 import chromadb
 import streamlit as st
 
-from llama_index.core import SimpleDirectoryReader
+from llama_index.core import SimpleDirectoryReader, Settings
 from llama_index.core.node_parser import SentenceSplitter
 from llama_index.llms.openai import OpenAI
 from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.vector_stores.chroma import ChromaVectorStore
-from llama_index.core import SimpleDirectoryReader
 from llama_index.packs.raptor import RaptorPack, RaptorRetriever
-from llama_index.core.query_engine import RetrieverQueryEngine
-
-def read_file(file_path):
-    reader = SimpleDirectoryReader(
-    input_files=[file_path]
-)
-    docs = reader.load_data()
-    text = docs[0].text
-    print(text)
-    return text
-
-
-
-from llama_index.core import Settings
 
 if "openai_api_key" not in st.session_state:
-    st.session_state.openai_api_key = ""
+    st.session_state.openai_api_key = os.getenv('OPENAI_API_KEY')
 
 embed_model = OpenAIEmbedding(embed_batch_size=10, api_key=st.session_state.openai_api_key)
 Settings.embed_model = embed_model
-
 
 class RAPTORRetriever:
     def __init__(self, documents_path, db_path, collection_name):
         self.documents_path = documents_path
         self.db_path = db_path
         self.collection_name = collection_name
-        self.documents = self.load_documents()
         self.vector_store = self.initialize_vector_store()
+        self.documents = self.load_documents()
         self.raptor_pack = self.create_raptor_pack()
 
     def load_documents(self):
@@ -52,7 +36,7 @@ class RAPTORRetriever:
     def create_raptor_pack(self):
         return RaptorPack(
             self.documents,
-            embed_model=OpenAIEmbedding(model="text-embedding-3-small"),
+            embed_model=embed_model,
             llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1),
             vector_store=self.vector_store,
             similarity_top_k=2,
@@ -66,30 +50,37 @@ class RAPTORRetriever:
     def initialize_retriever(self, mode="tree_traversal"):
         return RaptorRetriever(
             [],
-            embed_model=OpenAIEmbedding(model="text-embedding-3-small"),
+            embed_model=embed_model,
             llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1),
             vector_store=self.vector_store,
             similarity_top_k=2,
             mode=mode,
         )
 
-    def create_query_engine(self, retriever):
-        return RetrieverQueryEngine.from_args(
-            retriever, llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1)
-        )
 
     def query(self, query_text, mode="tree_traversal"):
         retriever = self.initialize_retriever(mode=mode)
         query_engine = self.create_query_engine(retriever)
         return query_engine.query(query_text)
 
-
 if __name__ == "__main__":
-    retriever = RAPTORRetriever(
-        documents_path="./raptor_paper.pdf",
-        db_path="./raptor_paper_db",
-        collection_name="raptor"
-    )
+    # Check if persisted data exists
+    persist_path = "./persist"
+    if os.path.exists(persist_path):
+        retriever = RaptorRetriever.from_persist_dir(
+            persist_path,
+            embed_model=embed_model,
+            llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1),
+            vector_store=ChromaVectorStore(chroma_collection=chromadb.PersistentClient(path="./raptor_paper_db").get_or_create_collection("raptor")),
+            similarity_top_k=2,
+            mode="tree_traversal",
+        )
+    else:
+        retriever = RAPTORRetriever(
+            documents_path="./raptor_paper.pdf",
+            db_path="./raptor_paper_db",
+            collection_name="raptor"
+        )
 
     nodes_collapsed = retriever.retrieve_nodes("What baselines is raptor compared against?", mode="collapsed")
     print(len(nodes_collapsed))
@@ -98,7 +89,3 @@ if __name__ == "__main__":
     nodes_tree_traversal = retriever.retrieve_nodes("What baselines is raptor compared against?", mode="tree_traversal")
     print(len(nodes_tree_traversal))
     print(nodes_tree_traversal[0].text)
-
-    # Querying using the query engine
-    response = retriever.query("What baselines was RAPTOR compared against?")
-    print(str(response))
