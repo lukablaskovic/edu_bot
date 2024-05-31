@@ -2,10 +2,10 @@ from llama_index.core.tools import ToolMetadata
 from llama_index.core.selectors import LLMSingleSelector, LLMMultiSelector
 
 choices = [
-        ToolMetadata(description="Able to read unstructured data such as documents, including student scripts", name="summarizer"),
+        ToolMetadata(description="Use this when student asks some programming questions or other professional IT-related questoin", name="summarizer"),
         ToolMetadata(description="Called when user wants to read from database, such as his points", name="sql_rag"),
         ToolMetadata(description="Connects to Github repo and provides details about repository", name="github_rag"),
-        ToolMetadata(description="Chitchat small talk non related to facutly", name="chitchat"),
+        ToolMetadata(description="Random talk not related to programming", name="chitchat"),
     ]
 
 def select_tool(query: str):

@@ -32,7 +32,7 @@ load_dotenv()
 openn_ai_client = openai.Client()
 
 def render_chatbot():
-    openai_api_key = st.session_state["openai_api_key"]
+    
     if "messages" not in st.session_state:
         st.session_state["messages"] = [{"role": "assistant", "content": "Hej, tu sam!"}]
 
@@ -59,7 +59,7 @@ def render_chatbot():
 
                 if 'summarizer' in tool_dict.values():
 
-
+                    """
                     documents = SimpleDirectoryReader(input_files=["./uploaded_files/PJS1 - JavaScript osnove.pdf"]).load_data()
                     
                     raptor_pack = RaptorPack(
@@ -67,35 +67,34 @@ def render_chatbot():
                         embed_model=OpenAIEmbedding(
                             model="text-embedding-3-small"
                         ),  # used for embedding clusters
-                        llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1),  # used for generating summaries
-                        vector_store=vector_store,  # used for storage
-                        similarity_top_k=2,  # top k for each layer, or overall top-k for collapsed
-                        mode="collapsed",  # sets default mode
+                        llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1, api_key=st.session_state["openai_api_key"]), 
+                        vector_store=vector_store,
+                        similarity_top_k=2,
+                        mode="collapsed", 
                         
                     )
-                    
-                    nodes = raptor_pack.run(query=prompt, mode="collapsed")
-                    #print(len(nodes))
-                    #print(nodes[0].text)
+                    """
 
-                    
                     retriever = RaptorRetriever(
                         [],
                         embed_model=OpenAIEmbedding(
                             model="text-embedding-3-small"
                         ),  # used for embedding clusters
-                        llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1),  # used for generating summaries
-                        vector_store=vector_store,  # used for storage
-                        similarity_top_k=2,  # top k for each layer, or overall top-k for collapsed
-                        mode="collapsed",  # sets default mode
+                        llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1, api_key=st.session_state["openai_api_key"]), 
+                        vector_store=vector_store, 
+                        similarity_top_k=2,  
+                        mode="collapsed", 
                     )
         
                     query_engine = RetrieverQueryEngine.from_args(
-                        retriever, llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1)
+                        retriever, llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1, api_key=st.session_state["openai_api_key"])
                     )
                     response = query_engine.query(prompt)
-                    print(str(response))
-                    st.write(str(response))
+                    
+                    if (response):
+                        st.session_state.messages.append({"role": "assistant", "content": str(response)})
+                        st.chat_message("assistant").write(str(response))
+                    
                 
         except Exception as e:
             st.error(f"Error: {e}")
