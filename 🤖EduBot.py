@@ -62,7 +62,12 @@ if st.session_state['connected']:
         container.write("Postavke")
     
     render_chatbot()
-    
+
+    # Reset conversation
+    if(st.button("Resetiraj razgovor")):
+        st.session_state["messages"] = [{"role": "assistant", "content": "Hej, tu sam!"}]
+        st.rerun()
+
     
 
 else:

@@ -1,9 +1,10 @@
 import streamlit as st
 import openai
 import os
-from intent_agent import select_tool, get_tool_metadata_by_index
+from intent_agent import select_tool, get_tool_metadata_by_index, intent_recognition
 from dotenv import load_dotenv
 from llama_index.core.tools import ToolMetadata
+from streamlit_js_eval import streamlit_js_eval
 
 from llama_index.core import SimpleDirectoryReader, VectorStoreIndex
 
@@ -29,11 +30,13 @@ def render_chatbot():
     if prompt := st.chat_input("Postavi mi pitanje ovdje..."):
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.chat_message("user").write(prompt)
+
+        velociraptor = RAPTOR(file_path="./uploaded_files/PJS1 - JavaScript osnove.pdf", collection_name="pjs")
         
-        # Reset conversation
-        if(st.button("Resetiraj razgovor")):
-            st.session_state["messages"] = [{"role": "assistant", "content": "Hej, tu sam!"}]
-            st.rerun()
+        intent = intent_recognition(prompt, velociraptor)
+        
+        print("__________________________INTENT___________________________", intent)
+        
         try:
             with st.spinner("Odabirem alat..." if st.session_state.debug_mode else "..."):
                 selected_tools = select_tool(prompt)
@@ -46,7 +49,7 @@ def render_chatbot():
 
                 if 'summarizer' in tool_dict.values():
 
-                    velociraptor = RAPTOR(file_path="./uploaded_files/PJS1 - JavaScript osnove.pdf", collection_name="pjs")
+                    
 
                     response = velociraptor.get_response(prompt)
                     

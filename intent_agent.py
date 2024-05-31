@@ -9,6 +9,8 @@ from llama_index.core import VectorStoreIndex
 from llama_index.core.selectors import LLMSingleSelector
 from llama_index.core.query_engine import RouterQueryEngine
 
+from modules.raptor_module import RAPTOR
+
 
 choices = [
         ToolMetadata(description="Use this when student asks some programming questions or other professional IT-related questoin", name="summarizer"),
@@ -38,40 +40,29 @@ class LlmQueryEngine(CustomQueryEngine):
         llm_response = self.llm.complete(llm_prompt)
         return str(llm_response)
 
+def intent_recognition(prompt: str, velociraptor: RAPTOR):
+    llm_query_engine = LlmQueryEngine(llm=OpenAI(model="gpt-3.5-turbo"), prompt=direct_llm_prompt)
 
-llm_query_engine = LlmQueryEngine(
-    llm=OpenAI(model="gpt-3.5-turbo"), prompt=direct_llm_prompt
-)
-
-llm_tool = QueryEngineTool.from_defaults(
-    query_engine=llm_query_engine,
-    name="llm_query_tool",
-    description=(
-        "Useful for when the INTENT of the user isnt clear, is broad, "
-        "or when the user is asking general questions that have nothing "
-        "to do with the faculty or programming. Use this tool when the other tool is not useful."
-    ),
-)
-
-"""
-vector_query_engine = vector_index.as_query_engine(
-    similarity_top_k=4,
-    response_synthesizer_mode=ResponseMode.REFINE,
-)
-
-
-raptor_tool = QueryEngineTool.from_defaults(
-    query_engine=vector_query_engine,
+    llm_tool = QueryEngineTool.from_defaults(
+        query_engine=llm_query_engine,
+        name="llm_query_tool",
+        description=(
+            "Useful for when the INTENT of the user isnt clear, is broad, "
+            "or when the user is asking general questions that have nothing "
+            "to do with the faculty or programming. Use this tool when the other tool is not useful."
+        ),
+    )
+    raptor_query_engine = velociraptor.query_engine
+    
+    raptor_tool = QueryEngineTool.from_defaults(
+    query_engine=raptor_query_engine,
     name="vector_query_tool",
     description=(
         "Useful for retrieving specific context about the faculty, programming,"
         "javascript, python, classes at the Faculty of Informatics, scripts and pdf files,"
-        "courses details, and help with programming assignments and exercises."
-
-    ),
-)
-
-def get_intent(query: str):
+        "courses details, and help with programming assignments and exercises."),
+    )
+    
     router_query_engine = RouterQueryEngine(
         selector=LLMSingleSelector.from_defaults(),
         query_engine_tools=[
@@ -80,10 +71,9 @@ def get_intent(query: str):
         ],
     )
 
-    response = router_query_engine.query(query)
+    response = router_query_engine.query(prompt)
     return response
 
-"""
 
 def select_tool(query: str):
     
