@@ -73,7 +73,9 @@ def intent_recognition(prompt: str, velociraptor: RAPTOR):
     )
     
     response = router_query_engine.query(prompt)
-    return response
+    print("response.metadata['selector_result']", response.metadata["selector_result"])
+    intent = response.metadata["selector_result"].selections[0]
+    return response, intent
 
 # to remove
 def select_tool(query: str):

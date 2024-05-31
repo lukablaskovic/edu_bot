@@ -46,8 +46,8 @@ if st.session_state['connected']:
     with col1:
         st.write(f"Hej, {st.session_state['user_info'].get('name')}👋🏻")
         st.write("Uspješna prijava! Huuray! 🎉")
-        st.write("""Tu sam da ti olakšam tvoju studentsku avanturu na Fakultetu informatike. Mogu ti pomoći s pitanjima o studiju, predmetima, profesorima, projektima i još mnogo toga. """)
-        st.write("Nije ti jasan silabus iz nekog kolegija, neki zadatak iz skripte, ili te pak zanima koliko ti nedostaje bodova za prolaz i što moraš sve dovršiti za taj projekt iz Programskog🔥")
+        st.write("""Tu sam da ti olakšam tvoju studentsku avanturu na [Fakultetu informatike](https://fipu.unipu.hr/). Mogu ti pomoći s pitanjima o studiju, predmetima, profesorima, projektima i još mnogo toga. """)
+        st.write("Nije ti jasan silabus iz nekog kolegija, zadatak iz vježbi, problem iz programiranja ili te pak zanima koliko ti nedostaje bodova za prolaz i što moraš sve dovršiti za taj projekt iz Programskog🔥?")
 
     with col2:
         debug_mode_on = st.toggle("Ispod haube", key="debug_mode")
