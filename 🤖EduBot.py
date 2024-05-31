@@ -6,6 +6,8 @@ from openai_key import get_openai_key
 from chatbot import render_chatbot
 from dotenv import load_dotenv
 
+
+
 # Import logging
 # logging.basicConfig(level=logging.DEBUG)
 
@@ -24,9 +26,6 @@ st.sidebar.write("Chatbot za personalizaciju nastavnih materijala")
 st.sidebar.write("Autor: [Luka Blašković](https://github.com/lukablaskovic)")
 
 st.sidebar.write("Source kod dostupan [ovdje](https://github.com/lukablaskovic/edu_bot).")
-
-
-
 
 #"st.session_state", st.session_state
 
@@ -48,7 +47,7 @@ if st.session_state['connected']:
         st.write(f"Hej, {st.session_state['user_info'].get('name')}👋🏻")
         st.write("Uspješna prijava! Huuray! 🎉")
         st.write("""Tu sam da ti olakšam tvoju studentsku avanturu na Fakultetu informatike. Mogu ti pomoći s pitanjima o studiju, predmetima, profesorima, projektima i još mnogo toga. """)
-        st.write("Nije ti jasan silabus iz nekog kolegija, neki zadatak iz skripte, ili te pak zanima koliko ti nedostaje bodova za prolaz i što moraš sve dovršiti za taj projekt iz Programskog🔥? Pitaj me što god želiš! 🤖🎓")
+        st.write("Nije ti jasan silabus iz nekog kolegija, neki zadatak iz skripte, ili te pak zanima koliko ti nedostaje bodova za prolaz i što moraš sve dovršiti za taj projekt iz Programskog🔥")
 
     with col2:
         debug_mode_on = st.toggle("Ispod haube", key="debug_mode")

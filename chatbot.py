@@ -5,13 +5,15 @@ from query_router import select_tool, get_tool_metadata_by_index
 from dotenv import load_dotenv
 from llama_index.core.tools import ToolMetadata
 
-from modules.raptor_module.velociraptor import process_or_load_raptor
 from llama_index.core import SimpleDirectoryReader
+
+from modules.raptor import RAPTORRetriever
 
 
 load_dotenv()
 
 client = openai.Client()
+
 
 def render_chatbot():
     openai_api_key = st.session_state["openai_api_key"]
@@ -38,21 +40,19 @@ def render_chatbot():
                     tools_list = "\n".join([f"{i+1}. {tool_dict[tool.index]}" for i, tool in enumerate(selected_tools)])
                     st.success(f"Odabrao sam sljedeće alate:\n{tools_list}")
 
-                if 'raptor' in tool_dict.values():
-                    
-                    RA = process_or_load_raptor(file_path="./uploaded_files")
-                    print("Tree constructed!")
-                    answer = RA.answer_question(question=prompt)
-                else:
-                    answer = get_chatbot_response(prompt)
+                if 'summarizer' in tool_dict.values():
+                    RR = RAPTORRetriever("./uploaded_files/PJS1 - JavaScript osnove.pdf", "data/chroma.db", "chroma")
+                    nodes_collapsed = RR.retrieve_nodes(prompt, mode="collapsed")
+                    raptor_context = nodes_collapsed[0].text
+                    answer = get_chatbot_response(prompt, raptor_context)
 
+              
                 if answer:
                     st.session_state.messages.append({"role": "assistant", "content": answer})
                     st.chat_message("assistant").write(answer)
         except Exception as e:
             st.error(f"Error: {e}")
             return
-
 
 SYSTEM_CONTENT = "You are a helpful assistant for students at the Faculty of Informatics. Respond to user queries and provide information about tools and resources available to students in Croatian language."
 
@@ -69,4 +69,3 @@ def get_chatbot_response(user_prompt, raptor_content):
         max_tokens=500,
     )
     return response.choices[0].message.content
-
