@@ -63,7 +63,6 @@ def intent_recognition(prompt: str, velociraptor: RAPTOR):
         "javascript, python, classes at the Faculty of Informatics, scripts and pdf files,"
         "courses details, and help with programming assignments and exercises."),
     )
-    # might change to custom selector
     router_query_engine = RouterQueryEngine(
         selector=LLMSingleSelector.from_defaults(),
         query_engine_tools=[

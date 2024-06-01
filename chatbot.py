@@ -31,7 +31,7 @@ def render_chatbot():
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.chat_message("user").write(prompt)
 
-        velociraptor = RAPTOR(file_path="./uploaded_files/PJS1 - JavaScript osnove.pdf", collection_name="pjs")
+        velociraptor = RAPTOR(file_path="./uploaded_files", collection_name="pjs")
         
         intent = intent_recognition(prompt, velociraptor)
         
