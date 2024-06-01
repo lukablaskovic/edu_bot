@@ -52,19 +52,23 @@ class RAPTOR:
         try:
             self.client = chromadb.PersistentClient()
             self.collection = self.client.get_or_create_collection(collection_name)
+            
             self.vector_store = ChromaVectorStore(chroma_collection=self.collection)
 
             self.logger.info("Loading documents from file_path: %s", file_path)
             self.documents = SimpleDirectoryReader(input_dir=file_path).load_data()
+            
+            #self.build_raptor_tree()
+            
             self.retriever = self.setup_retriever()
             self.query_engine = self.setup_query_engine()
         except Exception as e:
             self.logger.error("An error occurred during initialization: %s", e)
             raise
 
-    def get_raptor_pack(self):
+    def build_raptor_tree(self):
         try:
-            self.logger.info("Creating RaptorPack")
+            self.logger.info("Creating RaptorPack and building raptor tree")
             return RaptorPack(
                 self.documents,
                 embed_model=OpenAIEmbedding(model="text-embedding-3-small"),  # used for embedding clusters
@@ -74,7 +78,7 @@ class RAPTOR:
                 mode="collapsed", 
             )
         except Exception as e:
-            self.logger.error("An error occurred while creating RaptorPack: %s", e)
+            self.logger.error("An error occurred while building raptor tree: %s", e)
             raise
 
     def setup_retriever(self):
@@ -83,7 +87,7 @@ class RAPTOR:
             return RaptorRetriever(
                 [],
                 embed_model=OpenAIEmbedding(model="text-embedding-3-small"),  # used for embedding clusters
-                llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1, api_key=st.session_state["openai_api_key"]), 
+                llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1, api_key=st.session_state["openai_api_key"]), # used for generating summaries
                 vector_store=self.vector_store,
                 similarity_top_k=2,
                 mode="collapsed", 
@@ -113,23 +117,3 @@ class RAPTOR:
         except Exception as e:
             self.logger.error("An error occurred while getting response: %s", e)
             raise
-"""
-retriever = RaptorRetriever(
-                    [],
-                    embed_model=OpenAIEmbedding(
-                        model="text-embedding-3-small"
-                    ),  # used for embedding clusters
-                    llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1, api_key=st.session_state["openai_api_key"]), 
-                    vector_store=vector_store, 
-                    similarity_top_k=2,  
-                    mode="collapsed", 
-                )
-"""
-
-"""
-query_engine = RetrieverQueryEngine.from_args(
-                    retriever, llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1, api_key=st.session_state["openai_api_key"])
-                )
-"""
-
-#response = query_engine.query(prompt)

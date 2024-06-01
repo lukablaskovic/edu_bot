@@ -33,30 +33,28 @@ def render_chatbot():
 
         velociraptor = RAPTOR(file_path="./uploaded_files", collection_name="pjs")
         
-        intent = intent_recognition(prompt, velociraptor)
+        response, intent = intent_recognition(prompt, velociraptor)
         
         print("__________________________INTENT___________________________", intent)
         
         try:
             # change this
             with st.spinner("Odabirem alat..." if st.session_state.debug_mode else "..."):
-                selected_tools = select_tool(prompt)
+                
 
-                tool_dict = {tool.index: get_tool_metadata_by_index(tool.index).name for tool in selected_tools}
-
+                #tool_dict = {tool.index: get_tool_metadata_by_index(tool.index).name for tool in selected_tools}
+                """"
                 if selected_tools and st.session_state.debug_mode:
                     tools_list = "\n".join([f"{i+1}. {tool_dict[tool.index]}" for i, tool in enumerate(selected_tools)])
                     st.success(f"Odabrao sam sljedeće alate:\n{tools_list}")
+                """
+                #if 'summarizer' in tool_dict.values():
 
-                if 'summarizer' in tool_dict.values():
-
-                    
-
-                    response = velociraptor.get_response(prompt)
-                    
-                    if (response):
-                        st.session_state.messages.append({"role": "assistant", "content": str(response)})
-                        st.chat_message("assistant").write(str(response))
+                #response = velociraptor.get_response(prompt)
+                
+                if (response):
+                    st.session_state.messages.append({"role": "assistant", "content": str(response)})
+                    st.chat_message("assistant").write(str(response))
                     
                 
         except Exception as e:
