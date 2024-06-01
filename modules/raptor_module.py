@@ -58,7 +58,7 @@ class RAPTOR:
             self.logger.info("Loading documents from file_path: %s", file_path)
             self.documents = SimpleDirectoryReader(input_dir=file_path).load_data()
             
-            #self.build_raptor_tree()
+            self.build_raptor_tree()
             
             self.retriever = self.setup_retriever()
             self.query_engine = self.setup_query_engine()

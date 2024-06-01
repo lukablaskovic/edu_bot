@@ -18,9 +18,10 @@ def save_uploaded_file(uploaded_file):
             with open(file_path, "wb") as f:
                 f.write(uploaded_file.getbuffer())
             st.success(f"Pohranjena datoteka: {uploaded_file.name}")
-        update_state_file(uploaded_file.name, True)
+        update_state_file(uploaded_file.name, False)
 
 def update_state_file(file_name, is_used):
+    print("Updating state file...")
     if os.path.exists(STATE_FILE):
         df = pd.read_csv(STATE_FILE)
     else:
@@ -30,6 +31,8 @@ def update_state_file(file_name, is_used):
         new_row = pd.DataFrame({"Naziv datoteke": [file_name], "is_used": [is_used]})
         df = pd.concat([df, new_row], ignore_index=True)
         df.to_csv(STATE_FILE, index=False)
+    
+    st.session_state["files_changed"] = False
 
 def load_state_file():
     if os.path.exists(STATE_FILE):
@@ -44,6 +47,7 @@ def list_uploaded_files():
     else:
         edited_df = st.data_editor(data=files,
                                    num_rows="dynamic",
+                                   key="files",
                                    column_config={
             "Naziv datoteke": {},
             "is_used": {"selector_type": "boolean"}
@@ -55,6 +59,11 @@ def list_uploaded_files():
         save_state_changes(edited_df)
 
 def save_state_changes(edited_df):
+    print(st.session_state['files'])
+    
+    if st.session_state['files']['edited_rows'] or st.session_state['files']['deleted_rows']:
+        st.session_state["files_changed"] = False
+    
     edited_df.to_csv(STATE_FILE, index=False)
 
 st.title("📚Skripte")
@@ -70,5 +79,8 @@ if uploaded_file is not None:
 st.header("Pohranjene datoteke")
 list_uploaded_files()
 
-if st.button("Opameti me! 🧠"):
+if "files_changed" not in st.session_state:
+    st.session_state["files_changed"] = True
+
+if st.button("Opameti me! 🧠", disabled=st.session_state['files_changed']):
     velociraptor = RAPTOR(file_path="./uploaded_files", collection_name="pjs")
