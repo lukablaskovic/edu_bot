@@ -1,7 +1,6 @@
 from llama_index.packs.raptor import RaptorPack
 from llama_index.packs.raptor import RaptorRetriever
 from llama_index.vector_stores.chroma import ChromaVectorStore
-from dotenv import load_dotenv
 from llama_index.core.tools import ToolMetadata
 from llama_index.embeddings.openai import OpenAIEmbedding
 
@@ -15,6 +14,7 @@ import time
 import os
 import shutil
 import gc
+from dotenv import load_dotenv
 load_dotenv()
 
 logging.basicConfig(level=logging.DEBUG)

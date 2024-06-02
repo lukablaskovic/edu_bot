@@ -2,6 +2,9 @@ import streamlit as st
 import os
 from dotenv import load_dotenv
 from streamlit_google_auth import Authenticate
+from sqlalchemy import MetaData, Table, insert
+
+from modules.sqlrag_module import create_users_table, get_engine, upsert_user
 
 st.set_page_config(
     page_title="EdubBot - Korisnički profil",
@@ -20,21 +23,31 @@ authenticator = Authenticate(
 
 authenticator.check_authentification()
 
+create_users_table()
 
 if st.session_state['connected']:
     st.title('👤Korisnički profil')
     st.markdown(f'Hej {st.session_state["user_info"].get("name")} 👋')
-    st.markdown('Ovdje možeš ažurirati neke svoje osobne podatke. ')
+    st.markdown('Ovdje možeš ažurirati neke svoje osobne podatke.')
 
-    
     with st.form(key="profile_form"):
-        st.text_input("Ime i prezime", value=st.session_state['user_info'].get('name'), disabled=True)
-        st.text_input("Email",  value=st.session_state['user_info'].get('email'), disabled=True)
-        st.selectbox("Godina studija", ["1. prijediplomski", "2. prijediplomski", "3. prijediplomski", "1. diplomski", "2. diplomski"], key="study_year")
-        st.text_area("O meni", key="about_me", help="Opiši mi kakav si student i na koji način najbolje učiš.")
-        st.slider("Znanje iz programiranja", min_value=0, max_value=10, key="programming_knowledge", help="Ocijeni svoje znanje iz programiranja od 0 do 10. Ovisno o tvojem znanju koje ovdje navedeš, prilagodit ću svoje odgovore.")
-        st.form_submit_button("Ažuriraj", type="primary")
+        name = st.text_input("Ime i prezime", value=st.session_state['user_info'].get('name'), disabled=True)
+        email = st.text_input("Email",  value=st.session_state['user_info'].get('email'), disabled=True)
+        study_year = st.selectbox("Godina studija", ["1. prijediplomski", "2. prijediplomski", "3. prijediplomski", "1. diplomski", "2. diplomski"], key="study_year")
+        about_me = st.text_area("O meni", key="about_me", help="Opiši mi kakav si student i na koji način najbolje učiš.")
+        programming_knowledge = st.slider("Znanje iz programiranja", min_value=0, max_value=10, key="programming_knowledge", help="Ocijeni svoje znanje iz programiranja od 0 do 10. Ovisno o tvojem znanju koje ovdje navedeš, prilagodit ću svoje odgovore.")
+        submit_button = st.form_submit_button("Ažuriraj", type="primary")
 
+        if submit_button:
+            user_info = {
+                "name": name,
+                "email": email,
+                "study_year": study_year,
+                "about_me": about_me,
+                "programming_knowledge": programming_knowledge
+            }
+            upsert_user(user_info)  
+            st.success("Podaci su uspješno ažurirani!")
 
 else:
     st.error("Moraš biti prijavljen za ovo!")
