@@ -1,7 +1,7 @@
 import streamlit as st
 import openai
 import os
-from intent_agent import select_tool, get_tool_metadata_by_index, intent_recognition
+from intent_agent import intent_recognition
 from dotenv import load_dotenv
 from llama_index.core.tools import ToolMetadata
 from streamlit_js_eval import streamlit_js_eval
@@ -12,8 +12,6 @@ from llama_index.core.node_parser import SentenceSplitter
 
 from modules.raptor_module import RAPTOR
 
-
-import logging
 
 # Configure logging
 
@@ -31,7 +29,7 @@ def render_chatbot():
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.chat_message("user").write(prompt)
 
-        velociraptor = RAPTOR(file_path="./uploaded_files", collection_name="pjs")
+        velociraptor = st.session_state["raptor"]
         
         response, intent = intent_recognition(prompt, velociraptor)
         

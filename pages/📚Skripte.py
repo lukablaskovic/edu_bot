@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import os
 
-from modules.raptor_module import RAPTOR
+from modules.raptor_module import get_raptor
 
 
 UPLOAD_DIR = "uploaded_files"
@@ -83,4 +83,6 @@ if "files_changed" not in st.session_state:
     st.session_state["files_changed"] = True
 
 if st.button("Opameti me! 🧠", disabled=st.session_state['files_changed']):
-    velociraptor = RAPTOR(file_path="./uploaded_files", collection_name="pjs")
+    with st.spinner('Učim iz tvojih datoteka...'):
+        st.session_state["raptor"] = get_raptor()
+    st.success("EduBot je sada pametniji!🔥")

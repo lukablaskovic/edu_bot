@@ -11,33 +11,12 @@ from llama_index.llms.openai import OpenAI
 import streamlit as st
 import chromadb
 import logging
+import time
 
 load_dotenv()
 
-
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
-
-#client = chromadb.PersistentClient()
-#collection = client.get_or_create_collection("pjs")
-
-#vector_store = ChromaVectorStore(chroma_collection=collection)
-
-#documents = SimpleDirectoryReader(input_files=["./uploaded_files/PJS1 - JavaScript osnove.pdf"]).load_data()
-
-"""
-raptor_pack = RaptorPack(
-    documents,
-    embed_model=OpenAIEmbedding(
-        model="text-embedding-3-small"
-    ),  # used for embedding clusters
-    llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1, api_key=st.session_state["openai_api_key"]), 
-    vector_store=vector_store,
-    similarity_top_k=2,
-    mode="collapsed", 
-    
-)
-"""
 
 class RAPTOR:
     def __init__(self, file_path, collection_name="pjs"):
@@ -49,6 +28,8 @@ class RAPTOR:
         logging.basicConfig(level=logging.INFO)
         self.logger.info("Initializing RAPTOR with file_path: %s and collection_name: %s", file_path, collection_name)
 
+        start_time = time.time()
+
         try:
             self.client = chromadb.PersistentClient()
             self.collection = self.client.get_or_create_collection(collection_name)
@@ -58,13 +39,17 @@ class RAPTOR:
             self.logger.info("Loading documents from file_path: %s", file_path)
             self.documents = SimpleDirectoryReader(input_dir=file_path).load_data()
             
-            self.build_raptor_tree()
+            #self.build_raptor_tree()
             
             self.retriever = self.setup_retriever()
             self.query_engine = self.setup_query_engine()
         except Exception as e:
             self.logger.error("An error occurred during initialization: %s", e)
             raise
+
+        end_time = time.time()
+        setup_duration = end_time - start_time
+        self.logger.info("RAPTOR setup completed in %s seconds", setup_duration)
 
     def build_raptor_tree(self):
         try:
@@ -117,3 +102,9 @@ class RAPTOR:
         except Exception as e:
             self.logger.error("An error occurred while getting response: %s", e)
             raise
+
+def get_raptor():
+    if "raptor" not in st.session_state:
+        velociraptor = RAPTOR(file_path="./uploaded_files", collection_name="pjs")
+        st.session_state["raptor"] = velociraptor
+    return velociraptor
