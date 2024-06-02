@@ -2,9 +2,10 @@ import streamlit as st
 import os
 from dotenv import load_dotenv
 from streamlit_google_auth import Authenticate
+
 st.set_page_config(
-    page_title="Korisnički profil",
-    page_icon="👤",
+    page_title="EdubBot - Korisnički profil",
+    page_icon="🤖",
 )
 
 load_dotenv()

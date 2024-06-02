@@ -27,7 +27,7 @@ st.sidebar.write("Autor: [Luka Blašković](https://github.com/lukablaskovic)")
 
 st.sidebar.write("Source kod dostupan [ovdje](https://github.com/lukablaskovic/edu_bot).")
 
-#"st.session_state", st.session_state
+"st.session_state", st.session_state
 
 authenticator = Authenticate(
     secret_credentials_path='google_credentials.json',

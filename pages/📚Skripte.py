@@ -1,9 +1,17 @@
 import streamlit as st
 import pandas as pd
 import os
+from openai_key import get_openai_key
 
 from modules.raptor_module import get_raptor
 
+st.set_page_config(
+    page_title="EduBot - Skripte",
+    page_icon="🤖",
+)
+
+if "openai_api_key" not in st.session_state:
+        st.session_state["openai_api_key"] = get_openai_key()
 
 UPLOAD_DIR = "uploaded_files"
 STATE_FILE = "file_state.csv"
@@ -86,3 +94,4 @@ if st.button("Opameti me! 🧠", disabled=st.session_state['files_changed']):
     with st.spinner('Učim iz tvojih datoteka...'):
         st.session_state["raptor"] = get_raptor()
     st.success("EduBot je sada pametniji!🔥")
+
