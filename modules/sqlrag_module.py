@@ -96,6 +96,27 @@ def upsert_user(user_info):
     except Exception as e:
         logger.error(f"An error occurred while upserting the user: {e}")
 
+def get_user_by_email(email):
+    try:
+        engine = get_engine()
+        metadata = MetaData()
+        table = Table("users", metadata, autoload_with=engine)
+
+        stmt = select(table).where(table.c.email == email)
+        with engine.connect() as connection:
+            result = connection.execute(stmt).fetchone()
+        
+        if result:
+            user_info = {column.name: value for column, value in zip(table.columns, result)}
+            logger.info(f"Retrieved user: {user_info}")
+            return user_info
+        else:
+            logger.info(f"No user found with email: {email}")
+            return None
+    except Exception as e:
+        logger.error(f"An error occurred while retrieving the user: {e}")
+        return None
+
 def main():
     engine = get_engine(default_db_path)
     metadata_obj = MetaData()
