@@ -1,14 +1,8 @@
 import streamlit as st
 import openai
 import os
-from intent_agent import intent_recognition
+from intent_agent import intent_recognition, get_intent_description
 from dotenv import load_dotenv
-from llama_index.core.tools import ToolMetadata
-from streamlit_js_eval import streamlit_js_eval
-
-from llama_index.core import SimpleDirectoryReader, VectorStoreIndex
-
-from llama_index.core.node_parser import SentenceSplitter
 
 from modules.raptor_module import get_raptor
 
@@ -29,35 +23,34 @@ def render_chatbot():
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.chat_message("user").write(prompt)
 
-        try:
-            # caching
-            if 'raptor' in st.session_state:
-                velociraptor = st.session_state["raptor"]
-            else:
-                velociraptor = get_raptor()
-        except Exception as e:
-            st.error(f"Greška: {e}")
-            return
+        with st.spinner("Odabirem alat..." if st.session_state.debug_mode else "..."):
         
-        response, intent = intent_recognition(prompt, velociraptor)
-        
-        print("__________________________INTENT___________________________")
+            try:
+                # caching
+                if 'raptor' in st.session_state:
+                    velociraptor = st.session_state["raptor"]
+                else:
+                    velociraptor = get_raptor()
+            except Exception as e:
+                st.error(f"Greška: {e}")
+                return
+            
+            response, intent = intent_recognition(prompt, velociraptor)
+            
+            print("__________________________INTENT___________________________")
 
-        print("response:", response)
-        print("intent:", intent)
-        
-        try:
-            # change this
-            with st.spinner("Odabirem alat..." if st.session_state.debug_mode else "..."):
-                
-             
-                if (response):
+            print("response:", response)
+            print("intent:", intent)
+            
+            if st.session_state.debug_mode:
+                st.success(f"Odabrao sam: {get_intent_description(intent)}")
+            
+            try:
+                if response:
                     st.session_state.messages.append({"role": "assistant", "content": str(response)})
                     st.chat_message("assistant").write(str(response))
-                    
-                
-        except Exception as e:
-            st.error(f"Greška: {e}")
+            except Exception as e:
+                st.error(f"Greška: {e}")
             return
 
 # will be removed
