@@ -10,7 +10,7 @@ from llama_index.core import SimpleDirectoryReader, VectorStoreIndex
 
 from llama_index.core.node_parser import SentenceSplitter
 
-from modules.raptor_module import RAPTOR
+from modules.raptor_module import get_raptor
 
 
 # Configure logging
@@ -29,27 +29,28 @@ def render_chatbot():
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.chat_message("user").write(prompt)
 
-        velociraptor = st.session_state["raptor"]
+        try:
+            # caching
+            if 'raptor' in st.session_state:
+                velociraptor = st.session_state["raptor"]
+            else:
+                velociraptor = get_raptor()
+        except Exception as e:
+            st.error(f"Greška: {e}")
+            return
         
         response, intent = intent_recognition(prompt, velociraptor)
         
-        print("__________________________INTENT___________________________", intent)
+        print("__________________________INTENT___________________________")
+
+        print("response:", response)
+        print("intent:", intent)
         
         try:
             # change this
             with st.spinner("Odabirem alat..." if st.session_state.debug_mode else "..."):
                 
-
-                #tool_dict = {tool.index: get_tool_metadata_by_index(tool.index).name for tool in selected_tools}
-                """"
-                if selected_tools and st.session_state.debug_mode:
-                    tools_list = "\n".join([f"{i+1}. {tool_dict[tool.index]}" for i, tool in enumerate(selected_tools)])
-                    st.success(f"Odabrao sam sljedeće alate:\n{tools_list}")
-                """
-                #if 'summarizer' in tool_dict.values():
-
-                #response = velociraptor.get_response(prompt)
-                
+             
                 if (response):
                     st.session_state.messages.append({"role": "assistant", "content": str(response)})
                     st.chat_message("assistant").write(str(response))
