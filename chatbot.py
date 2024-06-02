@@ -3,7 +3,7 @@ import openai
 import os
 from intent_agent import intent_recognition, get_intent_description
 from dotenv import load_dotenv
-
+import pandas as pd
 from modules.raptor_module import get_raptor
 
 
@@ -30,7 +30,7 @@ def render_chatbot():
                 if 'raptor' in st.session_state:
                     velociraptor = st.session_state["raptor"]
                 else:
-                    velociraptor = get_raptor()
+                    velociraptor = get_raptor(files=get_files() , force_rebuild=False)
             except Exception as e:
                 st.error(f"Greška: {e}")
                 return
@@ -69,3 +69,18 @@ def get_chatbot_response(user_prompt, raptor_content):
         max_tokens=500,
     )
     return response.choices[0].message.content
+
+UPLOAD_DIR = "uploaded_files"
+STATE_FILE = "file_state.csv"
+
+def get_files():
+    df = pd.read_csv(STATE_FILE)
+    
+    used_files_df = df[df['is_used'] == True]
+    
+    used_files = used_files_df['Naziv datoteke'].tolist()
+    
+    full_paths = [os.path.join(UPLOAD_DIR, file) for file in used_files]
+    print("full_paths", full_paths)
+    return full_paths
+    

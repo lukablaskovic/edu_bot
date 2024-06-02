@@ -36,7 +36,8 @@ class LlmQueryEngine(CustomQueryEngine):
 
 def intent_recognition(prompt: str, velociraptor: RAPTOR):
     
-    assert prompt and velociraptor is not None
+    assert prompt is not None
+    assert velociraptor is not None
     
     # generic query engine - direct to LLM
     llm_query_engine = LlmQueryEngine(llm=OpenAI(model="gpt-3.5-turbo"), prompt=direct_llm_prompt)

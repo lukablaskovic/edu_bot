@@ -33,7 +33,7 @@ if st.session_state['connected']:
         st.selectbox("Godina studija", ["1. prijediplomski", "2. prijediplomski", "3. prijediplomski", "1. diplomski", "2. diplomski"], key="study_year")
         st.text_area("O meni", key="about_me", help="Opiši mi kakav si student i na koji način najbolje učiš.")
         st.slider("Znanje iz programiranja", min_value=0, max_value=10, key="programming_knowledge", help="Ocijeni svoje znanje iz programiranja od 0 do 10. Ovisno o tvojem znanju koje ovdje navedeš, prilagodit ću svoje odgovore.")
-        st.form_submit_button("Ažuriraj")
+        st.form_submit_button("Ažuriraj", type="primary")
 
 
 else:
