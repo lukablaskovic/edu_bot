@@ -25,9 +25,9 @@ st.sidebar.write("Chatbot za personalizaciju nastavnih materijala")
 
 st.sidebar.write("Autor: [Luka Blašković](https://github.com/lukablaskovic)")
 
-st.sidebar.write("Source kod dostupan [ovdje](https://github.com/lukablaskovic/edu_bot).")
+st.sidebar.write("Source kôd dostupan [ovdje](https://github.com/lukablaskovic/edu_bot).")
 
-"st.session_state", st.session_state
+#"st.session_state", st.session_state
 
 authenticator = Authenticate(
     secret_credentials_path='google_credentials.json',
@@ -54,16 +54,26 @@ if st.session_state['connected']:
 
     if "openai_api_key" not in st.session_state:
         st.session_state["openai_api_key"] = get_openai_key()
+    
+    def intent_recognition_settings():
+        st.write("intent_agent settings")
+        if "intent_agent_settings" not in st.session_state:
+            st.session_state["intent_agent_settings"] = {}
+        st.session_state["intent_agent_settings"]["direct_llm_prompt"] = st.text_area("Direct LLM Prompt")
 
+    
     with st.sidebar:
         if st.button('Odjava'):
             authenticator.logout()
         container = st.sidebar.container(border=True)
-        container.write("Postavke")
+        with st.expander("Postavke"):
+            intent_recognition_settings()
+    
+    
     
     render_chatbot()
 
-    # Reset conversation
+    # Reset conversation.
     if(st.button("Resetiraj razgovor")):
         st.session_state["messages"] = [{"role": "assistant", "content": "Tu sam! Kako ti pomogu pomoći?🤖"}]
         st.rerun()

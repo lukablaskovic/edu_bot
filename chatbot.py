@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import pandas as pd
 from modules.raptor_module import get_raptor
 
+load_dotenv()
 
 # Configure logging
 
