@@ -119,7 +119,7 @@ def get_user_by_email(email):
     except Exception as e:
         logger.error(f"An error occurred while retrieving the user: {e}")
         return None
-
+# defualt implementation, needs to be updated with different hyperparameters 
 def get_sql_engine():
     sql_database = SQLDatabase(get_engine(), include_tables=["users"])
     nl_sql_retriever = NLSQLRetriever(

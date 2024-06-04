@@ -65,6 +65,10 @@ def intent_recognition(prompt: str, velociraptor: RAPTOR, sql_engine: RetrieverQ
     response = router_query_engine.query(prompt)
     print("response.metadata['selector_result']", response.metadata["selector_result"])
     intent = response.metadata["selector_result"].selections[0]
+    
+    #if intent.index == 2:
+        # must return sql select query which was generated
+    
     return response, intent
 
 def get_intent_description(intent: ToolMetadata) -> str:

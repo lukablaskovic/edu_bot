@@ -97,6 +97,9 @@ if st.session_state['connected']:
         st.write("Ovdje možeš postaviti RAPTOR.")
     
     
+    def sql_rag_settings():
+        st.write("Ovdje možeš postaviti SQL-RAG.")
+    
     with st.sidebar:
         if st.button('Odjava'):
             authenticator.logout()
@@ -105,7 +108,8 @@ if st.session_state['connected']:
             intent_recognition_settings()
         with st.expander("Postavke | RAPTOR", expanded=False):
             raptor_settings()
-    
+        with st.expander("Postavke | SQL-RAG", expanded=False):
+            sql_rag_settings()
     render_chatbot()
 
     # Reset conversation.
