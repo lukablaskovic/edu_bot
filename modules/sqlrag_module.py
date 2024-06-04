@@ -8,7 +8,10 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 from llama_index.core.query_engine import NLSQLTableQueryEngine
+
 llm = OpenAI(temperature=0.1, model="gpt-3.5-turbo")
+from llama_index.core.retrievers import NLSQLRetriever
+from llama_index.core.query_engine import RetrieverQueryEngine
 
 default_db_path = "db/test.db"
 
@@ -115,7 +118,14 @@ def get_user_by_email(email):
             return None
     except Exception as e:
         logger.error(f"An error occurred while retrieving the user: {e}")
-        return None-
+        return None
+
+def get_sql_engine():
+    sql_database = SQLDatabase(get_engine(), include_tables=["users"])
+    nl_sql_retriever = NLSQLRetriever(
+    sql_database, tables=["users"], return_raw=True)
+    query_engine = RetrieverQueryEngine.from_args(nl_sql_retriever)
+    return query_engine
 
 def main():
     engine = get_engine(default_db_path)

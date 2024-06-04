@@ -11,6 +11,9 @@ from llama_index.core.query_engine import RouterQueryEngine
 from typing import Dict
 from modules.raptor_module import RAPTOR
 import streamlit as st
+
+from llama_index.core.query_engine import RetrieverQueryEngine
+
 class LlmQueryEngine(CustomQueryEngine):
     """Custom query engine for direct calls to the LLM model."""
 
@@ -22,7 +25,7 @@ class LlmQueryEngine(CustomQueryEngine):
         llm_response = self.llm.complete(llm_prompt)
         return str(llm_response)
 
-def intent_recognition(prompt: str, velociraptor: RAPTOR):
+def intent_recognition(prompt: str, velociraptor: RAPTOR, sql_engine: RetrieverQueryEngine):
     
     assert prompt is not None
     assert velociraptor is not None
@@ -42,11 +45,20 @@ def intent_recognition(prompt: str, velociraptor: RAPTOR):
     description= st.session_state["intent_agent_settings"]["raptor_query_tool_description"],
     )
     
+    sql_query_engine = sql_engine
+    sql_rag_tool = QueryEngineTool.from_defaults(
+        query_engine=sql_query_engine,
+        name="sql_rag_tool",
+        description=st.session_state["intent_agent_settings"]["sql_rag_query_tool_description"]
+    )
+    
+    
     router_query_engine = RouterQueryEngine(
         selector=LLMSingleSelector.from_defaults(),
         query_engine_tools=[
             llm_tool,
             raptor_tool,
+            sql_rag_tool
         ],
     )
     
@@ -58,7 +70,8 @@ def intent_recognition(prompt: str, velociraptor: RAPTOR):
 def get_intent_description(intent: ToolMetadata) -> str:
     intents = {
         0: "llm_tool",
-        1: "raptor_tool"
+        1: "raptor_tool",
+        2: "sql_rag_tool"
     }
     
     intent_index = intent.index 

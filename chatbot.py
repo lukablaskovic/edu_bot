@@ -5,6 +5,7 @@ from intent_agent import intent_recognition, get_intent_description
 from dotenv import load_dotenv
 import pandas as pd
 from modules.raptor_module import get_raptor
+from modules.sqlrag_module import get_sql_engine
 
 load_dotenv()
 
@@ -36,7 +37,9 @@ def render_chatbot():
                 st.error(f"Greška: {e}")
                 return
             
-            response, intent = intent_recognition(prompt, velociraptor)
+            sql_query_engine = get_sql_engine()
+            
+            response, intent = intent_recognition(prompt, velociraptor, sql_query_engine)
             
             print("__________________________INTENT___________________________")
 

@@ -83,6 +83,15 @@ if st.session_state['connected']:
             ),
             key="temp_raptor_query_tool_description"
         )
+        
+        st.text_area(
+            label="SQL-RAG Engine Description",
+            value=st.session_state["intent_agent_settings"]["sql_rag_query_tool_description"],
+            on_change=lambda: st.session_state["intent_agent_settings"].update(
+                {"sql_rag_query_tool_description": st.session_state["temp_sql_rag_query_tool_description"]}
+            ),
+            key="temp_sql_rag_query_tool_description"
+        )
     
     def raptor_settings():
         st.write("Ovdje možeš postaviti RAPTOR.")
