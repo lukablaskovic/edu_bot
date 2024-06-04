@@ -115,7 +115,7 @@ def get_user_by_email(email):
             return None
     except Exception as e:
         logger.error(f"An error occurred while retrieving the user: {e}")
-        return None
+        return None-
 
 def main():
     engine = get_engine(default_db_path)

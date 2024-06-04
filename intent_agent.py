@@ -10,19 +10,7 @@ from llama_index.core.selectors import LLMSingleSelector
 from llama_index.core.query_engine import RouterQueryEngine
 from typing import Dict
 from modules.raptor_module import RAPTOR
-
-
-direct_llm_prompt = (
-    "Given the user query, respond as best as possible following this guidelines:\n"
-    "- If the intent of the user is to get information about the abilities of the AI, respond with: "
-    "EduBot ti može pomoći u učenju, razumijevanju gradiva iz programiranja, provjeri bodova i obaveza na kolegiju, provjeri stanja vašeg projekta na Githubu. \n"
-    "- If the intent of the user is harmful. Respond with: Nažalost, ne mogu ti pomoći s ovime. \n"
-    "- If the intent of the user is just to chat respond back politely in Croatian and do not start conversations with him non-related to the faculty, programming and IT.\n"
-    "- If the intent of the user is to get information outside of the context given, respond with: "
-    "E to ne znam! Molim te pitaj me nešto u kontekstu fakulteta Informatike i gradiva iz programiranja...\n"
-    "Query: {query}"
-)
-
+import streamlit as st
 class LlmQueryEngine(CustomQueryEngine):
     """Custom query engine for direct calls to the LLM model."""
 
@@ -40,25 +28,18 @@ def intent_recognition(prompt: str, velociraptor: RAPTOR):
     assert velociraptor is not None
     
     # generic query engine - direct to LLM
-    llm_query_engine = LlmQueryEngine(llm=OpenAI(model="gpt-3.5-turbo"), prompt=direct_llm_prompt)
+    llm_query_engine = LlmQueryEngine(llm=OpenAI(model="gpt-3.5-turbo"), prompt=st.session_state["intent_agent_settings"]["direct_llm_prompt"])
     llm_tool = QueryEngineTool.from_defaults(
         query_engine=llm_query_engine,
         name="llm_query_tool",
-        description=(
-            "Useful for when the INTENT of the user isnt clear, is broad, "
-            "or when the user is asking general questions that have nothing "
-            "to do with the faculty or programming. Use this tool when the other tool is not useful."
-        ),
+        description= st.session_state["intent_agent_settings"]["llm_query_tool_description"],
     )
     
     raptor_query_engine = velociraptor.query_engine
     raptor_tool = QueryEngineTool.from_defaults(
     query_engine=raptor_query_engine,
     name="vector_query_tool",
-    description=(
-        "Useful for retrieving specific context about the faculty, programming,"
-        "javascript, python, classes at the Faculty of Informatics, scripts and pdf files,"
-        "courses details, and help with programming assignments and exercises."),
+    description= st.session_state["intent_agent_settings"]["raptor_query_tool_description"],
     )
     
     router_query_engine = RouterQueryEngine(

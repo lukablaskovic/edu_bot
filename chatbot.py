@@ -15,7 +15,7 @@ openn_ai_client = openai.Client()
 def render_chatbot():
     
     if "messages" not in st.session_state:
-        st.session_state["messages"] = [{"role": "assistant", "content": "Tu sam! Kako ti pomogu pomoći?🤖"}]
+        st.session_state["messages"] = [{"role": "assistant", "content": "Tu sam! Kako ti mogu pomoći?🤖"}]
 
     for msg in st.session_state.messages:
         st.chat_message(msg["role"]).write(msg["content"])

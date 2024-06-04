@@ -6,7 +6,7 @@ from openai_key import get_openai_key
 from chatbot import render_chatbot
 from dotenv import load_dotenv
 
-
+from settings import initialize_settings
 
 # Import logging
 # logging.basicConfig(level=logging.DEBUG)
@@ -27,7 +27,7 @@ st.sidebar.write("Autor: [Luka Blašković](https://github.com/lukablaskovic)")
 
 st.sidebar.write("Source kôd dostupan [ovdje](https://github.com/lukablaskovic/edu_bot).")
 
-#"st.session_state", st.session_state
+"st.session_state", st.session_state
 
 authenticator = Authenticate(
     secret_credentials_path='google_credentials.json',
@@ -40,7 +40,7 @@ authenticator = Authenticate(
 authenticator.check_authentification()
 
 if st.session_state['connected']:
-
+    initialize_settings()
     col1, col2 = st.columns([3, 1])
 
     with col1:
@@ -56,26 +56,52 @@ if st.session_state['connected']:
         st.session_state["openai_api_key"] = get_openai_key()
     
     def intent_recognition_settings():
-        st.write("intent_agent settings")
-        if "intent_agent_settings" not in st.session_state:
-            st.session_state["intent_agent_settings"] = {}
-        st.session_state["intent_agent_settings"]["direct_llm_prompt"] = st.text_area("Direct LLM Prompt")
-
+        
+        st.text_area(
+            label="Direct LLM Prompt",
+            value=st.session_state["intent_agent_settings"]["direct_llm_prompt"],
+            on_change=lambda: st.session_state["intent_agent_settings"].update(
+                {"direct_llm_prompt": st.session_state["temp_direct_llm_prompt"]}
+            ),
+            key="temp_direct_llm_prompt"
+        )
+        
+        st.text_area(
+            label="Query Engine Description",
+            value=st.session_state["intent_agent_settings"]["llm_query_tool_description"],
+            on_change=lambda: st.session_state["intent_agent_settings"].update(
+                {"llm_query_tool_description": st.session_state["temp_llm_query_tool_description"]}
+            ),
+            key="temp_llm_query_tool_description"
+        )
+        
+        st.text_area(
+            label="RAPTOR Engine Description",
+            value=st.session_state["intent_agent_settings"]["raptor_query_tool_description"],
+            on_change=lambda: st.session_state["intent_agent_settings"].update(
+                {"raptor_query_tool_description": st.session_state["temp_raptor_query_tool_description"]}
+            ),
+            key="temp_raptor_query_tool_description"
+        )
+    
+    def raptor_settings():
+        st.write("Ovdje možeš postaviti RAPTOR.")
+    
     
     with st.sidebar:
         if st.button('Odjava'):
             authenticator.logout()
         container = st.sidebar.container(border=True)
-        with st.expander("Postavke"):
+        with st.expander("Postavke | Intent Recognition", expanded=False):
             intent_recognition_settings()
-    
-    
+        with st.expander("Postavke | RAPTOR", expanded=False):
+            raptor_settings()
     
     render_chatbot()
 
     # Reset conversation.
     if(st.button("Resetiraj razgovor")):
-        st.session_state["messages"] = [{"role": "assistant", "content": "Tu sam! Kako ti pomogu pomoći?🤖"}]
+        st.session_state["messages"] = [{"role": "assistant", "content": "Tu sam! Kako ti mogu pomoći?🤖"}]
         st.rerun()
 
     
