@@ -75,27 +75,50 @@ if st.session_state['connected']:
             key="temp_llm_query_tool_description"
         )
         
-        st.text_area(
-            label="RAPTOR Engine Description",
-            value=st.session_state["intent_agent_settings"]["raptor_query_tool_description"],
-            on_change=lambda: st.session_state["intent_agent_settings"].update(
-                {"raptor_query_tool_description": st.session_state["temp_raptor_query_tool_description"]}
-            ),
-            key="temp_raptor_query_tool_description"
-        )
+        use_raptor = st.checkbox("Koristi RAPTOR Engine", 
+                                 value= st.session_state["intent_agent_settings"]["use_raptor"],
+                                 on_change=lambda: st.session_state["intent_agent_settings"].update(
+                                        {"use_raptor": st.session_state["temp_use_raptor"]}
+                                    ), 
+                                 key="temp_use_raptor")
+        if use_raptor:
+            st.text_area(
+                label="RAPTOR Engine Description",
+                value=st.session_state["intent_agent_settings"]["raptor_query_tool_description"],
+                on_change=lambda: st.session_state["intent_agent_settings"].update(
+                    {"raptor_query_tool_description": st.session_state["temp_raptor_query_tool_description"]}
+                ),
+                key="temp_raptor_query_tool_description"
+            )
         
-        st.text_area(
-            label="SQL-RAG Engine Description",
-            value=st.session_state["intent_agent_settings"]["sql_rag_query_tool_description"],
-            on_change=lambda: st.session_state["intent_agent_settings"].update(
-                {"sql_rag_query_tool_description": st.session_state["temp_sql_rag_query_tool_description"]}
-            ),
-            key="temp_sql_rag_query_tool_description"
-        )
+        use_sql_rag = st.checkbox("Koristi SQL-RAG Engine", 
+                                 value= st.session_state["intent_agent_settings"]["use_sql_rag"],
+                                 on_change=lambda: st.session_state["intent_agent_settings"].update(
+                                        {"use_sql_rag": st.session_state["temp_use_sql_rag"]}
+                                    ), 
+                                 key="temp_use_sql_rag")
+        if use_sql_rag:
+            st.text_area(
+                label="SQL-RAG Engine Description",
+                value=st.session_state["intent_agent_settings"]["sql_rag_query_tool_description"],
+                on_change=lambda: st.session_state["intent_agent_settings"].update(
+                    {"sql_rag_query_tool_description": st.session_state["temp_sql_rag_query_tool_description"]}
+                ),
+                key="temp_sql_rag_query_tool_description"
+            )
     
     def raptor_settings():
-        st.write("Ovdje možeš postaviti RAPTOR.")
-    
+        st.radio(
+            "RAPTOR Retriever Mode",
+            options=["collapsed_retrieval", "tree_traversal_retrieval",],
+            on_change=lambda: st.session_state["intent_agent_settings"].update(
+                {"retriever_mode": st.session_state["temp_retriever_mode"]}
+            ),
+            key="temp_retriever_mode",
+        )
+        st.number_input("Unesi top-k", min_value=1, max_value=10, value=st.session_state["intent_agent_settings"]["top_k"], key="top_k")
+
+            
     
     def sql_rag_settings():
         st.write("Ovdje možeš postaviti SQL-RAG.")
@@ -106,10 +129,13 @@ if st.session_state['connected']:
         container = st.sidebar.container(border=True)
         with st.expander("Postavke | Intent Recognition", expanded=False):
             intent_recognition_settings()
-        with st.expander("Postavke | RAPTOR", expanded=False):
-            raptor_settings()
-        with st.expander("Postavke | SQL-RAG", expanded=False):
-            sql_rag_settings()
+        if st.session_state["intent_agent_settings"]["use_raptor"]:
+            st.write("test:", st.session_state["intent_agent_settings"]["use_raptor"])
+            with st.expander("Postavke | RAPTOR", expanded=False):
+                raptor_settings()
+        if st.session_state["intent_agent_settings"]["use_sql_rag"]:
+            with st.expander("Postavke | SQL-RAG", expanded=False):
+                sql_rag_settings()
     render_chatbot()
 
     # Reset conversation.

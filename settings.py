@@ -38,5 +38,8 @@ def initialize_settings():
             st.session_state["intent_agent_settings"] = {}
     st.session_state["intent_agent_settings"]["direct_llm_prompt"] = DEFUALT_LLM_PROMPT
     st.session_state["intent_agent_settings"]["llm_query_tool_description"] = DEFAULT_LLM_QUERY_TOOL_DESCRIPTION
+    st.session_state["intent_agent_settings"]["use_raptor"] = True
+    st.session_state["intent_agent_settings"]["use_sql_rag"] = True 
     st.session_state["intent_agent_settings"]["raptor_query_tool_description"] = DEFAULT_RAPTOR_QUERY_TOOL_DESCRIPTION
     st.session_state["intent_agent_settings"]["sql_rag_query_tool_description"] = DEFUALT_SQL_RAG_QUERY_TOOL_DESCRIPTION
+    st.session_state["intent_agent_settings"]["top_k"] = 2

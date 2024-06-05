@@ -52,6 +52,7 @@ def intent_recognition(prompt: str, velociraptor: RAPTOR, sql_engine: RetrieverQ
         description=st.session_state["intent_agent_settings"]["sql_rag_query_tool_description"]
     )
     
+    print("sqlengine:", sql_engine)
     
     router_query_engine = RouterQueryEngine(
         selector=LLMSingleSelector.from_defaults(),
