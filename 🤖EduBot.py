@@ -5,7 +5,7 @@ from streamlit_google_auth import Authenticate
 from openai_key import get_openai_key
 from chatbot import render_chatbot
 from dotenv import load_dotenv
-
+from modules.sqlrag_module import get_tables 
 from settings import initialize_settings
 
 # Import logging
@@ -69,7 +69,8 @@ if st.session_state['connected']:
             key="temp_direct_llm_prompt", 
             height=200
         )
-        
+        st.button(label="Spremi", key="btn_save_direct_llm_settings", type="primary")
+
         st.text_area(
             label="Query Engine Description",
             value=st.session_state["intent_agent_settings"]["llm_query_tool_description"],
@@ -79,7 +80,8 @@ if st.session_state['connected']:
             key="temp_llm_query_tool_description", 
             height=200
         )
-        
+        st.button(label="Spremi", key="btn_save_query_engine_desc", type="primary")
+
         st.divider()
         
         use_raptor = st.checkbox("Koristi RAPTOR Engine", 
@@ -144,7 +146,14 @@ if st.session_state['connected']:
 
     
     def sql_rag_settings():
-        st.write("Ovdje možeš postaviti SQL-RAG.")
+        st.write("Označi tablice iz baze podataka koje će se koristiti za SQL-RAG")
+        
+        # Tables which will be used for SQL-RAG        
+        tables = get_tables()
+        selected_tables = {}
+        
+        for table in tables:
+            selected_tables[table] = st.checkbox(table, key=table)
     
     with st.sidebar:
         if st.button('Odjava'):

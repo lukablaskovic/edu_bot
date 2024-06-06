@@ -18,10 +18,6 @@ default_db_path = "db/test.db"
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def get_engine(db_path = default_db_path):
-    return create_engine(f"sqlite:///{db_path}", echo=True)
-
-
 def get_engine(db_path=default_db_path):
     db_dir = os.path.dirname(db_path)
     if not os.path.exists(db_dir):
@@ -127,6 +123,20 @@ def get_sql_engine():
     query_engine = RetrieverQueryEngine.from_args(nl_sql_retriever)
     return query_engine
 
+def get_tables():
+    engine = get_engine()
+    try:
+        metadata = MetaData()
+        metadata.reflect(bind=engine)
+        
+        table_names = metadata.tables.keys()
+        
+        logger.info(f"Tables in the database: {table_names}")
+        return list(table_names)
+    except Exception as e:
+        logger.error(f"An error occurred while retrieving the tables: {e}")
+        return []
+    
 def main():
     engine = get_engine(default_db_path)
     metadata_obj = MetaData()

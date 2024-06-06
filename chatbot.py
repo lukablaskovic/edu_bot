@@ -57,22 +57,6 @@ def render_chatbot():
                 st.error(f"Greška: {e}")
             return
 
-# will be removed
-SYSTEM_CONTENT = "You are a helpful assistant for students at the Faculty of Informatics. Respond to user queries and provide information about tools and resources available to students in Croatian language."
-
-def get_chatbot_response(user_prompt, raptor_content):
-    openai.api_key = st.session_state["openai_api_key"]
-    response = openn_ai_client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": SYSTEM_CONTENT},
-            {"role": "assistant", "content": raptor_content}, 
-            {"role": "user", "content": user_prompt}
-        ],
-        temperature=0.1,
-        max_tokens=500,
-    )
-    return response.choices[0].message.content
 
 UPLOAD_DIR = "uploaded_files"
 STATE_FILE = "file_state.csv"
