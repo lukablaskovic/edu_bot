@@ -22,6 +22,7 @@ STATE_FILE = "file_state.csv"
 if not os.path.exists(UPLOAD_DIR):
     os.makedirs(UPLOAD_DIR)
 
+
 def save_uploaded_file(uploaded_file):
     if uploaded_file is not None:
         with st.spinner(f'Saving {uploaded_file.name}...'):

@@ -8,15 +8,14 @@ from dotenv import load_dotenv
 from modules.sqlrag_module import get_tables 
 from settings import initialize_settings, save_prompt
 
-# Import logging
+# import logging
 # logging.basicConfig(level=logging.DEBUG)
-
-load_dotenv()
 
 st.set_page_config(
     page_title="EduBot",
     page_icon="🤖",
 )
+
 st.title('🤖🎓EduBot')
 
 st.sidebar.title('🤖🎓EduBot')
@@ -45,6 +44,7 @@ authenticator = Authenticate(
 
 authenticator.check_authentification()
 
+
 if st.session_state['connected']:
     initialize_settings()
     col1, col2 = st.columns([3, 1])
@@ -59,7 +59,7 @@ if st.session_state['connected']:
         debug_mode_on = st.toggle("Ispod haube", key="debug_mode")
 
     def intent_recognition_settings():
-        
+        st.checkbox("Koristi cijeli razgovor kao LLM prompt", key="use_full_conversation")
         st.text_area(
             label="Direct LLM Prompt",
             value=st.session_state["intent_agent_settings"]["direct_llm_prompt"],
@@ -126,7 +126,7 @@ if st.session_state['connected']:
     def raptor_settings():
         st.radio(
             "RAPTOR Retriever Mode",
-            options=["collapsed_retrieval", "tree_traversal_retrieval",],
+            options=["collapsed", "tree_traversal",],
             on_change=lambda: st.session_state["intent_agent_settings"].update(
                 {"retriever_mode": st.session_state["temp_retriever_mode"]}
             ),
@@ -167,7 +167,6 @@ if st.session_state['connected']:
         container = st.sidebar.container(border=True)
         
         with st.expander("Postavke | Odabir modela", expanded=False):
-            st.write("Odabir modela")
             st.radio(
                 "Odaberi LLM koji želiš koristiti za pogon EduBota🤖",
                 options=["GPT", "Mistral", "Gemma"],
@@ -192,9 +191,10 @@ if st.session_state['connected']:
 
                 
             elif(st.session_state["llm_selection"]["selected_model"] == "Mistral"):
-                st.write("Mistral Settings")
+                st.write("Mistral Settings (To-Do)")
             else:
-                st.write("Gemma Settings")
+                st.write("Gemma Settings (To-Do)")
+                
         with st.expander("Postavke | Intent Recognition", expanded=False):
             intent_recognition_settings()
 

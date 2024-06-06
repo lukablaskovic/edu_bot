@@ -21,6 +21,9 @@ from settings import get_llm_settings
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+logger.setLevel(logging.WARNING)
+
+
 LLM_settings = get_llm_settings()
 EMBEDDING_MODEL = st.session_state["llm_selection"]["selected_embedding_model"]
 RETRIEVAL_METHOD = st.session_state["intent_agent_settings"]["retriever_mode"]
@@ -32,7 +35,7 @@ class RAPTOR:
         self.collection_name = collection_name
         # Set up logging
         self.logger = logging.getLogger(__name__)
-        logging.basicConfig(level=logging.INFO)
+        logging.basicConfig()
         self.logger.info("Initializing RAPTOR with collection_name: %s", collection_name)
 
         start_time = time.time()

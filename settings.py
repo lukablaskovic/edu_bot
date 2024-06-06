@@ -51,7 +51,7 @@ def initialize_settings():
     
     # RAPTOR
     st.session_state["intent_agent_settings"]["similarity_top_k"] = 2
-    st.session_state["intent_agent_settings"]["retriever_mode"] = "collapsed_retrieval"
+    st.session_state["intent_agent_settings"]["retriever_mode"] = "collapsed"
     
      # sql-rag
     if "sql_rag_tables" not in st.session_state:
@@ -68,6 +68,7 @@ def get_llm_settings():
     """
     if "llm_selection" not in st.session_state:
         initialize_settings()
+        print("***Initialized settings!***")
     
     if st.session_state["llm_selection"]["selected_model"] == "GPT":
         return st.session_state["llm_selection"]["selected_gpt"]

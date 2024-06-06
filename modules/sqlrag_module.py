@@ -15,8 +15,10 @@ from llama_index.core.query_engine import RetrieverQueryEngine
 import streamlit as st
 default_db_path = "db/test.db"
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig()
 logger = logging.getLogger(__name__)
+
+logger.setLevel(logging.WARNING)
 
 def get_engine(db_path=default_db_path):
     db_dir = os.path.dirname(db_path)
