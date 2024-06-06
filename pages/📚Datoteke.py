@@ -8,7 +8,7 @@ from modules.raptor_module import get_raptor
 from settings import initialize_settings
 
 st.set_page_config(
-    page_title="EduBot - Skripte",
+    page_title="EduBot - Datoteke",
     page_icon="🤖",
 )
 
@@ -86,7 +86,7 @@ def save_state_changes(edited_df):
 if st.session_state['connected']:
     initialize_settings()
 
-    st.title("📚Skripte")
+    st.title("📚Datoteke")
     st.write("Ovde možeš učitati skripte ili druge datoteke koje želiš podijeliti samnom kako bi ti pomogao u učenju.")
     st.write("Jednom kad učitaš skripte, bolje ću razumijevati gradivo kolegija koje me pitaš i ponudit ću ti kvalitetnije odgovore 🤖")
     st.write("Učitane datoteke će biti pohranjene na ovom serveru i bit će dostupne samo tebi. Naravno, možeš ih obrisati kad god poželiš.")

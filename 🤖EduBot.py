@@ -11,17 +11,23 @@ from settings import initialize_settings
 # Import logging
 # logging.basicConfig(level=logging.DEBUG)
 
-
+load_dotenv()
 
 st.set_page_config(
     page_title="EduBot",
     page_icon="🤖",
 )
-load_dotenv()
 st.title('🤖🎓EduBot')
 
 st.sidebar.title('🤖🎓EduBot')
-st.sidebar.write("Chatbot za personalizaciju nastavnih materijala")
+st.sidebar.markdown("**Chatbot za personalizaciju nastavnih materijala**")
+
+st.sidebar.markdown(
+    "EduBot🤖🎓 je chatbot za studente i nastavnike Fakulteta informatike u Puli. Koristi velike jezične modele (LLM) za prepoznavanje namjera korisnika i generiranje odgovora.\n\n"
+    "EduBot može odgovarati na pitanja iz dokumenata pohranjenih u bazi znanja (📚Datoteke). Korisnik može dodavati, brisati i definirati koje datoteke će se koristiti za obogaćivanje znanja EduBota.\n\n"
+    "Korisnik može pohraniti informacije o sebi u 👤Korisničkom profilu kako bi EduBot prilagodio odgovore, npr. prema znanju iz programiranja.\n\n"
+    "EduBot također može dohvaćati podatke iz baze podataka koristeći SQL-RAG tehniku."
+)
 
 st.sidebar.write("Autor: [Luka Blašković](https://github.com/lukablaskovic)")
 
@@ -60,7 +66,8 @@ if st.session_state['connected']:
             on_change=lambda: st.session_state["intent_agent_settings"].update(
                 {"direct_llm_prompt": st.session_state["temp_direct_llm_prompt"]}
             ),
-            key="temp_direct_llm_prompt"
+            key="temp_direct_llm_prompt", 
+            height=200
         )
         
         st.text_area(
@@ -69,8 +76,11 @@ if st.session_state['connected']:
             on_change=lambda: st.session_state["intent_agent_settings"].update(
                 {"llm_query_tool_description": st.session_state["temp_llm_query_tool_description"]}
             ),
-            key="temp_llm_query_tool_description"
+            key="temp_llm_query_tool_description", 
+            height=200
         )
+        
+        st.divider()
         
         use_raptor = st.checkbox("Koristi RAPTOR Engine", 
                                  value= st.session_state["intent_agent_settings"]["use_raptor"],
@@ -85,8 +95,11 @@ if st.session_state['connected']:
                 on_change=lambda: st.session_state["intent_agent_settings"].update(
                     {"raptor_query_tool_description": st.session_state["temp_raptor_query_tool_description"]}
                 ),
-                key="temp_raptor_query_tool_description"
+                key="temp_raptor_query_tool_description",
+                height=200
             )
+        st.button(label="Spremi", key="btn_save_raptor_settings", type="primary")
+        st.divider()
         
         use_sql_rag = st.checkbox("Koristi SQL-RAG Engine", 
                                  value= st.session_state["intent_agent_settings"]["use_sql_rag"],
@@ -101,8 +114,11 @@ if st.session_state['connected']:
                 on_change=lambda: st.session_state["intent_agent_settings"].update(
                     {"sql_rag_query_tool_description": st.session_state["temp_sql_rag_query_tool_description"]}
                 ),
-                key="temp_sql_rag_query_tool_description"
+                key="temp_sql_rag_query_tool_description",
+                height=200
             )
+        
+        st.button(label="Spremi", key="btn_save_sqlrag_settings", type="primary")
     
     def raptor_settings():
         st.radio(
