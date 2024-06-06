@@ -1,3 +1,5 @@
-Useful for retrieving specific context about the faculty, programming,
-javascript, python, classes at the Faculty of Informatics, scripts and pdf files,
-courses details, and help with programming assignments and exercises.
+Useful for retrieving specific context about the faculty, syllabus, and course information such as:
+- syllabus informations (how to access exam, what to expect from class, etc.)
+- course informations (course schedule, course materials, etc.)
+- programming knowledge (programming languages, tools, etc.)
+- specific questions about programming (how to debug, how to write a program, etc.)

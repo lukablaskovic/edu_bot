@@ -40,8 +40,8 @@ def initialize_settings():
         st.session_state["llm_selection"]["selected_gpt"] = DEFAULT_SELECTED_GPT
         st.session_state["llm_selection"]["selected_embedding_model"] = DEFAULT_SELECTED_EMBEDDING_MODEL
     
-    if "intent_agent_settings" not in st.session_state:
-        st.session_state["intent_agent_settings"] = {}
+    
+    st.session_state["intent_agent_settings"] = {}
     st.session_state["intent_agent_settings"]["direct_llm_prompt"] = DEFUALT_DIRECT_LLM_PROMPT
     st.session_state["intent_agent_settings"]["llm_query_tool_description"] = DEFAULT_LLM_QUERY_TOOL_DESCRIPTION
     st.session_state["intent_agent_settings"]["use_raptor"] = True

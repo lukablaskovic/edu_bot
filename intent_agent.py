@@ -54,8 +54,7 @@ def intent_recognition(prompt: str, velociraptor: RAPTOR, sql_engine: RetrieverQ
         name="sql_rag_tool",
         description=st.session_state["intent_agent_settings"]["sql_rag_query_tool_description"]
     )
-    
-    print("sqlengine:", sql_engine)
+
     
     router_query_engine = RouterQueryEngine(
         selector=LLMSingleSelector.from_defaults(),
@@ -65,8 +64,9 @@ def intent_recognition(prompt: str, velociraptor: RAPTOR, sql_engine: RetrieverQ
             sql_rag_tool
         ],
     )
+    query = "<query>" + prompt + "</query>"
+    response = router_query_engine.query(query)
     
-    response = router_query_engine.query(prompt)
     print("response.metadata['selector_result']", response.metadata["selector_result"])
     intent = response.metadata["selector_result"].selections[0]
     

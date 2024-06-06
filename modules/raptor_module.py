@@ -25,6 +25,7 @@ logger.setLevel(logging.WARNING)
 
 
 LLM_settings = get_llm_settings()
+
 EMBEDDING_MODEL = st.session_state["llm_selection"]["selected_embedding_model"]
 RETRIEVAL_METHOD = st.session_state["intent_agent_settings"]["retriever_mode"]
 SIMILARITY_TOP_K = st.session_state["intent_agent_settings"]["similarity_top_k"]

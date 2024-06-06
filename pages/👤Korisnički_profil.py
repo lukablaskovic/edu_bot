@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from streamlit_google_auth import Authenticate
 from sqlalchemy import MetaData, Table, insert
 
-from modules.sqlrag_module import create_users_table, get_engine, upsert_user, get_user_by_email
+from modules.sqlrag_module import create_users_table, get_engine, upsert_user, get_user_by_email, create_pjs_points_table
 
 st.set_page_config(
     page_title="EdubBot - Korisnički profil",

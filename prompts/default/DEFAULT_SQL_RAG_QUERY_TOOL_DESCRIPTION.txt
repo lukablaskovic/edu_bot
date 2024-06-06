@@ -1,4 +1,4 @@
 Useful for retrieving specific data from database,
-you use this tool when you identify that the user is asking for data that is stored in the database,
-and can identify tables and select query that is relevant to the user query.
-Usually, you will use this tool when you have user needs for specific data related to his account, class score, available classes etc.
+- you can use this tool when user asks about student information like his name, total points, grades, attendance, etc.
+- you can use this when user asks about his points/grades for some class or his attendance in some class.
+- use this tool when user asks about his personal information and programming knowledge.

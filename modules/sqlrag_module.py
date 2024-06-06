@@ -1,5 +1,5 @@
 import logging
-from sqlalchemy import create_engine, MetaData, Table, Column, String, Integer, select, insert, update
+from sqlalchemy import create_engine, MetaData, Table, Column, String, Integer, ForeignKeyConstraint, select, insert, update, ForeignKey
 from llama_index.core import SQLDatabase
 from llama_index.llms.openai import OpenAI
 from sqlalchemy import text
@@ -48,6 +48,7 @@ def create_users_table():
         logger.info(f"Table '{table_name}' created successfully.")
     except Exception as e:
         logger.error(f"An error occurred while creating the table: {e}")
+
 
 def insert_rows(table_name : str, rows):
     try:
@@ -120,6 +121,7 @@ def get_user_by_email(email):
     
  
 def get_sql_engine(tables: list):
+    print("tables included:", tables)
     sql_database = SQLDatabase(get_engine(), include_tables=tables)
     nl_sql_retriever = NLSQLRetriever(
     sql_database, tables=["users"], return_raw=True)
@@ -139,66 +141,55 @@ def get_tables():
     except Exception as e:
         logger.error(f"An error occurred while retrieving the tables: {e}")
         return []
-    
-def main():
-    engine = get_engine(default_db_path)
-    metadata_obj = MetaData()
-    table_name = "city_stats"
-    city_stats_table = Table(
-        table_name,
-        metadata_obj,
-        Column("city_name", String(16), primary_key=True),
-        Column("population", Integer),
-        Column("country", String(16), nullable=False),
-    )
-    metadata_obj.create_all(engine)
-        
-    sql_database = SQLDatabase(engine, include_tables=["city_stats"])
 
-    # Uncomment to insert initial rows
-    
-    rows = [
-        {"city_name": "Toronto", "population": 2930000, "country": "Canada"},
-        {"city_name": "Tokyo", "population": 13960000, "country": "Japan"},
-        {"city_name": "Chicago", "population": 2679000, "country": "United States"},
-        {"city_name": "Seoul", "population": 9776000, "country": "South Korea"},
+def create_pjs_points_table():
+    try:
+        engine = get_engine()
+        metadata_obj = MetaData()
+        table_name = "PJS_points"
+        pjs_points_table = Table(
+            table_name,
+            metadata_obj,
+            Column("id", Integer, primary_key=True, autoincrement=True),
+            Column("user_id", Integer, ForeignKey("users.id"), nullable=False),
+            Column("exam_1_points", Integer, nullable=False, default=0),
+            Column("exam_2_points", Integer, nullable=False, default=0),
+            Column("exam_3_points", Integer, nullable=False, default=0),
+            Column("exam_4_points", Integer, nullable=False, default=0),
+            Column("exam_5_points", Integer, nullable=False),
+            Column("feedback", String(256), nullable=False)
+        )
+        metadata_obj.create_all(engine)
+        logger.info(f"Table '{table_name}' created successfully.")
+    except Exception as e:
+        logger.error(f"An error occurred while creating the table: {e}")
+
+
+def insert_pjs_points(rows):
+    try:
+        engine = get_engine()
+        metadata = MetaData()
+        table = Table("PJS_points", metadata, autoload_with=engine)
+        
+        with engine.begin() as connection:
+            for row in rows:
+                stmt = insert(table).values(**row)
+                connection.execute(stmt)
+                logger.info(f"Inserted row: {row}")
+
+        logger.info("All rows inserted successfully into 'PJS_points' table.")
+    except Exception as e:
+        logger.error(f"An error occurred while inserting rows: {e}")
+
+def main():
+    create_pjs_points_table()
+
+    pjs_points_data = [
+        {"user_id": 1, "exam_1_points": 85, "exam_2_points": 90, "exam_3_points": 78, "exam_4_points": 88, "exam_5_points": 92, "feedback": "Good progress overall, keep up the good work."},
     ]
 
-    for row in rows:
-        stmt = insert(city_stats_table).values(**row)
-        with engine.begin() as connection:
-            cursor = connection.execute(stmt)
-            logger.info(f"Inserted row: {row}")
-
-    stmt = select(
-        city_stats_table.c.city_name,
-        city_stats_table.c.population,
-        city_stats_table.c.country,
-    ).select_from(city_stats_table)
-
-    with engine.connect() as connection:
-        results = connection.execute(stmt).fetchall()
-        logger.info("Current table contents:")
-        for result in results:
-            logger.info(result)
-
-
-    # Uncomment to fetch rows
-    """
-    with engine.connect() as con:
-        rows = con.execute(text("SELECT city_name from city_stats"))
-    for row in rows:
-        print(row)
-    """
-
-    # Text-to-SQL Query Engine
-    query_engine = NLSQLTableQueryEngine(
-        sql_database=sql_database, tables=["city_stats"], llm=llm
-    )
-    query_str = "Which city has the highest population?"
-    response = query_engine.query(query_str)
-
-    print("RESPONSE", response)
+    # Insert sample data into 'PJS_points' table
+    insert_pjs_points(pjs_points_data)
 
 if __name__ == "__main__":
     main()
