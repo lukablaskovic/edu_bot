@@ -14,7 +14,8 @@ DEFAULT_RAPTOR_QUERY_TOOL_DESCRIPTION = read_prompt_file("./prompts/DEFAULT_RAPT
 DEFUALT_SQL_RAG_QUERY_TOOL_DESCRIPTION = read_prompt_file("./prompts/DEFUALT_SQL_RAG_QUERY_TOOL_DESCRIPTION.txt")
 
 DEFAULT_SELECTED_MODEL = "GPT"
-DEFAULT_SELECTED_GPT = "mda"
+DEFAULT_SELECTED_GPT = "gpt-3.5-turbo"
+DEFAULT_SELECTED_EMBEDDING_MODEL = "text-embedding-3-small"
 
 def initialize_settings():
     """
@@ -24,6 +25,8 @@ def initialize_settings():
     if "llm_selection" not in st.session_state:
         st.session_state["llm_selection"] = {}
         st.session_state["llm_selection"]["selected_model"] = DEFAULT_SELECTED_MODEL
+        st.session_state["llm_selection"]["selected_gpt"] = DEFAULT_SELECTED_GPT
+        st.session_state["llm_selection"]["selected_embedding_model"] = DEFAULT_SELECTED_EMBEDDING_MODEL
     
     if "intent_agent_settings" not in st.session_state:
             st.session_state["intent_agent_settings"] = {}
@@ -33,4 +36,18 @@ def initialize_settings():
     st.session_state["intent_agent_settings"]["use_sql_rag"] = True 
     st.session_state["intent_agent_settings"]["raptor_query_tool_description"] = DEFAULT_RAPTOR_QUERY_TOOL_DESCRIPTION
     st.session_state["intent_agent_settings"]["sql_rag_query_tool_description"] = DEFUALT_SQL_RAG_QUERY_TOOL_DESCRIPTION
-    st.session_state["intent_agent_settings"]["top_k"] = 2
+    
+    # RAPTOR
+    st.session_state["intent_agent_settings"]["similarity_top_k"] = 2
+    st.session_state["intent_agent_settings"]["retriever_mode"] = "collapsed_retrieval"
+    
+    
+def get_llm_settings():
+    """
+    Get LLM settings.
+    """
+    if "llm_selection" not in st.session_state:
+        initialize_settings()
+    
+    if st.session_state["llm_selection"]["selected_model"] == "GPT":
+        return st.session_state["llm_selection"]["selected_gpt"]

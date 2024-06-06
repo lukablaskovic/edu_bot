@@ -11,6 +11,7 @@ from llama_index.core.query_engine import RouterQueryEngine
 from typing import Dict
 from modules.raptor_module import RAPTOR
 import streamlit as st
+from settings import get_llm_settings
 
 from llama_index.core.query_engine import RetrieverQueryEngine
 
@@ -25,13 +26,17 @@ class LlmQueryEngine(CustomQueryEngine):
         llm_response = self.llm.complete(llm_prompt)
         return str(llm_response)
 
+LLM_settings = get_llm_settings()
+
 def intent_recognition(prompt: str, velociraptor: RAPTOR, sql_engine: RetrieverQueryEngine):
     
     assert prompt is not None
     assert velociraptor is not None
     
+    
+    
     # generic query engine - direct to LLM
-    llm_query_engine = LlmQueryEngine(llm=OpenAI(model="gpt-3.5-turbo"), prompt=st.session_state["intent_agent_settings"]["direct_llm_prompt"])
+    llm_query_engine = LlmQueryEngine(llm=OpenAI(model=LLM_settings), prompt=st.session_state["intent_agent_settings"]["direct_llm_prompt"])
     llm_tool = QueryEngineTool.from_defaults(
         query_engine=llm_query_engine,
         name="llm_query_tool",

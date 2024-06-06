@@ -113,7 +113,18 @@ if st.session_state['connected']:
             ),
             key="temp_retriever_mode",
         )
-        st.number_input("Unesi top-k", min_value=1, max_value=10, value=st.session_state["intent_agent_settings"]["top_k"], key="top_k")
+        st.number_input("Unesi top-k", min_value=1, max_value=10, value=st.session_state["intent_agent_settings"]["similarity_top_k"], key="similarity_top_k")
+        
+        selected_embedding_model = st.radio(
+                    "Odaberi embedding model koji želiš koristiti",
+                    ('text-embedding-3-small', 'text-embedding-3-large'),
+                    help="Embedding model koji će se koristiti za embedding klastera prilikom izrade RAPTOR stabla i pozivanja RAPTOR Retriever-a.",
+                    
+                    on_change=lambda: st.session_state["llm_selection"].update(
+                        {"selected_embedding_model": st.session_state["temp_selected_embedding_model"]}
+                    ),
+                    key="temp_selected_embedding_model",
+                )
 
     
     def sql_rag_settings():

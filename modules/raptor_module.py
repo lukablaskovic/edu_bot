@@ -16,9 +16,15 @@ import shutil
 import gc
 from dotenv import load_dotenv
 load_dotenv()
+from settings import get_llm_settings
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
+
+LLM_settings = get_llm_settings()
+EMBEDDING_MODEL = st.session_state["llm_selection"]["selected_embedding_model"]
+RETRIEVAL_METHOD = st.session_state["intent_agent_settings"]["retriever_mode"]
+SIMILARITY_TOP_K = st.session_state["intent_agent_settings"]["similarity_top_k"]
 
 class RAPTOR:
     def __init__(self, files, collection_name="pjs", force_rebuild=False):
@@ -64,11 +70,11 @@ class RAPTOR:
             self.logger.info("Creating RaptorPack and building raptor tree...")
             raptor_pack = RaptorPack(
                 self.documents,
-                embed_model=OpenAIEmbedding(model="text-embedding-3-small"),  # used for embedding clusters
-                llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1, api_key=st.session_state["openai_api_key"]), 
+                embed_model=OpenAIEmbedding(model=EMBEDDING_MODEL),  # used for embedding clusters
+                llm=OpenAI(model=LLM_settings, temperature=0.1, api_key=st.session_state["openai_api_key"]), 
                 vector_store=self.vector_store,
-                similarity_top_k=2,
-                mode="collapsed", 
+                similarity_top_k=SIMILARITY_TOP_K,
+                mode=RETRIEVAL_METHOD, 
             )
             modules = raptor_pack.get_modules()
             return modules["retriever"]
@@ -81,11 +87,11 @@ class RAPTOR:
             self.logger.info("Setting up RaptorRetriever")
             return RaptorRetriever(
                 [],
-                embed_model=OpenAIEmbedding(model="text-embedding-3-small"),  # used for embedding clusters
-                llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1, api_key=st.session_state["openai_api_key"]), # used for generating summaries
+                embed_model=OpenAIEmbedding(model=EMBEDDING_MODEL),  # used for embedding clusters
+                llm=OpenAI(model=LLM_settings, temperature=0.1, api_key=st.session_state["openai_api_key"]), # used for generating summaries
                 vector_store=self.vector_store,
-                similarity_top_k=2,
-                mode="collapsed", 
+                similarity_top_k=SIMILARITY_TOP_K,
+                mode=RETRIEVAL_METHOD, 
             )
         except Exception as e:
             self.logger.error("An error occurred while setting up RaptorRetriever: %s", e)
@@ -95,7 +101,7 @@ class RAPTOR:
         try:
             self.logger.info("Setting up RetrieverQueryEngine")
             return RetrieverQueryEngine.from_args(
-                self.retriever, llm=OpenAI(model="gpt-3.5-turbo", temperature=0.1, api_key=st.session_state["openai_api_key"])
+                self.retriever, llm=OpenAI(model=LLM_settings, temperature=0.1, api_key=st.session_state["openai_api_key"])
             )
         except Exception as e:
             self.logger.error("An error occurred while setting up RetrieverQueryEngine: %s", e)
