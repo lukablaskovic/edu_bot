@@ -37,7 +37,7 @@ def render_chatbot():
                 st.error(f"Greška: {e}")
                 return
             
-            sql_query_engine = get_sql_engine()
+            sql_query_engine = get_sql_engine(tables=st.session_state["sql_rag_tables"])
             
             response, intent = intent_recognition(prompt, velociraptor, sql_query_engine)
             

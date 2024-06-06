@@ -1,0 +1,3 @@
+Useful for retrieving specific context about the faculty, programming,
+javascript, python, classes at the Faculty of Informatics, scripts and pdf files,
+courses details, and help with programming assignments and exercises.

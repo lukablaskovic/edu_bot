@@ -6,7 +6,7 @@ from openai_key import get_openai_key
 from chatbot import render_chatbot
 from dotenv import load_dotenv
 from modules.sqlrag_module import get_tables 
-from settings import initialize_settings
+from settings import initialize_settings, save_prompt
 
 # Import logging
 # logging.basicConfig(level=logging.DEBUG)
@@ -69,7 +69,7 @@ if st.session_state['connected']:
             key="temp_direct_llm_prompt", 
             height=200
         )
-        st.button(label="Spremi", key="btn_save_direct_llm_settings", type="primary")
+        st.button(label="Spremi", key="btn_save_direct_llm_settings", type="primary", on_click=lambda: save_prompt("./prompts/DIRECT_LLM_PROMPT.txt", st.session_state["temp_direct_llm_prompt"]))
 
         st.text_area(
             label="Query Engine Description",
@@ -80,7 +80,7 @@ if st.session_state['connected']:
             key="temp_llm_query_tool_description", 
             height=200
         )
-        st.button(label="Spremi", key="btn_save_query_engine_desc", type="primary")
+        st.button(label="Spremi", key="btn_save_query_engine_desc", type="primary", on_click=lambda: save_prompt("./prompts/LLM_QUERY_TOOL_DESCRIPTION.txt", st.session_state["temp_llm_query_tool_description"]))
 
         st.divider()
         
@@ -100,7 +100,7 @@ if st.session_state['connected']:
                 key="temp_raptor_query_tool_description",
                 height=200
             )
-        st.button(label="Spremi", key="btn_save_raptor_settings", type="primary")
+        st.button(label="Spremi", key="btn_save_raptor_settings", type="primary", on_click=lambda: save_prompt("./prompts/RAPTOR_QUERY_TOOL_DESCRIPTION.txt", st.session_state["temp_raptor_query_tool_description"]))
         st.divider()
         
         use_sql_rag = st.checkbox("Koristi SQL-RAG Engine", 
@@ -119,8 +119,9 @@ if st.session_state['connected']:
                 key="temp_sql_rag_query_tool_description",
                 height=200
             )
-        
-        st.button(label="Spremi", key="btn_save_sqlrag_settings", type="primary")
+            
+        st.button(label="Spremi", key="btn_save_sqlrag_settings", type="primary", on_click=lambda: save_prompt("./prompts/SQL_RAG_QUERY_TOOL_DESCRIPTION.txt", st.session_state["temp_sql_rag_query_tool_description"]))
+
     
     def raptor_settings():
         st.radio(
@@ -153,8 +154,13 @@ if st.session_state['connected']:
         selected_tables = {}
         
         for table in tables:
-            selected_tables[table] = st.checkbox(table, key=table)
-    
+            selected_tables[table] = st.checkbox(table, 
+                                                 key=f"sql_rag_table_{table}", 
+                                                 on_change= lambda: st.session_state["sql_rag_tables"].update(
+                                                        {table: st.session_state[f"sql_rag_table_{table}"]}),
+                                                 value=st.session_state["sql_rag_tables"][table]
+                                                 )
+                                                
     with st.sidebar:
         if st.button('Odjava'):
             authenticator.logout()

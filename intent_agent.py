@@ -32,9 +32,7 @@ def intent_recognition(prompt: str, velociraptor: RAPTOR, sql_engine: RetrieverQ
     
     assert prompt is not None
     assert velociraptor is not None
-    
-    
-    
+
     # generic query engine - direct to LLM
     llm_query_engine = LlmQueryEngine(llm=OpenAI(model=LLM_settings), prompt=st.session_state["intent_agent_settings"]["direct_llm_prompt"])
     llm_tool = QueryEngineTool.from_defaults(

@@ -12,7 +12,7 @@ from llama_index.core.query_engine import NLSQLTableQueryEngine
 llm = OpenAI(temperature=0.1, model="gpt-3.5-turbo")
 from llama_index.core.retrievers import NLSQLRetriever
 from llama_index.core.query_engine import RetrieverQueryEngine
-
+import streamlit as st
 default_db_path = "db/test.db"
 
 logging.basicConfig(level=logging.INFO)
@@ -115,9 +115,10 @@ def get_user_by_email(email):
     except Exception as e:
         logger.error(f"An error occurred while retrieving the user: {e}")
         return None
-# defualt implementation, needs to be updated with different hyperparameters 
-def get_sql_engine():
-    sql_database = SQLDatabase(get_engine(), include_tables=["users"])
+    
+ 
+def get_sql_engine(tables: list):
+    sql_database = SQLDatabase(get_engine(), include_tables=tables)
     nl_sql_retriever = NLSQLRetriever(
     sql_database, tables=["users"], return_raw=True)
     query_engine = RetrieverQueryEngine.from_args(nl_sql_retriever)

@@ -42,7 +42,12 @@ if st.session_state['connected']:
         email = st.text_input("Email", value=st.session_state['user_info'].get('email'), disabled=True)
         study_year = st.selectbox("Godina studija", ["1. prijediplomski", "2. prijediplomski", "3. prijediplomski", "1. diplomski", "2. diplomski"], index=["1. prijediplomski", "2. prijediplomski", "3. prijediplomski", "1. diplomski", "2. diplomski"].index(study_year), key="study_year")
         about_me = st.text_area("O meni", value=about_me, key="about_me", help="Opiši mi kakav si student i na koji način najbolje učiš.")
-        programming_knowledge = st.slider("Znanje iz programiranja", min_value=0, max_value=10, value=programming_knowledge, key="programming_knowledge", help="Ocijeni svoje znanje iz programiranja od 0 do 10. Ovisno o tvojem znanju koje ovdje navedeš, prilagodit ću svoje odgovore.")
+        programming_knowledge = st.slider("Znanje iz programiranja",
+                                          min_value=0,
+                                          max_value=10,
+                                          value=programming_knowledge,
+                                          key="programming_knowledge",
+                                          help="Ocijeni svoje znanje iz programiranja od 0 do 10. Ovisno o tvojem znanju koje ovdje navedeš, prilagodit ću svoje odgovore. [0] - nemam pojma, apsolutni početnik sam, [10] - mogu napisati svoj programski jezik")
         submit_button = st.form_submit_button("Ažuriraj", type="primary")
 
         if submit_button:
