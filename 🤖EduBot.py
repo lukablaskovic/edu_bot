@@ -2,7 +2,7 @@ import streamlit as st
 import os
 
 from streamlit_google_auth import Authenticate
-from openai_key import get_openai_key
+from openai_key import model_selection
 from chatbot import render_chatbot
 from dotenv import load_dotenv
 
@@ -52,9 +52,6 @@ if st.session_state['connected']:
     with col2:
         debug_mode_on = st.toggle("Ispod haube", key="debug_mode")
 
-    if "openai_api_key" not in st.session_state:
-        st.session_state["openai_api_key"] = get_openai_key()
-    
     def intent_recognition_settings():
         
         st.text_area(
@@ -118,7 +115,6 @@ if st.session_state['connected']:
         )
         st.number_input("Unesi top-k", min_value=1, max_value=10, value=st.session_state["intent_agent_settings"]["top_k"], key="top_k")
 
-            
     
     def sql_rag_settings():
         st.write("Ovdje možeš postaviti SQL-RAG.")
@@ -127,15 +123,19 @@ if st.session_state['connected']:
         if st.button('Odjava'):
             authenticator.logout()
         container = st.sidebar.container(border=True)
+        
+        with st.expander("Postavke | Odabir modela", expanded=False):
+            model_selection()
+        
         with st.expander("Postavke | Intent Recognition", expanded=False):
             intent_recognition_settings()
-        if st.session_state["intent_agent_settings"]["use_raptor"]:
-            st.write("test:", st.session_state["intent_agent_settings"]["use_raptor"])
-            with st.expander("Postavke | RAPTOR", expanded=False):
-                raptor_settings()
-        if st.session_state["intent_agent_settings"]["use_sql_rag"]:
-            with st.expander("Postavke | SQL-RAG", expanded=False):
-                sql_rag_settings()
+
+        with st.expander("Postavke | RAPTOR", expanded=False):
+            raptor_settings()
+            
+        with st.expander("Postavke | SQL-RAG", expanded=False):
+            sql_rag_settings()
+            
     render_chatbot()
 
     # Reset conversation.

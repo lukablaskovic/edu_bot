@@ -75,10 +75,12 @@ class Authenticate:
             
             if not st.session_state['connected']:
                 auth_code = st.query_params.get("code")
+                st.session_state['user_info'] = {}
+                st.session_state["oauth_id"] = None
                 st.query_params.clear()
                 if auth_code:
                     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-                        self.secret_credentials_path, # replace with you json credentials from your google auth app
+                        self.secret_credentials_path,
                         scopes=["openid", "https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"],
                         redirect_uri=self.redirect_uri,
                     )

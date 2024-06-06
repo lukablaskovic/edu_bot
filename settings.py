@@ -29,10 +29,16 @@ DEFUALT_SQL_RAG_QUERY_TOOL_DESCRIPTION = (
     "and can identify tables and select query that is relevant to the user query."
 )
 
+DEFAULT_SELECTED_MODEL = "GPT"
+
 def initialize_settings():
     """
     Initialize settings.
     """
+    
+    if "llm_selection" not in st.session_state:
+        st.session_state["llm_selection"] = {}
+        st.session_state["llm_selection"]["selected_model"] = DEFAULT_SELECTED_MODEL
     
     if "intent_agent_settings" not in st.session_state:
             st.session_state["intent_agent_settings"] = {}

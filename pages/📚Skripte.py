@@ -5,6 +5,8 @@ from openai_key import get_openai_key
 import time
 from modules.raptor_module import get_raptor
 
+from settings import initialize_settings
+
 st.set_page_config(
     page_title="EduBot - Skripte",
     page_icon="🤖",
@@ -81,44 +83,49 @@ def on_files_changed():
 def save_state_changes(edited_df):
     edited_df.to_csv(STATE_FILE, index=False)
 
-st.title("📚Skripte")
-st.write("Ovde možeš učitati skripte ili druge datoteke koje želiš podijeliti samnom kako bi ti pomogao u učenju.")
-st.write("Jednom kad učitaš skripte, bolje ću razumijevati gradivo kolegija koje me pitaš i ponudit ću ti kvalitetnije odgovore 🤖")
-st.write("Učitane datoteke će biti pohranjene na ovom serveru i bit će dostupne samo tebi. Naravno, možeš ih obrisati kad god poželiš.")
+if st.session_state['connected']:
+    initialize_settings()
 
-uploaded_file = st.file_uploader(label="Učitaj datoteke, prezentacije, skripte, štogod!", type=None, accept_multiple_files=False, help="Učitavanjem datoteka ovdje EduBot dobiva novo znanje i može vam pomoći u razumijevanju skripte/gradiva koji vam nije jasan.")
+    st.title("📚Skripte")
+    st.write("Ovde možeš učitati skripte ili druge datoteke koje želiš podijeliti samnom kako bi ti pomogao u učenju.")
+    st.write("Jednom kad učitaš skripte, bolje ću razumijevati gradivo kolegija koje me pitaš i ponudit ću ti kvalitetnije odgovore 🤖")
+    st.write("Učitane datoteke će biti pohranjene na ovom serveru i bit će dostupne samo tebi. Naravno, možeš ih obrisati kad god poželiš.")
 
-if uploaded_file is not None:
-    save_uploaded_file(uploaded_file)
+    uploaded_file = st.file_uploader(label="Učitaj datoteke, prezentacije, skripte, štogod!", type=None, accept_multiple_files=False, help="Učitavanjem datoteka ovdje EduBot dobiva novo znanje i može vam pomoći u razumijevanju skripte/gradiva koji vam nije jasan.")
 
-st.header("Učitane datoteke")
-edited_df = list_uploaded_files()
+    if uploaded_file is not None:
+        save_uploaded_file(uploaded_file)
 
-if "files_changed" not in st.session_state:
-    st.session_state["files_changed"] = False
+    st.header("Učitane datoteke")
+    edited_df = list_uploaded_files()
 
-if "saved_files_config" not in st.session_state:
-    st.session_state["saved_files_config"] = False
+    if "files_changed" not in st.session_state:
+        st.session_state["files_changed"] = False
 
-if st.session_state["files_changed"]:
-    if st.button("Spremi promjene", type= 'primary'):
-        save_state_changes(edited_df)
-        st.session_state["original_files"] = edited_df.copy()
-        st.success("Promjene su spremljene!")
-        st.session_state["saved_files_config"] = True
+    if "saved_files_config" not in st.session_state:
+        st.session_state["saved_files_config"] = False
+
+    if st.session_state["files_changed"]:
+        if st.button("Spremi promjene", type= 'primary'):
+            save_state_changes(edited_df)
+            st.session_state["original_files"] = edited_df.copy()
+            st.success("Promjene su spremljene!")
+            st.session_state["saved_files_config"] = True
+            st.session_state["disabled"] = False
+
+    if st.session_state["files_changed"] and not st.session_state["saved_files_config"]:
+        st.session_state["disabled"] = True
+
+    elif not st.session_state["files_changed"] and not st.session_state["saved_files_config"]:
         st.session_state["disabled"] = False
 
-if st.session_state["files_changed"] and not st.session_state["saved_files_config"]:
-    st.session_state["disabled"] = True
+    if st.button("Opameti me! 🧠", type='secondary', disabled=st.session_state.get("disabled", True)):
+        with st.spinner('Učim iz tvojih datoteka...'):
+            used_files = edited_df.loc[edited_df["is_used"] == True, "Naziv datoteke"].tolist()
+            used_files = [os.path.join(UPLOAD_DIR, file) for file in used_files] 
+            st.session_state["raptor"] = get_raptor(files=used_files, force_rebuild=True)
+        st.success("EduBot je sada pametniji!🔥")
+        st.session_state["files_changed"] = False
 
-elif not st.session_state["files_changed"] and not st.session_state["saved_files_config"]:
-    st.session_state["disabled"] = False
-
-if st.button("Opameti me! 🧠", type='secondary', disabled=st.session_state.get("disabled", True)):
-    with st.spinner('Učim iz tvojih datoteka...'):
-        used_files = edited_df.loc[edited_df["is_used"] == True, "Naziv datoteke"].tolist()
-        used_files = [os.path.join(UPLOAD_DIR, file) for file in used_files] 
-        st.session_state["raptor"] = get_raptor(files=used_files, force_rebuild=True)
-    st.success("EduBot je sada pametniji!🔥")
-    st.session_state["files_changed"] = False
-
+else:
+    st.error("Moraš biti prijavljen za ovo!")
