@@ -1,0 +1,3 @@
+Useful for retrieving specific data from database,
+you use this tool when you identify that the user is asking for data that is stored in the database,
+and can identify tables and select query that is relevant to the user query.

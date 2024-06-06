@@ -1,0 +1,3 @@
+Useful for when the INTENT of the user isnt clear, is broad,
+or when the user is asking general questions that have nothing 
+to do with the faculty or programming. Use this tool when the other tool is not useful.

@@ -2,7 +2,7 @@ import streamlit as st
 import os
 
 from streamlit_google_auth import Authenticate
-from openai_key import model_selection
+from openai_key import get_openai_key
 from chatbot import render_chatbot
 from dotenv import load_dotenv
 
@@ -125,8 +125,34 @@ if st.session_state['connected']:
         container = st.sidebar.container(border=True)
         
         with st.expander("Postavke | Odabir modela", expanded=False):
-            model_selection()
-        
+            st.write("Odabir modela")
+            st.radio(
+                "Odaberi LLM koji želiš koristiti za pogon EduBota🤖",
+                options=["GPT", "Mistral", "Gemma"],
+                on_change=lambda: st.session_state["llm_selection"].update(
+                    {"selected_model": st.session_state["temp_selected_model"]}
+                ),
+                key="temp_selected_model",
+            )
+            if(st.session_state["llm_selection"]["selected_model"] == "GPT"):
+                st.session_state["openai_api_key"] = get_openai_key()
+                st.checkbox("Učitaj OpenAI API ključ iz okruženja", key="use_openai_env", help="Chekiraj ovu opciju ako želiš da se ključ učita iz okruženja. Potrebno je u `.env` datoteku dodati `OPENAI_API_KEY` ključ.")
+
+
+                selected_gpt = st.radio(
+                    "Odaberi GPT model koji želiš koristiti",
+                    ('gpt-3.5-turbo', 'gpt-4'),
+                    on_change=lambda: st.session_state["llm_selection"].update(
+                        {"selected_gpt": st.session_state["temp_selected_gpt"]}
+                    ),
+                    key="temp_selected_gpt",
+                )
+
+                
+            elif(st.session_state["llm_selection"]["selected_model"] == "Mistral"):
+                st.write("Mistral Settings")
+            else:
+                st.write("Gemma Settings")
         with st.expander("Postavke | Intent Recognition", expanded=False):
             intent_recognition_settings()
 
@@ -142,8 +168,6 @@ if st.session_state['connected']:
     if(st.button("Resetiraj razgovor")):
         st.session_state["messages"] = [{"role": "assistant", "content": "Tu sam! Kako ti mogu pomoći?🤖"}]
         st.rerun()
-
-    
 
 else:
     st.write("Bok👋🏻 Kako bi mogao koristiti EduBot, moraš se prijaviti.")
