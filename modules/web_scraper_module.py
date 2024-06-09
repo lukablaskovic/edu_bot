@@ -1,7 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
+
 from llama_index.core.query_engine import CustomQueryEngine
 from llama_index.llms.openai import OpenAI
+
+import streamlit as st
 
 class WebScraperQueryEngine(CustomQueryEngine):
     """Custom query engine for web scraping."""
@@ -13,6 +16,8 @@ class WebScraperQueryEngine(CustomQueryEngine):
         response = requests.get(url_fipu, verify=False)
         response.raise_for_status() 
 
+        limit = st.session_state["web_scraper_settings"]["max_number_of_posts"]
+
         soup = BeautifulSoup(response.text, 'html.parser')
 
         news_container = soup.select('div.scrollable_content div.container div.row div.col-lg-9 div#area_middle div#cms_area_middle div.cms_module.portlet_news div.cms_module_html div.news.Default_news_layout.news_layout_type_default')
@@ -22,6 +27,8 @@ class WebScraperQueryEngine(CustomQueryEngine):
         for article in news_container:
             news_articles = article.find_all('div', class_='news_article card news_priority_5 image_left')
             for news in news_articles:
+                if limit and len(articles) >= limit:
+                    break
                 title = news.find('div', class_='news_title_truncateable').text.strip()
                 link = news.find('a')['href']
                 pub_date = news.find('div', class_='news_pub_date').find('time')['datetime']
@@ -37,6 +44,8 @@ class WebScraperQueryEngine(CustomQueryEngine):
                     'image': image,
                     'summary': summary
                 })
+            if limit and len(articles) >= limit:
+                break
 
         return articles
 
@@ -48,4 +57,3 @@ class WebScraperQueryEngine(CustomQueryEngine):
         answer = self.llm.complete(prompt)
         
         return str(answer)
-

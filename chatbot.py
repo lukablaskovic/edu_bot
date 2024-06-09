@@ -1,21 +1,19 @@
-import streamlit as st
-import openai
 import os
-from intent_agent import intent_recognition, get_intent_description
 from dotenv import load_dotenv
+
 import pandas as pd
-from modules.raptor_module import get_raptor
-from modules.sqlrag_module import SQLQueryEngine
+import streamlit as st
+
 from llama_index.llms.openai import OpenAI
-from settings import get_llm_settings
 from llama_index.core import PromptTemplate
-from modules.sqlrag_module import get_create_table_statement
+
+from modules.sqlrag_module import SQLQueryEngine, get_create_table_statement, get_sql_template
+from modules.raptor_module import get_raptor
 from modules.web_scraper_module import WebScraperQueryEngine
+from intent_agent import intent_recognition, get_intent_description
+from settings import get_llm_settings
+
 load_dotenv()
-
-# Configure logging
-
-openn_ai_client = openai.Client()
 
 def render_chatbot():
     if "messages" not in st.session_state:
@@ -36,30 +34,26 @@ def render_chatbot():
                 else:
                     velociraptor = get_raptor(files=get_files(), force_rebuild=False)
             except Exception as e:
-                st.error(f"Greška: {e}")
+                st.error(f"Greška [RAPTOR]: {e}")
                 return
 
-            table_schemas = []
-            for table, is_used in st.session_state.get("sql_rag_tables", {}).items():
-                if is_used:
-                    table_schemas.append(get_create_table_statement(table))
-            schemas_str = "\n".join(table_schemas)
+            try:
+                table_schemas = []
+                for table, is_used in st.session_state.get("sql_rag_tables", {}).items():
+                    if is_used:
+                        table_schemas.append(get_create_table_statement(table))
+                schemas_str = "\n".join(table_schemas)
 
-            sql_prompt = PromptTemplate(
-                f"Context information is below.\n"
-                f"---------------------\n"
-                f"You are a professional SQL developer. You are given a task to write a SQL query to retrieve data from the database.\n"
-                f"---------------------\n"
-                f"{schemas_str}\n"
-                f"---------------------\n"
-                f"Given the database schemas and example rows, structure the SQL query from given User prompt\n"
-                f"User prompt: {{query_str}}\n"
-            )
+                sql_prompt = get_sql_template(schemas_str)
 
-            sql_query_engine = SQLQueryEngine(prompt=sql_prompt, llm=OpenAI(model=get_llm_settings()))
+                sql_query_engine = SQLQueryEngine(prompt=sql_prompt, llm=OpenAI(model=get_llm_settings()))
+            except Exception as e:
+                st.error(f"Greška [SQL-RAG]: {e}")
+                return
             
             web_scraper_engine = WebScraperQueryEngine(llm=OpenAI(model=get_llm_settings()))
 
+            
             if st.session_state["use_full_conversation"]:
                 if st.session_state.debug_mode:
                     st.info("Koristim cijeli razgovor")
@@ -81,7 +75,10 @@ def render_chatbot():
 
             if st.session_state.debug_mode:
                 st.success(f"Odabrao sam: {get_intent_description(intent)}")
-
+            
+            if st.session_state.debug_mode:
+                st.info(f"Čitam najnovijih {st.session_state['web_scraper_settings']['max_number_of_posts']} objava s weba🌐🎓")
+            
             if st.session_state.debug_mode and st.session_state["generated_query.text"]:
                 st.code(st.session_state["generated_query.text"], language="sql")      
             try:

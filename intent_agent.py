@@ -1,19 +1,16 @@
+import streamlit as st
+
 from llama_index.core.tools import ToolMetadata
 from llama_index.core.selectors import LLMSingleSelector, LLMMultiSelector
-from llama_index.core import VectorStoreIndex
 from llama_index.llms.openai import OpenAI
 from llama_index.core.query_engine import CustomQueryEngine
 from llama_index.core.tools import QueryEngineTool
-from llama_index.core.response_synthesizers import ResponseMode
-from llama_index.core import VectorStoreIndex
 from llama_index.core.selectors import LLMSingleSelector
 from llama_index.core.query_engine import RouterQueryEngine
-from typing import Dict
-from modules.raptor_module import RAPTOR
-import streamlit as st
-from settings import get_llm_settings
 
-from llama_index.core.query_engine import RetrieverQueryEngine
+from modules.raptor_module import RAPTOR
+
+from settings import get_llm_settings
 
 class LlmQueryEngine(CustomQueryEngine):
     """Custom query engine for direct calls to the LLM model."""

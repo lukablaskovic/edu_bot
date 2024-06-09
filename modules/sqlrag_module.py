@@ -1,16 +1,13 @@
-import logging
-from sqlalchemy import create_engine, MetaData, Table, Column, String, Integer, select, insert, update, ForeignKey
-from llama_index.core import SQLDatabase
-from llama_index.llms.openai import OpenAI
-from sqlalchemy import text
 import os
 
+import logging
+import streamlit as st
+from sqlalchemy import create_engine, MetaData, Table, Column, String, Integer, select, insert, update, ForeignKey, text
 from sqlalchemy.schema import CreateTable
 
 from dotenv import load_dotenv
 load_dotenv()
-import streamlit as st
- 
+
 from llama_index.llms.openai import OpenAI
 from llama_index.core import PromptTemplate
 from llama_index.core.query_engine import CustomQueryEngine
@@ -25,6 +22,19 @@ def get_engine():
     db_uri = f'sqlite:///{db_path}'
     engine = create_engine(db_uri)
     return engine
+
+def get_sql_template(schemas_str: str):
+    sql_prompt = PromptTemplate(
+                    f"Context information is below.\n"
+                    f"---------------------\n"
+                    f"You are a professional SQL developer. You are given a task to write a SQL query to retrieve data from the database.\n"
+                    f"---------------------\n"
+                    f"{schemas_str}\n"
+                    f"---------------------\n"
+                    f"Given the database schemas and example rows, structure the SQL query from given User prompt\n"
+                    f"User prompt: {{query_str}}\n"
+                )
+    return sql_prompt
 
 def create_users_table():
     try:
@@ -46,7 +56,6 @@ def create_users_table():
         logger.info(f"Table '{table_name}' created successfully.")
     except Exception as e:
         logger.error(f"An error occurred while creating the table: {e}")
-
 
 def insert_rows(table_name : str, rows):
     try:

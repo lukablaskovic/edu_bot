@@ -1,10 +1,10 @@
-import streamlit as st
 import os
 
+import streamlit as st
 from streamlit_google_auth import Authenticate
+
 from openai_key import get_openai_key
 from chatbot import render_chatbot
-from dotenv import load_dotenv
 from modules.sqlrag_module import get_tables 
 from settings import initialize_settings, save_prompt
 
@@ -32,7 +32,13 @@ st.sidebar.write("Autor: [Luka Blašković](https://github.com/lukablaskovic)")
 
 st.sidebar.write("Source kôd dostupan [ovdje](https://github.com/lukablaskovic/edu_bot).")
 
-"st.session_state", st.session_state
+
+st.write("Session State: ")
+st.write("top k :", st.session_state["intent_agent_settings"]["similarity_top_k"])
+st.write("tables used:", st.session_state["sql_rag_tables"])
+st.write("max num posts:", st.session_state["web_scraper_settings"]["max_number_of_posts"])
+st.write("selected_gpt:", st.session_state["llm_selection"]["selected_gpt"])
+
 
 authenticator = Authenticate(
     secret_credentials_path='google_credentials.json',
@@ -44,9 +50,139 @@ authenticator = Authenticate(
 
 authenticator.check_authentification()
 
-
 if st.session_state['connected']:
     initialize_settings()
+
+def raptor_settings():
+    st.radio(
+        "RAPTOR Retriever Mode",
+        options=["collapsed", "tree_traversal",],
+        help="Odaberi način pretraživanja klastera u RAPTOR-u. 'collapsed' pristup postavlja sve čvorove na istu razinu i evaluira sličnost čvorov simultano. 'tree_traversal' pristup koristi stablo za pretraživanje klastera i evaluira sličnost čvorova po razini stabla.",
+        on_change=lambda: st.session_state["intent_agent_settings"].update(
+            {"retriever_mode": st.session_state["temp_retriever_mode"]}
+        ),
+        key="temp_retriever_mode",
+    )
+    st.number_input("Unesi top-k", 
+                    min_value=1, 
+                    max_value=10,
+                    help="Odaberi broj najrelevantnijih klastera koje će RAPTOR koristiti za pretraživanje.",  
+                    key="temp_similarity_top_k",
+                    value=st.session_state["intent_agent_settings"]["similarity_top_k"],
+                    on_change=lambda: st.session_state["intent_agent_settings"].update(
+                        {"similarity_top_k": st.session_state["temp_similarity_top_k"]} 
+                    )
+    )
+    
+    selected_embedding_model = st.radio(
+                "Odaberi embedding model koji želiš koristiti",
+                ('text-embedding-3-small', 'text-embedding-3-large'),
+                help="Embedding model koji će se koristiti za embedding klastera prilikom izrade RAPTOR stabla i pozivanja RAPTOR Retriever-a.",
+                
+                on_change=lambda: st.session_state["llm_selection"].update(
+                    {"selected_embedding_model": st.session_state["temp_selected_embedding_model"]}
+                ),
+                key="temp_selected_embedding_model",
+            )
+
+def sql_rag_settings():
+    st.write("Označi tablice iz baze podataka koje će se koristiti za SQL-RAG")
+    
+    # Tables which will be used for SQL-RAG        
+    tables = get_tables()
+    selected_tables = {}
+    
+    for table in tables:
+        selected_tables[table] = st.checkbox(table, 
+                                                key=f"sql_rag_table_{table}", 
+                                                on_change= lambda: st.session_state["sql_rag_tables"].update(
+                                                    {table: st.session_state[f"sql_rag_table_{table}"]}),
+                                                value=st.session_state["sql_rag_tables"][table]
+                                                )
+
+
+
+def web_scraper_settings():
+    st.write("Web Scraper Settings (To-Do)")
+    
+    
+    slider_value = st.slider(
+        "Odaberi maksimalni broj najnovijih objava koje želiš da proučim sa stranica Sveučilišta/Fakulteta",
+        min_value=1, 
+        max_value=100,
+        value=st.session_state["web_scraper_settings"]["max_number_of_posts"],
+        key="temp_web_scraper_max_number_of_posts",
+        on_change= lambda: st.session_state["web_scraper_settings"].update(
+            {"max_number_of_posts": st.session_state["temp_web_scraper_max_number_of_posts"]}
+        )
+    )
+
+def intent_recognition_settings():
+    st.checkbox("Koristi cijeli razgovor kao kontekst", key="use_full_conversation")
+    st.text_area(
+        label="Direct LLM Prompt",
+        value=st.session_state["intent_agent_settings"]["direct_llm_prompt"],
+        on_change=lambda: st.session_state["intent_agent_settings"].update(
+            {"direct_llm_prompt": st.session_state["temp_direct_llm_prompt"]}
+        ),
+        key="temp_direct_llm_prompt", 
+        height=200
+    )
+    st.button(label="Spremi", key="btn_save_direct_llm_settings", type="primary", on_click=lambda: save_prompt("./prompts/DIRECT_LLM_PROMPT.txt", st.session_state["temp_direct_llm_prompt"]))
+
+    st.text_area(
+        label="Query Engine Description",
+        value=st.session_state["intent_agent_settings"]["llm_query_tool_description"],
+        on_change=lambda: st.session_state["intent_agent_settings"].update(
+            {"llm_query_tool_description": st.session_state["temp_llm_query_tool_description"]}
+        ),
+        key="temp_llm_query_tool_description", 
+        height=200
+    )
+    st.button(label="Spremi", key="btn_save_query_engine_desc", type="primary", on_click=lambda: save_prompt("./prompts/LLM_QUERY_TOOL_DESCRIPTION.txt", st.session_state["temp_llm_query_tool_description"]))
+
+    st.divider()
+    
+    use_raptor = st.checkbox("Koristi RAPTOR Engine", 
+                                value= st.session_state["intent_agent_settings"]["use_raptor"],
+                                on_change=lambda: st.session_state["intent_agent_settings"].update(
+                                    {"use_raptor": st.session_state["temp_use_raptor"]}
+                                ), 
+                                key="temp_use_raptor")
+    if use_raptor:
+        st.text_area(
+            label="RAPTOR Engine Description",
+            value=st.session_state["intent_agent_settings"]["raptor_query_tool_description"],
+            on_change=lambda: st.session_state["intent_agent_settings"].update(
+                {"raptor_query_tool_description": st.session_state["temp_raptor_query_tool_description"]}
+            ),
+            key="temp_raptor_query_tool_description",
+            height=200
+        )
+    st.button(label="Spremi", key="btn_save_raptor_settings", type="primary", on_click=lambda: save_prompt("./prompts/RAPTOR_QUERY_TOOL_DESCRIPTION.txt", st.session_state["temp_raptor_query_tool_description"]))
+    st.divider()
+    
+    use_sql_rag = st.checkbox("Koristi SQL-RAG Engine", 
+                                value= st.session_state["intent_agent_settings"]["use_sql_rag"],
+                                on_change=lambda: st.session_state["intent_agent_settings"].update(
+                                    {"use_sql_rag": st.session_state["temp_use_sql_rag"]}
+                                ), 
+                                key="temp_use_sql_rag")
+    if use_sql_rag:
+        st.text_area(
+            label="SQL-RAG Engine Description",
+            value=st.session_state["intent_agent_settings"]["sql_rag_query_tool_description"],
+            on_change=lambda: st.session_state["intent_agent_settings"].update(
+                {"sql_rag_query_tool_description": st.session_state["temp_sql_rag_query_tool_description"]}
+            ),
+            key="temp_sql_rag_query_tool_description",
+            height=200
+        )
+        
+    st.button(label="Spremi", key="btn_save_sqlrag_settings", type="primary", on_click=lambda: save_prompt("./prompts/SQL_RAG_QUERY_TOOL_DESCRIPTION.txt", st.session_state["temp_sql_rag_query_tool_description"]))
+
+if st.session_state['connected']:
+    
     col1, col2 = st.columns([3, 1])
 
     with col1:
@@ -58,109 +194,6 @@ if st.session_state['connected']:
     with col2:
         debug_mode_on = st.toggle("Ispod haube", key="debug_mode")
 
-    def intent_recognition_settings():
-        st.checkbox("Koristi cijeli razgovor kao kontekst", key="use_full_conversation")
-        st.text_area(
-            label="Direct LLM Prompt",
-            value=st.session_state["intent_agent_settings"]["direct_llm_prompt"],
-            on_change=lambda: st.session_state["intent_agent_settings"].update(
-                {"direct_llm_prompt": st.session_state["temp_direct_llm_prompt"]}
-            ),
-            key="temp_direct_llm_prompt", 
-            height=200
-        )
-        st.button(label="Spremi", key="btn_save_direct_llm_settings", type="primary", on_click=lambda: save_prompt("./prompts/DIRECT_LLM_PROMPT.txt", st.session_state["temp_direct_llm_prompt"]))
-
-        st.text_area(
-            label="Query Engine Description",
-            value=st.session_state["intent_agent_settings"]["llm_query_tool_description"],
-            on_change=lambda: st.session_state["intent_agent_settings"].update(
-                {"llm_query_tool_description": st.session_state["temp_llm_query_tool_description"]}
-            ),
-            key="temp_llm_query_tool_description", 
-            height=200
-        )
-        st.button(label="Spremi", key="btn_save_query_engine_desc", type="primary", on_click=lambda: save_prompt("./prompts/LLM_QUERY_TOOL_DESCRIPTION.txt", st.session_state["temp_llm_query_tool_description"]))
-
-        st.divider()
-        
-        use_raptor = st.checkbox("Koristi RAPTOR Engine", 
-                                 value= st.session_state["intent_agent_settings"]["use_raptor"],
-                                 on_change=lambda: st.session_state["intent_agent_settings"].update(
-                                        {"use_raptor": st.session_state["temp_use_raptor"]}
-                                    ), 
-                                 key="temp_use_raptor")
-        if use_raptor:
-            st.text_area(
-                label="RAPTOR Engine Description",
-                value=st.session_state["intent_agent_settings"]["raptor_query_tool_description"],
-                on_change=lambda: st.session_state["intent_agent_settings"].update(
-                    {"raptor_query_tool_description": st.session_state["temp_raptor_query_tool_description"]}
-                ),
-                key="temp_raptor_query_tool_description",
-                height=200
-            )
-        st.button(label="Spremi", key="btn_save_raptor_settings", type="primary", on_click=lambda: save_prompt("./prompts/RAPTOR_QUERY_TOOL_DESCRIPTION.txt", st.session_state["temp_raptor_query_tool_description"]))
-        st.divider()
-        
-        use_sql_rag = st.checkbox("Koristi SQL-RAG Engine", 
-                                 value= st.session_state["intent_agent_settings"]["use_sql_rag"],
-                                 on_change=lambda: st.session_state["intent_agent_settings"].update(
-                                        {"use_sql_rag": st.session_state["temp_use_sql_rag"]}
-                                    ), 
-                                 key="temp_use_sql_rag")
-        if use_sql_rag:
-            st.text_area(
-                label="SQL-RAG Engine Description",
-                value=st.session_state["intent_agent_settings"]["sql_rag_query_tool_description"],
-                on_change=lambda: st.session_state["intent_agent_settings"].update(
-                    {"sql_rag_query_tool_description": st.session_state["temp_sql_rag_query_tool_description"]}
-                ),
-                key="temp_sql_rag_query_tool_description",
-                height=200
-            )
-            
-        st.button(label="Spremi", key="btn_save_sqlrag_settings", type="primary", on_click=lambda: save_prompt("./prompts/SQL_RAG_QUERY_TOOL_DESCRIPTION.txt", st.session_state["temp_sql_rag_query_tool_description"]))
-
-    
-    def raptor_settings():
-        st.radio(
-            "RAPTOR Retriever Mode",
-            options=["collapsed", "tree_traversal",],
-            on_change=lambda: st.session_state["intent_agent_settings"].update(
-                {"retriever_mode": st.session_state["temp_retriever_mode"]}
-            ),
-            key="temp_retriever_mode",
-        )
-        st.number_input("Unesi top-k", min_value=1, max_value=10, value=st.session_state["intent_agent_settings"]["similarity_top_k"], key="similarity_top_k")
-        
-        selected_embedding_model = st.radio(
-                    "Odaberi embedding model koji želiš koristiti",
-                    ('text-embedding-3-small', 'text-embedding-3-large'),
-                    help="Embedding model koji će se koristiti za embedding klastera prilikom izrade RAPTOR stabla i pozivanja RAPTOR Retriever-a.",
-                    
-                    on_change=lambda: st.session_state["llm_selection"].update(
-                        {"selected_embedding_model": st.session_state["temp_selected_embedding_model"]}
-                    ),
-                    key="temp_selected_embedding_model",
-                )
-
-    
-    def sql_rag_settings():
-        st.write("Označi tablice iz baze podataka koje će se koristiti za SQL-RAG")
-        
-        # Tables which will be used for SQL-RAG        
-        tables = get_tables()
-        selected_tables = {}
-        
-        for table in tables:
-            selected_tables[table] = st.checkbox(table, 
-                                                 key=f"sql_rag_table_{table}", 
-                                                 on_change= lambda: st.session_state["sql_rag_tables"].update(
-                                                        {table: st.session_state[f"sql_rag_table_{table}"]}),
-                                                 value=st.session_state["sql_rag_tables"][table]
-                                                 )
-                                                
     with st.sidebar:
         if st.button('Odjava'):
             authenticator.logout()
@@ -203,6 +236,9 @@ if st.session_state['connected']:
             
         with st.expander("Postavke | SQL-RAG", expanded=False):
             sql_rag_settings()
+        
+        with st.expander("Postavke | Web Scraper", expanded=False):
+            web_scraper_settings()
             
     render_chatbot()
 

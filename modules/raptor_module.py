@@ -1,22 +1,25 @@
-from llama_index.packs.raptor import RaptorPack
-from llama_index.packs.raptor import RaptorRetriever
-from llama_index.vector_stores.chroma import ChromaVectorStore
-from llama_index.core.tools import ToolMetadata
-from llama_index.embeddings.openai import OpenAIEmbedding
-
-from llama_index.core import SimpleDirectoryReader, VectorStoreIndex
-from llama_index.core.query_engine import RetrieverQueryEngine
-from llama_index.llms.openai import OpenAI
-import streamlit as st
-import chromadb
 import logging
 import time
 import os
-import shutil
-import gc
+
+import streamlit as st
+import chromadb
+
+
+from llama_index.packs.raptor import RaptorPack
+from llama_index.packs.raptor import RaptorRetriever
+from llama_index.vector_stores.chroma import ChromaVectorStore
+from llama_index.embeddings.openai import OpenAIEmbedding
+
+from llama_index.core import SimpleDirectoryReader
+from llama_index.core.query_engine import RetrieverQueryEngine
+from llama_index.llms.openai import OpenAI
+
+
 from dotenv import load_dotenv
-load_dotenv()
 from settings import get_llm_settings
+
+load_dotenv()
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
