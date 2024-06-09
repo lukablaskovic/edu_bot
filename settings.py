@@ -60,7 +60,7 @@ def initialize_settings():
         tables = get_tables()
         for table in tables:
             st.session_state["sql_rag_tables"][table] = True
-        
+    st.session_state["generated_query.text"] = None
     
 def get_llm_settings():
     """

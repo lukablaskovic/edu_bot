@@ -80,6 +80,10 @@ def render_chatbot():
             if st.session_state.debug_mode:
                 st.success(f"Odabrao sam: {get_intent_description(intent)}")
 
+            if st.session_state.debug_mode and st.session_state["generated_query.text"]:
+                st.code(st.session_state["generated_query.text"], language="sql")
+
+            
             try:
                 if response:
                     st.session_state.messages.append({"role": "assistant", "content": str(response)})

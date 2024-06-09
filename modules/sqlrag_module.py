@@ -145,6 +145,8 @@ class SQLQueryEngine(CustomQueryEngine):
         llm_prompt = self.prompt.format(query_str=query_str)
         generated_query = self.llm.complete(llm_prompt)
         result = run_query(generated_query.text)
+        
+        st.session_state["generated_query.text"] = generated_query.text
         answer = self.llm.complete(f"Answer the user question: ${query_str} based on the result from the database query: {result}. Answer in Croatian.")
         return str(answer)
 

@@ -39,6 +39,7 @@ def intent_recognition(prompt: str, velociraptor: RAPTOR, sql_engine: RetrieverQ
         query_engine=llm_query_engine,
         name="llm_query_tool",
         description= st.session_state["intent_agent_settings"]["llm_query_tool_description"],
+        
     )
     
     raptor_query_engine = velociraptor.query_engine
@@ -55,7 +56,6 @@ def intent_recognition(prompt: str, velociraptor: RAPTOR, sql_engine: RetrieverQ
         description=st.session_state["intent_agent_settings"]["sql_rag_query_tool_description"]
     )
 
-    
     router_query_engine = RouterQueryEngine(
         selector=LLMSingleSelector.from_defaults(),
         query_engine_tools=[
@@ -79,7 +79,8 @@ def get_intent_description(intent: ToolMetadata) -> str:
     intents = {
         0: "llm_tool",
         1: "raptor_tool",
-        2: "sql_rag_tool"
+        2: "sql_rag_tool",
+        3: "web_scraper_tool"
     }
     
     intent_index = intent.index 
