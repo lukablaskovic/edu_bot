@@ -9,7 +9,7 @@ from modules.sqlrag_module import SQLQueryEngine
 from llama_index.llms.openai import OpenAI
 from settings import get_llm_settings
 from llama_index.core import PromptTemplate
-
+from modules.sqlrag_module import get_create_table_statement
 load_dotenv()
 
 # Configure logging
@@ -38,39 +38,25 @@ def render_chatbot():
                 st.error(f"Greška: {e}")
                 return
 
-            qa_prompt = PromptTemplate(
-                "Context information is below.\n"
-                "---------------------\n"
-                "You are a professional SQL developer. You are given a task to write a SQL query to retrieve data from the database.\n"
-                "---------------------\n"
-                "CREATE TABLE users (\n"
-                "id INTEGER NOT NULL, \n"
-                "first_name VARCHAR(16) NOT NULL, \n"
-                "last_name VARCHAR(16) NOT NULL, \n"
-                "email VARCHAR(32) NOT NULL, \n"
-                "study_year VARCHAR(16) NOT NULL, \n"
-                "about_me VARCHAR(256) NOT NULL, \n"
-                "programming_knowledge INTEGER NOT NULL, \n"
-                "PRIMARY KEY (id))\n"
-                "\n"
-                "CREATE TABLE PJS_points (\n"
-                "id INTEGER NOT NULL UNIQUE,\n"
-                "user_id INTEGER NOT NULL,\n"
-                "exam_1_points INTEGER NOT NULL DEFAULT 0,\n"
-                "exam_2_points INTEGER NOT NULL DEFAULT 0,\n"
-                "exam_3_points INTEGER NOT NULL DEFAULT 0,\n"
-                "exam_4_points INTEGER NOT NULL DEFAULT 0,\n"
-                "exam_5_points INTEGER NOT NULL DEFAULT 0,\n"
-                "exam_total_points INTEGER NOT NULL DEFAULT 0,\n"
-                "PRIMARY KEY(id AUTOINCREMENT),\n"
-                "FOREIGN KEY(user_id) REFERENCES users(id))\n"
-                "---------------------\n"
-                "Given the database schemas and example rows, structure the SQL query from given User prompt\n"
-                "User prompt: {query_str}\n"
+            table_schemas = []
+            for table, is_used in st.session_state.get("sql_rag_tables", {}).items():
+                if is_used:
+                    table_schemas.append(get_create_table_statement(table))
+            schemas_str = "\n".join(table_schemas)
+
+            sql_prompt = PromptTemplate(
+                f"Context information is below.\n"
+                f"---------------------\n"
+                f"You are a professional SQL developer. You are given a task to write a SQL query to retrieve data from the database.\n"
+                f"---------------------\n"
+                f"{schemas_str}\n"
+                f"---------------------\n"
+                f"Given the database schemas and example rows, structure the SQL query from given User prompt\n"
+                f"User prompt: {{query_str}}\n"
             )
 
-            
-            sql_query_engine = SQLQueryEngine(prompt=qa_prompt ,llm=OpenAI(model=get_llm_settings()))
+            sql_query_engine = SQLQueryEngine(prompt=sql_prompt, llm=OpenAI(model=get_llm_settings()))
+
 
             if st.session_state["use_full_conversation"]:
                 if st.session_state.debug_mode:
