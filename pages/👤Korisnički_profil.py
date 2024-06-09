@@ -7,7 +7,7 @@ from sqlalchemy import MetaData, Table, insert
 from modules.sqlrag_module import create_users_table, get_engine, upsert_user, get_user_by_email, create_pjs_points_table
 
 st.set_page_config(
-    page_title="EdubBot - Korisnički profil",
+    page_title="EduBot - Korisnički profil",
     page_icon="🤖",
 )
 
@@ -52,7 +52,8 @@ if st.session_state['connected']:
 
         if submit_button:
             user_info = {
-                "name": name,
+                "first_name": name.split(" ")[0],
+                "last_name": name.split(" ")[1],
                 "email": email,
                 "study_year": study_year,
                 "about_me": about_me,
