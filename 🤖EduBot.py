@@ -33,13 +33,6 @@ st.sidebar.write("Autor: [Luka Blašković](https://github.com/lukablaskovic)")
 st.sidebar.write("Source kôd dostupan [ovdje](https://github.com/lukablaskovic/edu_bot).")
 
 
-st.write("Session State: ")
-st.write("top k :", st.session_state["intent_agent_settings"]["similarity_top_k"])
-st.write("tables used:", st.session_state["sql_rag_tables"])
-st.write("max num posts:", st.session_state["web_scraper_settings"]["max_number_of_posts"])
-st.write("selected_gpt:", st.session_state["llm_selection"]["selected_gpt"])
-
-
 authenticator = Authenticate(
     secret_credentials_path='google_credentials.json',
     cookie_name='edubot_cookie',
@@ -52,6 +45,13 @@ authenticator.check_authentification()
 
 if st.session_state['connected']:
     initialize_settings()
+
+st.write("Session State: ")
+st.write("top k :", st.session_state["intent_agent_settings"]["similarity_top_k"])
+st.write("tables used:", st.session_state["sql_rag_tables"])
+st.write("max num posts:", st.session_state["web_scraper_settings"]["max_number_of_posts"])
+st.write("selected_gpt:", st.session_state["llm_selection"]["selected_gpt"])
+
 
 def raptor_settings():
     st.radio(

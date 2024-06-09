@@ -1,9 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
-
 from llama_index.core.query_engine import CustomQueryEngine
 from llama_index.llms.openai import OpenAI
-
 import streamlit as st
 
 class WebScraperQueryEngine(CustomQueryEngine):
@@ -26,7 +24,7 @@ class WebScraperQueryEngine(CustomQueryEngine):
 
         for article in news_container:
             news_articles = article.find_all('div', class_='news_article card news_priority_5 image_left')
-            for news in news_articles:
+            for idx, news in enumerate(news_articles):
                 if limit and len(articles) >= limit:
                     break
                 title = news.find('div', class_='news_title_truncateable').text.strip()
@@ -37,6 +35,7 @@ class WebScraperQueryEngine(CustomQueryEngine):
                 summary = news.find('div', class_='news_lead_small').text.strip()
 
                 articles.append({
+                    'key': idx + 1,
                     'title': title,
                     'link': link,
                     'pub_date': pub_date,
@@ -44,6 +43,9 @@ class WebScraperQueryEngine(CustomQueryEngine):
                     'image': image,
                     'summary': summary
                 })
+                
+                print(f"Key: {idx + 1}\nTitle: {title}\nLink: {link}\nPublication Date: {pub_date}\nAuthor: {author}\nImage: {image}\nSummary: {summary}\n")
+                
             if limit and len(articles) >= limit:
                 break
 
@@ -51,9 +53,9 @@ class WebScraperQueryEngine(CustomQueryEngine):
 
     def custom_query(self, query_str: str):
         articles = self.fetch_articles()
-        articles_text = '\n'.join([f"Title: {article['title']}\nSummary: {article['summary']}" for article in articles])
+        articles_text = '\n'.join([f"Key: {article['key']}\nTitle: {article['title']}\nSummary: {article['summary']}" for article in articles])
         
-        prompt = f"Answer the user question: {query_str} based on the latest news listed here: {articles_text}. Answer in Croatian."
+        prompt = f"Answer the user question: {query_str} based on the latest news listed here: {articles_text}. The article with key 1 is the newest post. Answer in Croatian."
         answer = self.llm.complete(prompt)
         
         return str(answer)
