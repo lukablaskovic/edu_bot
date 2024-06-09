@@ -59,7 +59,7 @@ if st.session_state['connected']:
         debug_mode_on = st.toggle("Ispod haube", key="debug_mode")
 
     def intent_recognition_settings():
-        st.checkbox("Koristi cijeli razgovor kao LLM prompt", key="use_full_conversation")
+        st.checkbox("Koristi cijeli razgovor kao kontekst", key="use_full_conversation")
         st.text_area(
             label="Direct LLM Prompt",
             value=st.session_state["intent_agent_settings"]["direct_llm_prompt"],

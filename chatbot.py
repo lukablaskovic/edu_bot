@@ -10,6 +10,7 @@ from llama_index.llms.openai import OpenAI
 from settings import get_llm_settings
 from llama_index.core import PromptTemplate
 from modules.sqlrag_module import get_create_table_statement
+from modules.web_scraper_module import WebScraperQueryEngine
 load_dotenv()
 
 # Configure logging
@@ -56,7 +57,8 @@ def render_chatbot():
             )
 
             sql_query_engine = SQLQueryEngine(prompt=sql_prompt, llm=OpenAI(model=get_llm_settings()))
-
+            
+            web_scraper_engine = WebScraperQueryEngine(llm=OpenAI(model=get_llm_settings()))
 
             if st.session_state["use_full_conversation"]:
                 if st.session_state.debug_mode:
@@ -66,12 +68,12 @@ def render_chatbot():
                     conversation += f"{msg['role'].upper()}: {msg['content']}\n"
                 conversation += f"LATEST USER PROMPT: {prompt}"
                 print("***************************************full_conversation:", conversation)
-                response, intent = intent_recognition(conversation, velociraptor, sql_query_engine)
+                response, intent = intent_recognition(conversation, velociraptor, sql_query_engine, web_scraper_engine)
             else:
                 if st.session_state.debug_mode:
                     st.info("Koristim samo zadnji upit")
                 print("________________________________________prompt:", prompt)
-                response, intent = intent_recognition(prompt, velociraptor, sql_query_engine)
+                response, intent = intent_recognition(prompt, velociraptor, sql_query_engine, web_scraper_engine)
 
             print("__________________________INTENT___________________________")
             print("response:", response)
@@ -81,9 +83,7 @@ def render_chatbot():
                 st.success(f"Odabrao sam: {get_intent_description(intent)}")
 
             if st.session_state.debug_mode and st.session_state["generated_query.text"]:
-                st.code(st.session_state["generated_query.text"], language="sql")
-
-            
+                st.code(st.session_state["generated_query.text"], language="sql")      
             try:
                 if response:
                     st.session_state.messages.append({"role": "assistant", "content": str(response)})

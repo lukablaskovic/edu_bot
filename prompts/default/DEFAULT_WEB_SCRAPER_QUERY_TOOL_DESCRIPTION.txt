@@ -1,0 +1,2 @@
+Useful when user asks questions regarding latest news from Faculty or University. This tool will provide them by fetching latest news from Faculty website.
+Try to run this tool when user asks general information about conferences, seminars, workshops, student activities, competitions, university admissions etc.

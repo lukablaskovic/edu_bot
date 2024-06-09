@@ -14,9 +14,6 @@ import streamlit as st
 from llama_index.llms.openai import OpenAI
 from llama_index.core import PromptTemplate
 from llama_index.core.query_engine import CustomQueryEngine
-from llama_index.core.retrievers import BaseRetriever
-from llama_index.core import get_response_synthesizer
-from llama_index.core.response_synthesizers import BaseSynthesizer
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -27,7 +24,6 @@ def get_engine():
     db_path = os.path.join(os.path.dirname(__file__), 'db', 'database.db')
     db_uri = f'sqlite:///{db_path}'
     engine = create_engine(db_uri)
-    print("engine created successfully")
     return engine
 
 def create_users_table():
@@ -121,7 +117,6 @@ def get_user_by_email(email):
         logger.error(f"An error occurred while retrieving the user: {e}")
         return None
 
-
 def run_query(query_str):
     try:
         engine = get_engine()
@@ -136,20 +131,6 @@ def run_query(query_str):
     except Exception as e:
         logger.error(f"An error occurred while running the query: {e}")
         return None
-
-class SQLQueryEngine(CustomQueryEngine):
-    prompt: PromptTemplate
-    llm: OpenAI
-
-    def custom_query(self, query_str: str):
-        llm_prompt = self.prompt.format(query_str=query_str)
-        generated_query = self.llm.complete(llm_prompt)
-        result = run_query(generated_query.text)
-        
-        st.session_state["generated_query.text"] = generated_query.text
-        answer = self.llm.complete(f"Answer the user question: ${query_str} based on the result from the database query: {result}. Answer in Croatian.")
-        return str(answer)
-
 
 def get_tables():
     engine = get_engine()
@@ -210,7 +191,6 @@ def table_exists(table_name):
     metadata.reflect(engine)
     return table_name in metadata.tables
 
-
 def insert_pjs_points(rows):
     try:
         engine = get_engine()
@@ -226,6 +206,24 @@ def insert_pjs_points(rows):
         logger.info("All rows inserted successfully into 'PJS_points' table.")
     except Exception as e:
         logger.error(f"An error occurred while inserting rows: {e}", exc_info=True)
+
+class SQLQueryEngine(CustomQueryEngine):
+    
+    """Custom query engine for SQL queries."""
+    
+    prompt: PromptTemplate
+    llm: OpenAI
+
+    def custom_query(self, query_str: str):
+        llm_prompt = self.prompt.format(query_str=query_str)
+        generated_query = self.llm.complete(llm_prompt)
+        result = run_query(generated_query.text)
+        
+        st.session_state["generated_query.text"] = generated_query.text
+        answer = self.llm.complete(f"Answer the user question: ${query_str} based on the result from the database query: {result}. Answer in Croatian.")
+        return str(answer)
+
+
 
 def main():
     

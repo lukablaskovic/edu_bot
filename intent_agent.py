@@ -28,10 +28,12 @@ class LlmQueryEngine(CustomQueryEngine):
 
 LLM_settings = get_llm_settings()
 
-def intent_recognition(prompt: str, velociraptor: RAPTOR, sql_engine: RetrieverQueryEngine):
+def intent_recognition(prompt: str, velociraptor: RAPTOR, sql_engine, web_scraper_engine):
     
     assert prompt is not None
     assert velociraptor is not None
+    assert sql_engine is not None
+    assert web_scraper_engine is not None
 
     # generic query engine - direct to LLM
     llm_query_engine = LlmQueryEngine(llm=OpenAI(model=LLM_settings), prompt=st.session_state["intent_agent_settings"]["direct_llm_prompt"])
@@ -55,23 +57,26 @@ def intent_recognition(prompt: str, velociraptor: RAPTOR, sql_engine: RetrieverQ
         name="sql_rag_tool",
         description=st.session_state["intent_agent_settings"]["sql_rag_query_tool_description"]
     )
-
+    
+    web_scraper_query_engine = web_scraper_engine
+    web_scraper_tool = QueryEngineTool.from_defaults(
+        query_engine=web_scraper_query_engine,
+        name="web_scraper_tool",
+        description=st.session_state["intent_agent_settings"]["web_scraper_query_tool_description"]
+    )
     router_query_engine = RouterQueryEngine(
         selector=LLMSingleSelector.from_defaults(),
         query_engine_tools=[
             llm_tool,
             raptor_tool,
-            sql_rag_tool
+            sql_rag_tool,
+            web_scraper_tool
         ],
     )
     query = "<query>" + prompt + "</query>"
     response = router_query_engine.query(query)
     
-    print("response.metadata['selector_result']", response.metadata["selector_result"])
     intent = response.metadata["selector_result"].selections[0]
-    
-    #if intent.index == 2:
-        # must return sql select query which was generated
     
     return response, intent
 
