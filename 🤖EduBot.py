@@ -116,6 +116,17 @@ def web_scraper_settings():
             {"max_number_of_posts": st.session_state["temp_web_scraper_max_number_of_posts"]}
         )
     )
+    
+    selected_web_url = st.radio(
+                "Odaberi stranicu koju želiš da proučim",
+                ('https://www.unipu.hr/novosti', 'https://fipu.unipu.hr/fipu/novosti'),
+                help="Odaberi stranicu sastavnice Sveučilišta u Puli koju želiš da proučim.",
+                
+                on_change=lambda: st.session_state["web_scraper_settings"].update(
+                    {"selected_web_url": st.session_state["temp_selected_web_url"]}
+                ),
+                key="temp_selected_web_url",
+            )
 
 def intent_recognition_settings():
     st.checkbox("Koristi cijeli razgovor kao kontekst", key="use_full_conversation")

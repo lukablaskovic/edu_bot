@@ -10,7 +10,7 @@ class WebScraperQueryEngine(CustomQueryEngine):
     llm: OpenAI
 
     def fetch_articles(self):
-        url_fipu = 'https://fipu.unipu.hr/fipu/novosti/'
+        url_fipu = st.session_state["web_scraper_settings"]["selected_web_url"]
         response = requests.get(url_fipu, verify=False)
         response.raise_for_status() 
 
@@ -55,7 +55,7 @@ class WebScraperQueryEngine(CustomQueryEngine):
         articles = self.fetch_articles()
         articles_text = '\n'.join([f"Key: {article['key']}\nTitle: {article['title']}\nSummary: {article['summary']}" for article in articles])
         
-        prompt = f"Answer the user question: {query_str} based on the latest news listed here: {articles_text}. The article with key 1 is the newest post. Answer in Croatian."
+        prompt = f"Answer the user question: {query_str} based on the latest news listed here: {articles_text}. Answer in Croatian."
         answer = self.llm.complete(prompt)
         
         return str(answer)

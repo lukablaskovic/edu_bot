@@ -68,6 +68,7 @@ def initialize_settings():
     if "web_scraper_settings" not in st.session_state:
         st.session_state["web_scraper_settings"] = {}
         st.session_state["web_scraper_settings"]["max_number_of_posts"] = 15
+        st.session_state["web_scraper_settings"]["selected_web_url"] = "https://www.unipu.hr/novosti"
     
 def get_llm_settings():
     """
