@@ -70,9 +70,13 @@ def intent_recognition(prompt: str, velociraptor: RAPTOR, sql_engine, web_scrape
             web_scraper_tool
         ],
     )
-    query = "<query>" + prompt + "</query>"
-    response = router_query_engine.query(query)
     
+    query = "<query>\n" + prompt + "\n</query>"
+    
+    print("*\n" + query + "\n*")
+    
+    response = router_query_engine.query(query)
+        
     intent = response.metadata["selector_result"].selections[0]
     
     return response, intent
@@ -87,3 +91,14 @@ def get_intent_description(intent: ToolMetadata) -> str:
     
     intent_index = intent.index 
     return intents.get(intent_index, "Unknown intent")
+
+def stud_year_to_num(stud_year: str) -> int:
+    mapping = {
+        "1. prijediplomski": 1,
+        "2. prijediplomski": 2,
+        "3. prijediplomski": 3,
+        "1. diplomski": 4,
+        "2. diplomski": 5
+    }
+    
+    return mapping.get(stud_year, None)

@@ -53,6 +53,9 @@ def render_chatbot():
             
             web_scraper_engine = WebScraperQueryEngine(llm=OpenAI(model=get_llm_settings()))
 
+            if st.session_state["user_context_included"]:
+                if st.session_state.debug_mode:
+                    st.info("Uključujem podatke o studentu kao kontekst")
             
             if st.session_state["use_full_conversation"]:
                 if st.session_state.debug_mode:
@@ -61,22 +64,23 @@ def render_chatbot():
                 for msg in st.session_state.messages:
                     conversation += f"{msg['role'].upper()}: {msg['content']}\n"
                 conversation += f"LATEST USER PROMPT: {prompt}"
-                print("***************************************full_conversation:", conversation)
+
                 response, intent = intent_recognition(conversation, velociraptor, sql_query_engine, web_scraper_engine)
             else:
                 if st.session_state.debug_mode:
                     st.info("Koristim samo zadnji upit")
-                print("________________________________________prompt:", prompt)
+
                 response, intent = intent_recognition(prompt, velociraptor, sql_query_engine, web_scraper_engine)
 
             print("__________________________INTENT___________________________")
             print("response:", response)
             print("intent:", intent)
 
+            selected_intent = get_intent_description(intent)
             if st.session_state.debug_mode:
-                st.success(f"Odabrao sam: {get_intent_description(intent)}")
+                st.success(f"Odabrao sam: {selected_intent} ✅")
             
-            if st.session_state.debug_mode:
+            if st.session_state.debug_mode and selected_intent == "web_scraper_tool":
                 st.info(f"Čitam najnovijih {st.session_state['web_scraper_settings']['max_number_of_posts']} objava s weba🌐🎓")
             
             if st.session_state.debug_mode and st.session_state["generated_query.text"]:

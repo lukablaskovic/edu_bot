@@ -1,5 +1,7 @@
 Useful for retrieving specific context about the faculty, syllabus, and course information such as:
 - syllabus informations (how to access exam, what to expect from class, etc.)
 - course informations (course schedule, course materials, etc.)
-- programming knowledge (programming languages, tools, etc.)
+- programming knowledge (programming languages, tools, paradigms, functions, concepts etc.)
 - specific questions about programming (how to debug, how to write a program, etc.)
+Based on the context, you must provide an appropriate response to the user in Croatian language.
+Query: {query}

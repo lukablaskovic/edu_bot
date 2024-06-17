@@ -7,6 +7,7 @@ from openai_key import get_openai_key
 from chatbot import render_chatbot
 from modules.sqlrag_module import get_tables 
 from settings import initialize_settings, save_prompt
+from modules.sqlrag_module import create_users_table, get_engine, upsert_user, get_user_by_email, create_pjs_points_table
 
 # import logging
 # logging.basicConfig(level=logging.DEBUG)
@@ -43,16 +44,29 @@ authenticator = Authenticate(
 
 authenticator.check_authentification()
 
+st.session_state
+
 if st.session_state['connected']:
     initialize_settings()
+    email = st.session_state['user_info'].get('email')
+    user_details = get_user_by_email(email) 
+            
+    if 'study_year' not in st.session_state["user_info"]:
+        st.session_state["user_info"]["study_year"] = "1. prijediplomski"
+    if 'about_me' not in st.session_state["user_info"]:
+        st.session_state["user_info"]["about_me"] = ""
+    if 'programming_knowledge' not in st.session_state["user_info"]:
+        st.session_state["user_info"]["programming_knowledge"] = 0
+    
+    
+    study_year = user_details.get('study_year') if user_details else "1. prijediplomski"
+    about_me = user_details.get('about_me') if user_details else ""
+    programming_knowledge = user_details.get('programming_knowledge') if user_details else 0
 
-st.write("Session State: ")
-st.write("top k :", st.session_state["intent_agent_settings"]["similarity_top_k"])
-st.write("tables used:", st.session_state["sql_rag_tables"])
-st.write("max num posts:", st.session_state["web_scraper_settings"]["max_number_of_posts"])
-st.write("selected_gpt:", st.session_state["llm_selection"]["selected_gpt"])
-
-
+    st.session_state["user_info"]["study_year"] = study_year
+    st.session_state["user_info"]["about_me"] = about_me
+    st.session_state["user_info"]["programming_knowledge"] = programming_knowledge
+    
 def raptor_settings():
     st.radio(
         "RAPTOR Retriever Mode",
@@ -100,8 +114,6 @@ def sql_rag_settings():
                                                 value=st.session_state["sql_rag_tables"][table]
                                                 )
 
-
-
 def web_scraper_settings():
     st.write("Web Scraper Settings (To-Do)")
     
@@ -130,6 +142,7 @@ def web_scraper_settings():
 
 def intent_recognition_settings():
     st.checkbox("Koristi cijeli razgovor kao kontekst", key="use_full_conversation")
+    st.checkbox("Koristi podatke o korisniku kao kontekst", key="user_context_included")
     st.text_area(
         label="Direct LLM Prompt",
         value=st.session_state["intent_agent_settings"]["direct_llm_prompt"],
@@ -222,7 +235,6 @@ if st.session_state['connected']:
             if(st.session_state["llm_selection"]["selected_model"] == "GPT"):
                 st.session_state["openai_api_key"] = get_openai_key()
                 st.checkbox("Učitaj OpenAI API ključ iz okruženja", key="use_openai_env", help="Chekiraj ovu opciju ako želiš da se ključ učita iz okruženja. Potrebno je u `.env` datoteku dodati `OPENAI_API_KEY` ključ.")
-
 
                 selected_gpt = st.radio(
                     "Odaberi GPT model koji želiš koristiti",

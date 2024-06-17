@@ -1,2 +1,5 @@
 Useful when user asks questions regarding latest news from Faculty or University. This tool will provide them by fetching latest news from Faculty website.
 Try to run this tool when user asks general information about conferences, seminars, workshops, student activities, competitions, university admissions etc.
+
+Based on the data from the web, you must provide the appropriate response to the user in Croatian language. The response should be in the form of a text message, and it should contain the title of the news, author, a brief description, and a link to the news if available.
+Query: {query}

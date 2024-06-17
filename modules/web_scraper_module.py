@@ -55,7 +55,7 @@ class WebScraperQueryEngine(CustomQueryEngine):
         articles = self.fetch_articles()
         articles_text = '\n'.join([f"Key: {article['key']}\nTitle: {article['title']}\nSummary: {article['summary']}" for article in articles])
         
-        prompt = f"Answer the user question: {query_str} based on the latest news listed here: {articles_text}. Answer in Croatian."
+        prompt = f"Answer the user question: {query_str} based on the latest news listed here: {articles_text}."
         answer = self.llm.complete(prompt)
         
         return str(answer)

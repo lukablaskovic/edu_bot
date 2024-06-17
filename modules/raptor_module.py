@@ -108,7 +108,8 @@ class RAPTOR:
         try:
             self.logger.info("Setting up RetrieverQueryEngine")
             return RetrieverQueryEngine.from_args(
-                self.retriever, llm=OpenAI(model=LLM_settings, temperature=0.1, api_key=st.session_state["openai_api_key"])
+                self.retriever, llm=OpenAI(model=LLM_settings, temperature=0.1, api_key=st.session_state["openai_api_key"]),
+                streaming=True
             )
         except Exception as e:
             self.logger.error("An error occurred while setting up RetrieverQueryEngine: %s", e)
