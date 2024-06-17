@@ -83,7 +83,7 @@ def render_chatbot():
             if st.session_state.debug_mode and selected_intent == "web_scraper_tool":
                 st.info(f"Čitam najnovijih {st.session_state['web_scraper_settings']['max_number_of_posts']} objava s weba🌐🎓")
             
-            if st.session_state.debug_mode and st.session_state["generated_query.text"]:
+            if st.session_state.debug_mode and selected_intent == "sql_rag_tool":
                 st.code(st.session_state["generated_query.text"], language="sql")      
             try:
                 if response:
