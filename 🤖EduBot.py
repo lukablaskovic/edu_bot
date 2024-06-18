@@ -53,6 +53,7 @@ authenticator.check_authentification()
 if st.session_state['connected']:
     initialize_settings()
     
+    st.session_state["llm_selection"]["selected_model"]
     st.session_state["llm_selection"]["selected_gpt"]
     st.session_state["llm_selection"]["selected_embedding_model"]
     st.session_state["intent_agent_settings"]["retriever_mode"]
@@ -258,9 +259,9 @@ if st.session_state['connected']:
 
                 
             elif(st.session_state["llm_selection"]["selected_model"] == "Mistral"):
-                st.write("Mistral Settings (To-Do)")
+                st.success("Odabran model Mistral7B - lokalni deployment preko Ollama")
             else:
-                st.write("Gemma Settings (To-Do)")
+                pass
                 
         with st.expander("Postavke | Intent Recognition", expanded=False):
             intent_recognition_settings()

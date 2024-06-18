@@ -3,12 +3,15 @@ from bs4 import BeautifulSoup
 from llama_index.core.query_engine import CustomQueryEngine
 from llama_index.llms.openai import OpenAI
 import streamlit as st
+from llama_index.llms.ollama import Ollama
 
 class WebScraperQueryEngine(CustomQueryEngine):
     """Custom query engine for web scraping."""
     
-    llm: OpenAI
+    llm_openai: OpenAI | None
+    llm_ollama: Ollama | None
 
+    # web scraper
     def fetch_articles(self):
         url_fipu = st.session_state["web_scraper_settings"]["selected_web_url"]
         response = requests.get(url_fipu, verify=False)
@@ -55,7 +58,15 @@ class WebScraperQueryEngine(CustomQueryEngine):
         articles = self.fetch_articles()
         articles_text = '\n'.join([f"Key: {article['key']}\nTitle: {article['title']}\nSummary: {article['summary']}" for article in articles])
         
+        # Check which LLM is available
+        if self.llm_openai is not None:
+            llm = self.llm_openai
+        elif self.llm_ollama is not None:
+            llm = self.llm_ollama
+        else:
+            raise ValueError("No LLM available for querying.")
+
         prompt = f"Answer the user question: {query_str} based on the latest news listed here: {articles_text}."
-        answer = self.llm.complete(prompt)
+        answer = llm.complete(prompt)
         
         return str(answer)

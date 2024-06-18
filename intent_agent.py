@@ -3,10 +3,12 @@ import streamlit as st
 from llama_index.core.tools import ToolMetadata
 from llama_index.core.selectors import LLMSingleSelector, LLMMultiSelector
 from llama_index.llms.openai import OpenAI
+from llama_index.llms.ollama import Ollama
 from llama_index.core.query_engine import CustomQueryEngine
 from llama_index.core.tools import QueryEngineTool
 from llama_index.core.selectors import LLMSingleSelector
 from llama_index.core.query_engine import RouterQueryEngine
+
 
 from modules.raptor_module import RAPTOR
 
@@ -15,15 +17,23 @@ from settings import get_llm_settings
 class LlmQueryEngine(CustomQueryEngine):
     """Custom query engine for direct calls to the LLM model."""
 
-    llm: OpenAI
+    llm_openai: OpenAI | None
+    llm_ollama: Ollama | None
     prompt: str
 
     def custom_query(self, query_str: str):
-        llm_prompt = self.prompt.format(query=query_str)
-        llm_response = self.llm.complete(llm_prompt)
-        return str(llm_response)
+        if self.llm_openai is not None:
+            llm = self.llm_openai
+        elif self.llm_ollama is not None:
+            llm = self.llm_ollama
+        else:
+            raise ValueError("No LLM available for querying.")
 
-LLM_settings = get_llm_settings()
+        llm_prompt = self.prompt.format(query=query_str)
+        
+        llm_response = llm.complete(llm_prompt)
+        
+        return str(llm_response)
 
 def intent_recognition(user_prompt: str, velociraptor: RAPTOR, sql_engine, web_scraper_engine):
     
@@ -33,7 +43,16 @@ def intent_recognition(user_prompt: str, velociraptor: RAPTOR, sql_engine, web_s
     assert web_scraper_engine is not None
 
     # generic query engine - direct to LLM
-    llm_query_engine = LlmQueryEngine(llm=OpenAI(model=LLM_settings), prompt=st.session_state["intent_agent_settings"]["direct_llm_prompt"])
+    llm_settings = get_llm_settings()
+
+    # Determine the type of LLM and instantiate LlmQueryEngine accordingly
+    if isinstance(llm_settings, OpenAI):
+        llm_query_engine = LlmQueryEngine(llm_openai=llm_settings, prompt=st.session_state["intent_agent_settings"]["direct_llm_prompt"])
+    elif isinstance(llm_settings, Ollama):
+        llm_query_engine = LlmQueryEngine(llm_ollama=llm_settings, prompt=st.session_state["intent_agent_settings"]["direct_llm_prompt"])
+    else:
+        raise ValueError("Unsupported LLM type")
+
     llm_tool = QueryEngineTool.from_defaults(
         query_engine=llm_query_engine,
         name="llm_query_tool",
@@ -63,7 +82,7 @@ def intent_recognition(user_prompt: str, velociraptor: RAPTOR, sql_engine, web_s
     )
     
     router_query_engine = RouterQueryEngine(
-        selector=LLMSingleSelector.from_defaults(),
+        selector=LLMSingleSelector.from_defaults(llm=get_llm_settings()),
         query_engine_tools=[
             llm_tool,
             raptor_tool,
@@ -90,7 +109,7 @@ def intent_recognition(user_prompt: str, velociraptor: RAPTOR, sql_engine, web_s
     # if the user context is included and intent is RAPTOR search
     if intent.index == 1 and st.session_state["user_context_included"]:
         print("Tailoring response based on student context and gained knowledge...")
-        tailored_response = OpenAI(model=LLM_settings).complete(
+        tailored_response = get_llm_settings().complete(
             f"Always make sure to answer in Croatian language, but do not translate the code snippets nor IT terms.\n"
             f"You are a good professor and know how to explain things well to students of different levels. Student is asking you the following question {user_prompt} and you must answer him directly.\n"
             f"First determine if the question is IT-related and programming related.\n"

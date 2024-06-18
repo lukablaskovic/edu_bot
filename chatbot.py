@@ -6,6 +6,7 @@ import streamlit as st
 
 from llama_index.llms.openai import OpenAI
 from llama_index.core import PromptTemplate
+from llama_index.llms.ollama import Ollama
 
 from modules.sqlrag_module import SQLQueryEngine, get_create_table_statement, get_sql_template
 from modules.raptor_module import get_raptor
@@ -16,6 +17,7 @@ from settings import get_llm_settings
 load_dotenv()
 
 def render_chatbot():
+    llm_settings = get_llm_settings()
     if "messages" not in st.session_state:
         st.session_state["messages"] = [{"role": "assistant", "content": "Tu sam! Kako ti mogu pomoći?🤖"}]
 
@@ -48,13 +50,26 @@ def render_chatbot():
                 sql_prompt = get_sql_template(schemas_str)
                 
                 # SQL RAG MODULE
-                sql_query_engine = SQLQueryEngine(prompt=sql_prompt, llm=OpenAI(model=get_llm_settings()))
+                
+                if isinstance(llm_settings, OpenAI):
+                    sql_query_engine = SQLQueryEngine(prompt=sql_prompt, llm_openai=llm_settings)
+                elif isinstance(llm_settings, Ollama):
+                    sql_query_engine = SQLQueryEngine(prompt=sql_prompt, llm_ollama=llm_settings)
+                else:
+                    raise ValueError("Unsupported LLM type")
+
             except Exception as e:
                 st.error(f"Greška [SQL-RAG]: {e}")
                 return
             
             # WEB SCRAPER MODULE
-            web_scraper_engine = WebScraperQueryEngine(llm=OpenAI(model=get_llm_settings()))
+            
+            if isinstance(llm_settings, OpenAI):
+                web_scraper_engine = WebScraperQueryEngine(llm_openai=llm_settings)
+            elif isinstance(llm_settings, Ollama):
+                web_scraper_engine = WebScraperQueryEngine(llm_ollama=llm_settings)
+            else:
+                raise ValueError("Unsupported LLM type")
 
             if st.session_state["user_context_included"]:
                 if st.session_state.debug_mode:

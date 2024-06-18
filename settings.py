@@ -1,6 +1,7 @@
 import streamlit as st
 from modules.sqlrag_module import get_tables
-
+from llama_index.llms.openai import OpenAI
+from llama_index.llms.ollama import Ollama
 def read_prompt_file(file_path):
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
@@ -79,4 +80,13 @@ def get_llm_settings():
         print("***Initialized settings!***")
     
     if st.session_state["llm_selection"]["selected_model"] == "GPT":
-        return st.session_state["llm_selection"]["selected_gpt"]
+        return OpenAI(model=st.session_state["llm_selection"]["selected_gpt"], temperature=0.1, api_key=st.session_state["openai_api_key"])
+    elif st.session_state["llm_selection"]["selected_model"] == "Mistral":
+        try:
+            return Ollama(model="mistral", temperature=0.1, system_prompt="Always respond in Croatian language.")
+        except ValueError as e:
+            print(f"Model 'mistral' is not recognized: {e}")
+            raise ValueError("Invalid model 'mistral' for Ollama.")
+    
+    # https://ollama.com/library/mistral:7b
+    # https://ollama.com/library/gemma

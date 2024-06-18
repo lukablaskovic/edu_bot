@@ -23,18 +23,25 @@ load_dotenv()
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
-
 logger.setLevel(logging.WARNING)
 
 
-LLM_settings = get_llm_settings()
+def load_parameters():
+    try:
+        global EMBEDDING_MODEL
+        EMBEDDING_MODEL = st.session_state["llm_selection"]["selected_embedding_model"]
 
-EMBEDDING_MODEL = st.session_state["llm_selection"]["selected_embedding_model"]
-RETRIEVAL_METHOD = st.session_state["intent_agent_settings"]["retriever_mode"]
-SIMILARITY_TOP_K = st.session_state["intent_agent_settings"]["similarity_top_k"]
+        global RETRIEVAL_METHOD
+        RETRIEVAL_METHOD = st.session_state["intent_agent_settings"]["retriever_mode"]
+        
+        global SIMILARITY_TOP_K
+        SIMILARITY_TOP_K = st.session_state["intent_agent_settings"]["similarity_top_k"]
+    except Exception as e:
+        print(f"An error occurred while loading settings: {e}")
 
 class RAPTOR:
     def __init__(self, files, collection_name="edubot_raptor", force_rebuild=False):
+        load_parameters()
         self.files = files
         self.collection_name = collection_name
         # Set up logging
@@ -77,8 +84,8 @@ class RAPTOR:
             self.logger.info("Creating RaptorPack and building raptor tree...")
             raptor_pack = RaptorPack(
                 self.documents,
-                embed_model=OpenAIEmbedding(model=EMBEDDING_MODEL),  # used for embedding clusters
-                llm=OpenAI(model=LLM_settings, temperature=0.1, api_key=st.session_state["openai_api_key"]), 
+                embed_model=OpenAIEmbedding(model=EMBEDDING_MODEL),  # used for embedding clusters, using OpenAI always
+                llm=get_llm_settings(), 
                 vector_store=self.vector_store,
                 similarity_top_k=SIMILARITY_TOP_K,
                 mode=RETRIEVAL_METHOD, 
@@ -94,8 +101,8 @@ class RAPTOR:
             self.logger.info("Setting up RaptorRetriever")
             return RaptorRetriever(
                 [],
-                embed_model=OpenAIEmbedding(model=EMBEDDING_MODEL),  # used for embedding clusters
-                llm=OpenAI(model=LLM_settings, temperature=0.1, api_key=st.session_state["openai_api_key"]), # used for generating summaries
+                embed_model=OpenAIEmbedding(model=EMBEDDING_MODEL),  # used for embedding clusters, using OpenAI always
+                llm=get_llm_settings(),
                 vector_store=self.vector_store,
                 similarity_top_k=SIMILARITY_TOP_K,
                 mode=RETRIEVAL_METHOD, 
@@ -108,7 +115,7 @@ class RAPTOR:
         try:
             self.logger.info("Setting up RetrieverQueryEngine")
             return RetrieverQueryEngine.from_args(
-                self.retriever, llm=OpenAI(model=LLM_settings, temperature=0.1, api_key=st.session_state["openai_api_key"]),
+                self.retriever, llm=get_llm_settings(),
                 streaming=True
             )
         except Exception as e:

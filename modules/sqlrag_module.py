@@ -7,6 +7,7 @@ from sqlalchemy.schema import CreateTable
 
 from dotenv import load_dotenv
 load_dotenv()
+from llama_index.llms.ollama import Ollama
 
 from llama_index.llms.openai import OpenAI
 from llama_index.core import PromptTemplate
@@ -221,25 +222,36 @@ def insert_pjs_points(rows):
         logger.error(f"An error occurred while inserting rows: {e}", exc_info=True)
 
 class SQLQueryEngine(CustomQueryEngine):
-    
     """Custom query engine for SQL queries."""
-    
+
+    llm_openai: OpenAI | None
+    llm_ollama: Ollama | None
     prompt: PromptTemplate
-    llm: OpenAI
 
     def custom_query(self, query_str: str):
+        if self.llm_openai is not None:
+            llm = self.llm_openai
+        elif self.llm_ollama is not None:
+            llm = self.llm_ollama
+        else:
+            raise ValueError("No LLM available for querying.")
+
         llm_prompt = self.prompt.format(query_str=query_str)
-        generated_query = self.llm.complete(llm_prompt)
+        
+        generated_query = llm.complete(llm_prompt)
         
         query_normalized = remove_sql_markdown(generated_query.text)
         
-        
+        # Run the SQL query
         result = run_query(query_normalized)
         
         print(f"SQL result: {result}")
         
         st.session_state["generated_query.text"] = query_normalized
-        answer = self.llm.complete(f"Answer the user question: ${query_str} based on the result from the database query: {result}. Answer in Croatian.")
+        
+        answer_prompt = f"Answer the user question: {query_str} based on the result from the database query: {result}. Answer in Croatian."
+        answer = llm.complete(answer_prompt)
+        
         return str(answer)
 
 
