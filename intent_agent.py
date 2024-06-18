@@ -12,7 +12,7 @@ from llama_index.core.query_engine import RouterQueryEngine
 
 from modules.raptor_module import RAPTOR
 
-from settings import get_llm_settings
+from settings import get_llm
 
 class LlmQueryEngine(CustomQueryEngine):
     """Custom query engine for direct calls to the LLM model."""
@@ -43,7 +43,7 @@ def intent_recognition(user_prompt: str, velociraptor: RAPTOR, sql_engine, web_s
     assert web_scraper_engine is not None
 
     # generic query engine - direct to LLM
-    llm_settings = get_llm_settings()
+    llm_settings = get_llm()
 
     # Determine the type of LLM and instantiate LlmQueryEngine accordingly
     if isinstance(llm_settings, OpenAI):
@@ -57,13 +57,12 @@ def intent_recognition(user_prompt: str, velociraptor: RAPTOR, sql_engine, web_s
         query_engine=llm_query_engine,
         name="llm_query_tool",
         description= st.session_state["intent_agent_settings"]["llm_query_tool_description"],
-        
     )
     
     raptor_query_engine = velociraptor.query_engine
     raptor_tool = QueryEngineTool.from_defaults(
     query_engine=raptor_query_engine,
-    name="vector_query_tool",
+    name="raptor_query_engine",
     description= st.session_state["intent_agent_settings"]["raptor_query_tool_description"],
     )
     
@@ -82,7 +81,7 @@ def intent_recognition(user_prompt: str, velociraptor: RAPTOR, sql_engine, web_s
     )
     
     router_query_engine = RouterQueryEngine(
-        selector=LLMSingleSelector.from_defaults(llm=get_llm_settings()),
+        selector=LLMSingleSelector.from_defaults(llm=get_llm()),
         query_engine_tools=[
             llm_tool,
             raptor_tool,
@@ -107,27 +106,132 @@ def intent_recognition(user_prompt: str, velociraptor: RAPTOR, sql_engine, web_s
     intent = response.metadata["selector_result"].selections[0]
     
     # if the user context is included and intent is RAPTOR search
-    if intent.index == 1 and st.session_state["user_context_included"]:
-        print("Tailoring response based on student context and gained knowledge...")
-        tailored_response = get_llm_settings().complete(
-            f"Always make sure to answer in Croatian language, but do not translate the code snippets nor IT terms.\n"
-            f"You are a good professor and know how to explain things well to students of different levels. Student is asking you the following question {user_prompt} and you must answer him directly.\n"
-            f"First determine if the question is IT-related and programming related.\n"
-            f"STUDENT CONTEXT START\n"
-            f"Student year of study: {stud_year_to_num(st.session_state['user_info']['study_year'])}. Note 1 are freshmen so explain to them in simple terms, and 5 are graduate students with high knowledge - use professional terms.\n"
-            f"Student's programming knowledge: {st.session_state['user_info']['programming_knowledge']}. Note 1 is a beginner, 10 is an expert.\n"
-            f"STUDENT CONTEXT END\n"
-            f"Determine if the following knowledge is IT-related or programming related. If it is, tailor the following knowledge to the student's level based on STUDENT CONTEXT provided above and use code snippet in markdown if applicable.\n"
+    
+    if intent.index == 3:
+        print("WEB SCRAPER INTENT")
+        tailored_response = get_llm().complete(
+            f"***Instructions for answering the user query:***\n"
+            f"Always make sure to answer in Croatian language.\n"
+            f"Your task is to present the user with the latest news from the website. Here are the news:\n"  
             f""""
-            KNOWLEDGE START
-            {response}
-            KNOWLEDGE END
+                <NEWS START>
+                {response}
+                <NEWS END>
             """
-            f"Final note, if the knowledge is not IT-related or programming related, provide a general explanation of the knowledge without taking into account STUDENT CONTEXT nor use code snippets.\n"
-
         )
         return tailored_response, intent
+    
+    if intent.index == 2:
+        print("SQL RAG INTENT")
+        tailored_response = get_llm().complete(
+            f"***Instructions for answering the user query:***\n"
+            f"Always make sure to answer in Croatian language.\n"
+            f"Based on user query and result SQL query result. Answer the user question directly to user.\n"
+            f"User has asked the following question:\n"
+            f"<LATEST USER QUERY>\n"
+                f"{user_prompt} \n"
+                f"<LATEST USER QUERY END>\n"
+            f"Here is the result of the SQL query:\n"
+            f""""
+                <SQL QUERY RESULT START>
+                {response}
+                <SQL QUERY RESULT END>
+            """
+        )
+        return tailored_response, intent
+    
+    if not st.session_state["use_full_conversation"]:
+    
+        if intent.index == 1 and st.session_state["user_context_included"] :
+            print("RAPTOR INTENT | ONLY LAST USER QUERY | USER CONTEXT INCLUDED")
+            tailored_response = get_llm().complete(
+                f"***Instructions for answering the user query:***\n"
+                f"Always make sure to answer in Croatian language, but do not translate the code snippets nor IT terms.\n"
+                f"You are a good professor and know how to explain things well to students of different levels. Student is asking you the following question:\n"
+                f"<LATEST USER QUERY>\n"
+                f"{user_prompt} \n"
+                f"<LATEST USER QUERY END>\n"
+                f"Answer the student directly.\n"
+                f"First determine if the question is IT-related and programming related.\n"
+                f"<STUDENT CONTEXT START>\n"
+                f"Student year of study: {stud_year_to_num(st.session_state['user_info']['study_year'])}. Note 1 are freshmen so explain to them in simple terms, and 5 are graduate students with high knowledge - use professional terms.\n"
+                f"Student's programming knowledge: {st.session_state['user_info']['programming_knowledge']}. Note 1 is a beginner, 10 is an expert.\n"
+                f"<STUDENT CONTEXT END>\n"
+                f"Determine if the following <KNOWLEDGE> is IT-related or programming related. If it is, tailor the following <KNOWLEDGE> to the student's level based on <STUDENT CONTEXT> provided above and use code snippet in markdown if applicable.\n"
+                f""""
+                <KNOWLEDGE START>
+                {response}
+                <KNOWLEDGE END>
+                """
+                f"Final note, if the knowledge is not IT-related or programming related, provide a general explanation of the <KNOWLEDGE> without taking into account <STUDENT CONTEXT> nor use code snippets.\n"
 
+            )
+            return tailored_response, intent
+        
+        elif intent.index == 1:
+            print("RAPTOR INTENT | ONLY LAST USER QUERY | NO USER CONTEXT")
+            tailored_response = get_llm().complete(
+                f"***Instructions for answering the user query:***\n"
+                f"Always make sure to answer in Croatian language, but do not translate the code snippets nor IT terms.\n"
+                f"You are a good professor and know how to explain things well to students of different levels. Student is asking you the following question:\n"
+                f"<LATEST USER QUERY>\n"
+                f"{user_prompt} \n"
+                f"<LATEST USER QUERY END>\n"
+                f"Answer the student directly.\n"
+                f"Use the following knowledge to answer the question:\n"
+                f"""
+                <KNOWLEDGE START>
+                {response}
+                <KNOWLEDGE END>
+                """
+            )
+            return tailored_response, intent
+           
+    else:
+        if intent.index == 1 and st.session_state["user_context_included"] :
+            print("RAPTOR INTENT | FULL CONVERSATION | USER CONTEXT INCLUDED")
+            tailored_response = get_llm().complete(
+                f"***Instructions for answering the user query:***\n"
+                f"Always make sure to answer in Croatian language, but do not translate the code snippets nor IT terms.\n"
+                f"You are a good professor and know how to explain things well to students of different levels. For context, here is full conversation with you so far:\n"
+                f"{user_prompt}"
+                f"\n Take the whole context and answer the student's latest question indicated under **LATEST USER QUERY**.\n"
+                f"First determine if the question is IT-related and programming related.\n"
+                f"<STUDENT CONTEXT START>\n"
+                f"Student year of study: {stud_year_to_num(st.session_state['user_info']['study_year'])}. Note 1 are freshmen so explain to them in simple terms, and 5 are graduate students with high knowledge - use professional terms.\n"
+                f"Student's programming knowledge: {st.session_state['user_info']['programming_knowledge']}. Note 1 is a beginner, 10 is an expert.\n"
+                f"<STUDENT CONTEXT END>\n"
+                f"Determine if the following <KNOWLEDGE> is IT-related or programming related. If it is, tailor the following <KNOWLEDGE> to the student's level based on <STUDENT CONTEXT> provided above and use code snippet in markdown if applicable.\n"
+                f""""
+                <KNOWLEDGE START>
+                {response}
+                <KNOWLEDGE END>
+                """
+                f"Final note, if the knowledge is not IT-related or programming related, provide a general explanation of the <KNOWLEDGE> without taking into account <STUDENT CONTEXT> nor use code snippets.\n"
+
+            )
+            return tailored_response, intent
+        
+        elif intent.index == 1:
+            print("RAPTOR INTENT | FULL CONVERSATION | NO USER CONTEXT")
+            tailored_response = get_llm().complete(
+                f"***Instructions for answering the user query:***\n"
+                f"Always make sure to answer in Croatian language, but do not translate the code snippets nor IT terms.\n"
+                f"You are a good professor and know how to explain things well to students of different levels. For context, here is full conversation with you so far:\n"
+                f"{user_prompt}"
+                f"\n Take the whole context and answer the student's latest question indicated under **LATEST USER QUERY**.\n"
+                f"<LATEST USER QUERY END>\n"
+                f"Answer the student directly.\n"
+                f"Use the following knowledge to answer the question:\n"
+                f"""
+                <KNOWLEDGE START>
+                {response}
+                <KNOWLEDGE END>
+                """
+            )
+            return tailored_response, intent
+        
+        
     return response, intent
 
 

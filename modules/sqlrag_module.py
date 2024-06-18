@@ -249,9 +249,10 @@ class SQLQueryEngine(CustomQueryEngine):
         
         st.session_state["generated_query.text"] = query_normalized
         
-        answer_prompt = f"Answer the user question: {query_str} based on the result from the database query: {result}. Answer in Croatian."
-        answer = llm.complete(answer_prompt)
+        #answer_prompt = f"Answer the user question: {query_str} based on the result from the database query: {result}. Answer in Croatian."
+        #answer = llm.complete(answer_prompt)
         
+        return str(result)
         return str(answer)
 
 

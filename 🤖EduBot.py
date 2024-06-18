@@ -49,7 +49,6 @@ authenticator = Authenticate(
 authenticator.check_authentification()
 
 
-
 if st.session_state['connected']:
     initialize_settings()
     
@@ -59,7 +58,8 @@ if st.session_state['connected']:
     st.session_state["intent_agent_settings"]["retriever_mode"]
     st.session_state["intent_agent_settings"]["similarity_top_k"]
 
-    
+    st.session_state["user_context_included"]
+
     email = st.session_state['user_info'].get('email')
     user_details = get_user_by_email(email) 
             

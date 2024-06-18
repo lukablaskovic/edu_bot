@@ -52,7 +52,7 @@ def initialize_settings():
         st.session_state["intent_agent_settings"]["web_scraper_query_tool_description"] = DEFAULT_WEB_SCRAPER_QUERY_TOOL_DESCRIPTION
     
         # RAPTOR
-        st.session_state["intent_agent_settings"]["similarity_top_k"] = 7
+        st.session_state["intent_agent_settings"]["similarity_top_k"] = 5
         st.session_state["intent_agent_settings"]["retriever_mode"] = "collapsed"
     
      # sql-rag
@@ -71,7 +71,10 @@ def initialize_settings():
         st.session_state["web_scraper_settings"]["max_number_of_posts"] = 15
         st.session_state["web_scraper_settings"]["selected_web_url"] = "https://www.unipu.hr/novosti"
     
-def get_llm_settings():
+    if "user_context_included" not in st.session_state:
+        st.session_state["user_context_included"] = False
+    
+def get_llm():
     """
     Get LLM settings.
     """

@@ -1,0 +1,6 @@
+Useful for retrieving specific data from database (most of the time numerical data such as points, grades, attendance),
+- you can use this tool when user asks about student information like his name, total points, grades, attendance, etc.
+- you can use this when user asks about his points/grades for some class or his attendance in some class.
+- use this tool when user asks about his personal information and programming knowledge.
+Based on the results from the database, you must provide the appropriate response to the user in Croatian language.
+Query: {query}

@@ -17,7 +17,7 @@ from llama_index.llms.openai import OpenAI
 
 
 from dotenv import load_dotenv
-from settings import get_llm_settings
+from settings import get_llm
 
 load_dotenv()
 
@@ -85,7 +85,7 @@ class RAPTOR:
             raptor_pack = RaptorPack(
                 self.documents,
                 embed_model=OpenAIEmbedding(model=EMBEDDING_MODEL),  # used for embedding clusters, using OpenAI always
-                llm=get_llm_settings(), 
+                llm=get_llm(), 
                 vector_store=self.vector_store,
                 similarity_top_k=SIMILARITY_TOP_K,
                 mode=RETRIEVAL_METHOD, 
@@ -102,7 +102,7 @@ class RAPTOR:
             return RaptorRetriever(
                 [],
                 embed_model=OpenAIEmbedding(model=EMBEDDING_MODEL),  # used for embedding clusters, using OpenAI always
-                llm=get_llm_settings(),
+                llm=get_llm(),
                 vector_store=self.vector_store,
                 similarity_top_k=SIMILARITY_TOP_K,
                 mode=RETRIEVAL_METHOD, 
@@ -115,7 +115,7 @@ class RAPTOR:
         try:
             self.logger.info("Setting up RetrieverQueryEngine")
             return RetrieverQueryEngine.from_args(
-                self.retriever, llm=get_llm_settings(),
+                self.retriever, llm=get_llm(),
                 streaming=True
             )
         except Exception as e:

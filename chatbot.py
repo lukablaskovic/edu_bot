@@ -12,12 +12,12 @@ from modules.sqlrag_module import SQLQueryEngine, get_create_table_statement, ge
 from modules.raptor_module import get_raptor
 from modules.web_scraper_module import WebScraperQueryEngine
 from intent_agent import intent_recognition, get_intent_description
-from settings import get_llm_settings
+from settings import get_llm
 
 load_dotenv()
 
 def render_chatbot():
-    llm_settings = get_llm_settings()
+    llm_settings = get_llm()
     if "messages" not in st.session_state:
         st.session_state["messages"] = [{"role": "assistant", "content": "Tu sam! Kako ti mogu pomoći?🤖"}]
 
