@@ -4,6 +4,8 @@ from llama_index.core.tools import ToolMetadata
 from llama_index.core.selectors import LLMSingleSelector, LLMMultiSelector
 from llama_index.llms.openai import OpenAI
 from llama_index.llms.ollama import Ollama
+from llama_index.llms.anthropic import Anthropic
+
 from llama_index.core.query_engine import CustomQueryEngine
 from llama_index.core.tools import QueryEngineTool
 from llama_index.core.selectors import LLMSingleSelector
@@ -19,6 +21,7 @@ class LlmQueryEngine(CustomQueryEngine):
 
     llm_openai: OpenAI | None
     llm_ollama: Ollama | None
+    llm_anthropic: Anthropic | None
     prompt: str
 
     def custom_query(self, query_str: str):
@@ -26,6 +29,8 @@ class LlmQueryEngine(CustomQueryEngine):
             llm = self.llm_openai
         elif self.llm_ollama is not None:
             llm = self.llm_ollama
+        elif self.llm_anthropic is not None:
+            llm = self.llm_anthropic
         else:
             raise ValueError("No LLM available for querying.")
 
@@ -50,6 +55,8 @@ def intent_recognition(user_prompt: str, velociraptor: RAPTOR, sql_engine, web_s
         llm_query_engine = LlmQueryEngine(llm_openai=llm_settings, prompt=st.session_state["intent_agent_settings"]["direct_llm_prompt"])
     elif isinstance(llm_settings, Ollama):
         llm_query_engine = LlmQueryEngine(llm_ollama=llm_settings, prompt=st.session_state["intent_agent_settings"]["direct_llm_prompt"])
+    elif isinstance(llm_settings, Anthropic):
+        llm_query_engine = LlmQueryEngine(llm_anthropic=llm_settings, prompt=st.session_state["intent_agent_settings"]["direct_llm_prompt"])
     else:
         raise ValueError("Unsupported LLM type")
 

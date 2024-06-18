@@ -238,7 +238,7 @@ if st.session_state['connected']:
         with st.expander("Postavke | Odabir modela", expanded=False):
             st.radio(
                 "Odaberi LLM koji želiš koristiti za pogon EduBota🤖",
-                options=["GPT", "mistral:7b", "gemma:7b", "llama3:8b"],
+                options=["GPT", "mistral:7b", "gemma:7b", "llama3:8b", "Claude 3 Opus", "Claude 3 Sonnet", "Claude 3 Haiku"],
                 on_change=lambda: st.session_state["llm_selection"].update(
                     {"selected_model": st.session_state["temp_selected_model"]}
                 ),

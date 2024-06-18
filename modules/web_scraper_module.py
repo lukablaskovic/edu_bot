@@ -1,15 +1,18 @@
+import streamlit as st
 import requests
 from bs4 import BeautifulSoup
 from llama_index.core.query_engine import CustomQueryEngine
-from llama_index.llms.openai import OpenAI
-import streamlit as st
+
 from llama_index.llms.ollama import Ollama
+from llama_index.llms.anthropic import Anthropic
+from llama_index.llms.openai import OpenAI
 
 class WebScraperQueryEngine(CustomQueryEngine):
     """Custom query engine for web scraping."""
     
     llm_openai: OpenAI | None
     llm_ollama: Ollama | None
+    llm_anthropic: Anthropic | None
 
     # web scraper
     def fetch_articles(self):
@@ -63,6 +66,8 @@ class WebScraperQueryEngine(CustomQueryEngine):
             llm = self.llm_openai
         elif self.llm_ollama is not None:
             llm = self.llm_ollama
+        elif self.llm_anthropic is not None:
+            llm = self.llm_anthropic
         else:
             raise ValueError("No LLM available for querying.")
 

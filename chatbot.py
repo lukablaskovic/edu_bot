@@ -7,6 +7,7 @@ import streamlit as st
 from llama_index.llms.openai import OpenAI
 from llama_index.core import PromptTemplate
 from llama_index.llms.ollama import Ollama
+from llama_index.llms.anthropic import Anthropic
 
 from modules.sqlrag_module import SQLQueryEngine, get_create_table_statement, get_sql_template
 from modules.raptor_module import get_raptor
@@ -63,6 +64,8 @@ def render_chatbot():
                     sql_query_engine = SQLQueryEngine(prompt=sql_prompt, llm_openai=llm_settings)
                 elif isinstance(llm_settings, Ollama):
                     sql_query_engine = SQLQueryEngine(prompt=sql_prompt, llm_ollama=llm_settings)
+                elif isinstance(llm_settings, Anthropic):
+                    sql_query_engine = SQLQueryEngine(prompt=sql_prompt, llm_anthropic=llm_settings)
                 else:
                     raise ValueError("Unsupported LLM type")
 
@@ -76,6 +79,8 @@ def render_chatbot():
                 web_scraper_engine = WebScraperQueryEngine(llm_openai=llm_settings)
             elif isinstance(llm_settings, Ollama):
                 web_scraper_engine = WebScraperQueryEngine(llm_ollama=llm_settings)
+            elif isinstance(llm_settings, Anthropic):
+                web_scraper_engine = WebScraperQueryEngine(llm_anthropic=llm_settings)
             else:
                 raise ValueError("Unsupported LLM type")
 

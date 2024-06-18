@@ -8,6 +8,7 @@ from sqlalchemy.schema import CreateTable
 from dotenv import load_dotenv
 load_dotenv()
 from llama_index.llms.ollama import Ollama
+from llama_index.llms.anthropic import Anthropic
 
 from llama_index.llms.openai import OpenAI
 from llama_index.core import PromptTemplate
@@ -226,6 +227,7 @@ class SQLQueryEngine(CustomQueryEngine):
 
     llm_openai: OpenAI | None
     llm_ollama: Ollama | None
+    llm_anthropic: Anthropic | None
     prompt: PromptTemplate
 
     def custom_query(self, query_str: str):
@@ -233,6 +235,8 @@ class SQLQueryEngine(CustomQueryEngine):
             llm = self.llm_openai
         elif self.llm_ollama is not None:
             llm = self.llm_ollama
+        elif self.llm_anthropic is not None:
+            llm = self.llm_anthropic
         else:
             raise ValueError("No LLM available for querying.")
 

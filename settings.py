@@ -2,6 +2,8 @@ import streamlit as st
 from modules.sqlrag_module import get_tables
 from llama_index.llms.openai import OpenAI
 from llama_index.llms.ollama import Ollama
+from llama_index.llms.anthropic import Anthropic
+
 def read_prompt_file(file_path):
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
@@ -109,3 +111,27 @@ def get_llm():
             print(f"Model 'llama3' is not recognized: {e}")
             raise ValueError("Invalid model 'llama3' for Ollama.")
         
+    # https://docs.llamaindex.ai/en/latest/examples/llm/anthropic/
+    elif st.session_state["llm_selection"]["selected_model"] == "Claude 3 Opus":
+        try:
+            return Anthropic(model="claude-3-opus-20240229", temperature=0.1)
+        except ValueError as e:
+            print(f"Model 'claude-3-opus-20240229' is not recognized: {e}")
+            raise ValueError("Invalid model 'claude-3-opus-20240229' for Anthropic.")
+        
+    # https://docs.llamaindex.ai/en/latest/examples/llm/anthropic/
+    elif st.session_state["llm_selection"]["selected_model"] == "Claude 3 Sonnet":
+        try:
+            return Anthropic(model="claude-3-sonnet-20240229", temperature=0.1)
+        except ValueError as e:
+            print(f"Model 'claude-3-sonnet-20240229' is not recognized: {e}")
+            raise ValueError("Invalid model 'claude-3-sonnet-20240229' for Anthropic.")
+        
+    # https://docs.llamaindex.ai/en/latest/examples/llm/anthropic/
+    elif st.session_state["llm_selection"]["selected_model"] == "Claude 3 Haiku":
+        try:
+            return Anthropic(model="claude-3-haiku-20240307", temperature=0.1)
+        except ValueError as e:
+            print(f"Model 'claude-3-haiku-20240307' is not recognized: {e}")
+            raise ValueError("Invalid model 'claude-3-haiku-20240307' for Anthropic.")
+    
