@@ -52,14 +52,13 @@ authenticator.check_authentification()
 if st.session_state['connected']:
     initialize_settings()
     
-    st.session_state["llm_selection"]["selected_model"]
-    st.session_state["llm_selection"]["selected_gpt"]
-    st.session_state["llm_selection"]["selected_embedding_model"]
-    st.session_state["intent_agent_settings"]["retriever_mode"]
-    st.session_state["intent_agent_settings"]["similarity_top_k"]
-
-    st.session_state["user_context_included"]
-
+    #st.session_state["llm_selection"]["selected_model"]
+    #st.session_state["llm_selection"]["selected_gpt"]
+    #st.session_state["llm_selection"]["selected_embedding_model"]
+    #st.session_state["intent_agent_settings"]["retriever_mode"]
+    #st.session_state["intent_agent_settings"]["similarity_top_k"]
+    #st.session_state["user_context_included"]
+  
     email = st.session_state['user_info'].get('email')
     user_details = get_user_by_email(email) 
             
