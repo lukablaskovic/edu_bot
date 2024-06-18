@@ -26,7 +26,7 @@ DEFUALT_SQL_RAG_QUERY_TOOL_DESCRIPTION = read_prompt_file("./prompts/default/DEF
 DEFAULT_WEB_SCRAPER_QUERY_TOOL_DESCRIPTION = read_prompt_file("./prompts/default/DEFAULT_WEB_SCRAPER_QUERY_TOOL_DESCRIPTION.txt")
 
 DEFAULT_SELECTED_MODEL = "GPT"
-DEFAULT_SELECTED_GPT = "gpt-3.5-turbo"
+DEFAULT_SELECTED_GPT = "gpt-4o"
 DEFAULT_SELECTED_EMBEDDING_MODEL = "text-embedding-3-small"
 
 def initialize_settings():
@@ -51,7 +51,7 @@ def initialize_settings():
         st.session_state["intent_agent_settings"]["web_scraper_query_tool_description"] = DEFAULT_WEB_SCRAPER_QUERY_TOOL_DESCRIPTION
     
         # RAPTOR
-        st.session_state["intent_agent_settings"]["similarity_top_k"] = 5
+        st.session_state["intent_agent_settings"]["similarity_top_k"] = 7
         st.session_state["intent_agent_settings"]["retriever_mode"] = "collapsed"
     
      # sql-rag

@@ -26,12 +26,13 @@ def render_chatbot():
         st.session_state.messages.append({"role": "user", "content": prompt})
         st.chat_message("user").write(prompt)
 
-        with st.spinner("Odabirem alat..." if st.session_state.debug_mode else "..."):
+        with st.spinner("Razmišljam..." if st.session_state.debug_mode else "..."):
             try:
                 # caching
                 if 'raptor' in st.session_state:
                     velociraptor = st.session_state["raptor"]
                 else:
+                    # RAPTOR RAG MODULE
                     velociraptor = get_raptor(files=get_files(), force_rebuild=False)
             except Exception as e:
                 st.error(f"Greška [RAPTOR]: {e}")
@@ -45,25 +46,27 @@ def render_chatbot():
                 schemas_str = "\n".join(table_schemas)
 
                 sql_prompt = get_sql_template(schemas_str)
-
+                
+                # SQL RAG MODULE
                 sql_query_engine = SQLQueryEngine(prompt=sql_prompt, llm=OpenAI(model=get_llm_settings()))
             except Exception as e:
                 st.error(f"Greška [SQL-RAG]: {e}")
                 return
             
+            # WEB SCRAPER MODULE
             web_scraper_engine = WebScraperQueryEngine(llm=OpenAI(model=get_llm_settings()))
 
             if st.session_state["user_context_included"]:
                 if st.session_state.debug_mode:
-                    st.info("Uključujem podatke o studentu kao kontekst")
-            
+                    st.info(f"Uključujem podatke o studentu kao kontekst: Godina studija: {st.session_state['user_info']['study_year']}, Poznavanje programiranja: {st.session_state['user_info']['programming_knowledge']}/10")
+      
             if st.session_state["use_full_conversation"]:
                 if st.session_state.debug_mode:
-                    st.info("Koristim cijeli razgovor")
+                    st.info("Koristim cijeli razgovor kao kontekst")
                 conversation = ""
                 for msg in st.session_state.messages:
                     conversation += f"{msg['role'].upper()}: {msg['content']}\n"
-                conversation += f"LATEST USER PROMPT: {prompt}"
+                conversation += f"LATEST USER QUERY: {prompt}"
 
                 response, intent = intent_recognition(conversation, velociraptor, sql_query_engine, web_scraper_engine)
             else:
@@ -72,9 +75,6 @@ def render_chatbot():
 
                 response, intent = intent_recognition(prompt, velociraptor, sql_query_engine, web_scraper_engine)
 
-            print("__________________________INTENT___________________________")
-            print("response:", response)
-            print("intent:", intent)
 
             selected_intent = get_intent_description(intent)
             if st.session_state.debug_mode:

@@ -1,3 +1,3 @@
 Useful for when the INTENT of the user isn't clear, is broad,
 or when the user is asking general questions that have nothing to do with the faculty, programming, students, passing college, student projects, points etc. Use this tool when the other tools are not useful.
-- Do not use this tool if the user asks about classes, faculty, programming, student data or any data which can be fetched from database using select query, uploaded pdf and documents related to the faculty or classes, such as syllabus, course outline, student scores etc. 
+- Do not use this tool if the user asks about classes, college, faculty, programming, student data or any data which can be fetched from database using select query, uploaded pdf and documents related to the faculty or classes, such as syllabus, course outline, student scores etc. 

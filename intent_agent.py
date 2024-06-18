@@ -25,9 +25,9 @@ class LlmQueryEngine(CustomQueryEngine):
 
 LLM_settings = get_llm_settings()
 
-def intent_recognition(prompt: str, velociraptor: RAPTOR, sql_engine, web_scraper_engine):
+def intent_recognition(user_prompt: str, velociraptor: RAPTOR, sql_engine, web_scraper_engine):
     
-    assert prompt is not None
+    assert user_prompt is not None
     assert velociraptor is not None
     assert sql_engine is not None
     assert web_scraper_engine is not None
@@ -61,6 +61,7 @@ def intent_recognition(prompt: str, velociraptor: RAPTOR, sql_engine, web_scrape
         name="web_scraper_tool",
         description=st.session_state["intent_agent_settings"]["web_scraper_query_tool_description"]
     )
+    
     router_query_engine = RouterQueryEngine(
         selector=LLMSingleSelector.from_defaults(),
         query_engine_tools=[
@@ -71,15 +72,45 @@ def intent_recognition(prompt: str, velociraptor: RAPTOR, sql_engine, web_scrape
         ],
     )
     
-    query = "<query>\n" + prompt + "\n</query>"
+    query = "<query>\n" + user_prompt + "\n</query>"
     
     print("*\n" + query + "\n*")
     
     response = router_query_engine.query(query)
-        
+    
+    print(f"""
+          RESPONSE RouterQueryEngine
+          *********************************************
+          {response}
+          *********************************************
+          """)
+    
     intent = response.metadata["selector_result"].selections[0]
     
+    # if the user context is included and intent is RAPTOR search
+    if intent.index == 1 and st.session_state["user_context_included"]:
+        print("Tailoring response based on student context and gained knowledge...")
+        tailored_response = OpenAI(model=LLM_settings).complete(
+            f"Always make sure to answer in Croatian language, but do not translate the code snippets nor IT terms.\n"
+            f"You are a good professor and know how to explain things well to students of different levels. Student is asking you the following question {user_prompt} and you must answer him directly.\n"
+            f"First determine if the question is IT-related and programming related.\n"
+            f"STUDENT CONTEXT START\n"
+            f"Student year of study: {stud_year_to_num(st.session_state['user_info']['study_year'])}. Note 1 are freshmen so explain to them in simple terms, and 5 are graduate students with high knowledge - use professional terms.\n"
+            f"Student's programming knowledge: {st.session_state['user_info']['programming_knowledge']}. Note 1 is a beginner, 10 is an expert.\n"
+            f"STUDENT CONTEXT END\n"
+            f"Determine if the following knowledge is IT-related or programming related. If it is, tailor the following knowledge to the student's level based on STUDENT CONTEXT provided above and use code snippet in markdown if applicable.\n"
+            f""""
+            KNOWLEDGE START
+            {response}
+            KNOWLEDGE END
+            """
+            f"Final note, if the knowledge is not IT-related or programming related, provide a general explanation of the knowledge without taking into account STUDENT CONTEXT nor use code snippets.\n"
+
+        )
+        return tailored_response, intent
+
     return response, intent
+
 
 def get_intent_description(intent: ToolMetadata) -> str:
     intents = {

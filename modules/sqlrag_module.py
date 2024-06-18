@@ -28,6 +28,7 @@ def get_sql_template(schemas_str: str):
                     f"Context information is below.\n"
                     f"---------------------\n"
                     f"You are a professional SQL developer. You are given a task to write a SQL query to retrieve data from the database.\n"
+                    f"You must ALWAYS return SQL query only and nothing else.\n"
                     f"---------------------\n"
                     f"{schemas_str}\n"
                     f"---------------------\n"
@@ -129,7 +130,10 @@ def get_user_by_email(email):
 def run_query(query_str):
     try:
         engine = get_engine()
+        print(engine)
         with engine.connect() as connection:
+            logger.debug(f"Executing query: {query_str}")
+
             result = connection.execute(text(query_str))
             
             results = [row for row in result.fetchall()]
@@ -226,11 +230,23 @@ class SQLQueryEngine(CustomQueryEngine):
     def custom_query(self, query_str: str):
         llm_prompt = self.prompt.format(query_str=query_str)
         generated_query = self.llm.complete(llm_prompt)
-        result = run_query(generated_query.text)
         
-        st.session_state["generated_query.text"] = generated_query.text
+        query_normalized = remove_sql_markdown(generated_query.text)
+        
+        
+        result = run_query(query_normalized)
+        
+        print(f"SQL result: {result}")
+        
+        st.session_state["generated_query.text"] = query_normalized
         answer = self.llm.complete(f"Answer the user question: ${query_str} based on the result from the database query: {result}. Answer in Croatian.")
         return str(answer)
+
+
+def remove_sql_markdown(input_string: str) -> str:
+    if input_string.startswith("```sql") and input_string.endswith("```"):
+        return input_string[6:-3].strip()
+    return input_string
 
 
 

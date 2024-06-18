@@ -44,10 +44,17 @@ authenticator = Authenticate(
 
 authenticator.check_authentification()
 
-st.session_state
+
 
 if st.session_state['connected']:
     initialize_settings()
+    
+    st.session_state["llm_selection"]["selected_gpt"]
+    st.session_state["llm_selection"]["selected_embedding_model"]
+    st.session_state["intent_agent_settings"]["retriever_mode"]
+    st.session_state["intent_agent_settings"]["similarity_top_k"]
+
+    
     email = st.session_state['user_info'].get('email')
     user_details = get_user_by_email(email) 
             
@@ -71,11 +78,11 @@ def raptor_settings():
     st.radio(
         "RAPTOR Retriever Mode",
         options=["collapsed", "tree_traversal",],
-        help="Odaberi način pretraživanja klastera u RAPTOR-u. 'collapsed' pristup postavlja sve čvorove na istu razinu i evaluira sličnost čvorov simultano. 'tree_traversal' pristup koristi stablo za pretraživanje klastera i evaluira sličnost čvorova po razini stabla.",
+        help="Odaberi način pretraživanja klastera u RAPTOR-u. 'collapsed' pristup postavlja sve čvorove na istu razinu i evaluira sličnost čvorova simultano. 'tree_traversal' pristup koristi stablo za pretraživanje klastera i evaluira sličnost čvorova po razini stabla.",
         on_change=lambda: st.session_state["intent_agent_settings"].update(
             {"retriever_mode": st.session_state["temp_retriever_mode"]}
         ),
-        key="temp_retriever_mode",
+        key="temp_retriever_mode"
     )
     st.number_input("Unesi top-k", 
                     min_value=1, 
@@ -141,8 +148,8 @@ def web_scraper_settings():
             )
 
 def intent_recognition_settings():
-    st.checkbox("Koristi cijeli razgovor kao kontekst", key="use_full_conversation")
-    st.checkbox("Koristi podatke o korisniku kao kontekst", key="user_context_included")
+    st.checkbox("Koristi cijeli razgovor kao kontekst", key="use_full_conversation", value=True)
+    st.checkbox("Koristi podatke o korisniku kao kontekst", key="user_context_included", value=True)
     st.text_area(
         label="Direct LLM Prompt",
         value=st.session_state["intent_agent_settings"]["direct_llm_prompt"],
@@ -213,10 +220,10 @@ if st.session_state['connected']:
         st.write(f"Hej, {st.session_state['user_info'].get('name')}👋🏻")
         st.write("Uspješna prijava! Huuray! 🎉")
         st.write("""Tu sam da ti olakšam tvoju studentsku avanturu na [Fakultetu informatike](https://fipu.unipu.hr/). Mogu ti pomoći s pitanjima o studiju, predmetima, profesorima, projektima i još mnogo toga!""")
-        st.write("Nije ti jasan silabus nekog kolegija, teorija iz skripte, problem iz programiranja ili te pak zanima koliko ti nedostaje bodova za prolaz iz nekog kolegija?")
+        st.write("Nije ti jasan silabus nekog kolegija, teorija iz skripte, problem iz programiranja ili te pak zanima koliko ti nedostaje bodova za prolaz iz nekog kolegija? Pokušaj pitati mene!🤖")
 
     with col2:
-        debug_mode_on = st.toggle("Ispod haube", key="debug_mode")
+        debug_mode_on = st.toggle("Ispod haube", key="debug_mode", value=True)
 
     with st.sidebar:
         if st.button('Odjava'):
@@ -238,7 +245,7 @@ if st.session_state['connected']:
 
                 selected_gpt = st.radio(
                     "Odaberi GPT model koji želiš koristiti",
-                    ('gpt-3.5-turbo', 'gpt-4'),
+                    ('gpt-4o', 'gpt-4', 'gpt-3.5-turbo'),
                     on_change=lambda: st.session_state["llm_selection"].update(
                         {"selected_gpt": st.session_state["temp_selected_gpt"]}
                     ),

@@ -34,7 +34,7 @@ RETRIEVAL_METHOD = st.session_state["intent_agent_settings"]["retriever_mode"]
 SIMILARITY_TOP_K = st.session_state["intent_agent_settings"]["similarity_top_k"]
 
 class RAPTOR:
-    def __init__(self, files, collection_name="pjs", force_rebuild=False):
+    def __init__(self, files, collection_name="edubot_raptor", force_rebuild=False):
         self.files = files
         self.collection_name = collection_name
         # Set up logging
@@ -128,5 +128,5 @@ class RAPTOR:
             raise
 
 def get_raptor(files, force_rebuild=False):
-    velociraptor = RAPTOR(files=files, collection_name="pjs", force_rebuild=force_rebuild)
+    velociraptor = RAPTOR(files=files, collection_name="edubot_raptor", force_rebuild=force_rebuild)
     return velociraptor
