@@ -15,6 +15,10 @@ from modules.sqlrag_module import create_users_table, get_engine, upsert_user, g
 st.set_page_config(
     page_title="EduBot",
     page_icon="🤖",
+    menu_items={
+        'Get Help': 'https://lukablaskovic.github.io/',
+        'Report a bug': "https://github.com/lukablaskovic/edu_bot/issues"
+    }
 )
 
 st.title('🤖🎓EduBot')
@@ -25,8 +29,8 @@ st.sidebar.markdown("**Chatbot za personalizaciju nastavnih materijala**")
 st.sidebar.markdown(
     "EduBot🤖🎓 je chatbot za studente i nastavnike Fakulteta informatike u Puli. Koristi velike jezične modele (LLM) za prepoznavanje namjera korisnika i generiranje odgovora.\n\n"
     "EduBot može odgovarati na pitanja iz dokumenata pohranjenih u bazi znanja (📚Datoteke). Korisnik može dodavati, brisati i definirati koje datoteke će se koristiti za obogaćivanje znanja EduBota.\n\n"
-    "Korisnik može pohraniti informacije o sebi u 👤Korisničkom profilu kako bi EduBot prilagodio odgovore, npr. prema znanju iz programiranja.\n\n"
-    "EduBot također može dohvaćati podatke iz baze podataka koristeći SQL-RAG tehniku."
+    "Korisnik može pohraniti informacije o sebi (👤Korisnički profil) kako bi EduBot prilagodio svoje odgovore, npr. prema korisnikovom znanju iz programiranja.\n\n"
+    "EduBot također može dohvaćati podatke iz baze podataka i web stranice Sveučilišta u Puli."
 )
 
 st.sidebar.write("Autor: [Luka Blašković](https://github.com/lukablaskovic)")
