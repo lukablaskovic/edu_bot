@@ -27,7 +27,7 @@ EduBot works by combining three (3) RAG modules to provide a seamless learning e
 
 2. **SQL-RAG module**: This module utilizes custom built text-to-sql approach for retrieving the relevant data from SQL database (currently only SQLite connector, but more can be added easily). This module outputs the SQL query which is then executed on the database to retrieve the relevant information. Once it's executed, the retrieved data is then passed to the generation model (along with user query) to generate the final answer.
 
-3. **Web-scraper module**: This module is custom built for scraping information from University of Pula news website. It utilizes BeautifulSoup and requests libraries to scrape the news articles from the website. The scraped data is then passed to the generation model (along with user query) to generate the final answer.
+3. **Web-scraper module**: This module is custom built for scraping information from University of Pula news website. It utilizes [`BeautifulSoup`](https://beautiful-soup-4.readthedocs.io/en/latest/) and `requests` libraries to scrape the news articles from the website. The scraped data is then passed to the generation model (along with user query) to generate the final answer.
 
 ### How is the correct module chosen? 🤔
 
