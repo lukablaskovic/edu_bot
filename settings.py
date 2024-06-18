@@ -81,12 +81,28 @@ def get_llm_settings():
     
     if st.session_state["llm_selection"]["selected_model"] == "GPT":
         return OpenAI(model=st.session_state["llm_selection"]["selected_gpt"], temperature=0.1, api_key=st.session_state["openai_api_key"])
-    elif st.session_state["llm_selection"]["selected_model"] == "Mistral":
+    
+    # https://ollama.com/library/mistral:7b
+    elif st.session_state["llm_selection"]["selected_model"] == "mistral:7b":
         try:
-            return Ollama(model="mistral", temperature=0.1, system_prompt="Always respond in Croatian language.")
+            return Ollama(model="mistral", temperature=0.1)
         except ValueError as e:
             print(f"Model 'mistral' is not recognized: {e}")
             raise ValueError("Invalid model 'mistral' for Ollama.")
-    
-    # https://ollama.com/library/mistral:7b
+        
     # https://ollama.com/library/gemma
+    elif st.session_state["llm_selection"]["selected_model"] == "gemma:7b":
+        try:
+            return Ollama(model="gemma:7b", temperature=0.1)
+        except ValueError as e:
+            print(f"Model 'gemma:7b' is not recognized: {e}")
+            raise ValueError("Invalid model 'gemma:7b' for Ollama.")
+        
+    # https://ollama.com/library/llama3
+    elif st.session_state["llm_selection"]["selected_model"] == "llama3:8b":
+        try:
+            return Ollama(model="llama3", temperature=0.1)
+        except ValueError as e:
+            print(f"Model 'llama3' is not recognized: {e}")
+            raise ValueError("Invalid model 'llama3' for Ollama.")
+        

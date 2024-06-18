@@ -238,10 +238,11 @@ if st.session_state['connected']:
         with st.expander("Postavke | Odabir modela", expanded=False):
             st.radio(
                 "Odaberi LLM koji želiš koristiti za pogon EduBota🤖",
-                options=["GPT", "Mistral", "Gemma"],
+                options=["GPT", "mistral:7b", "gemma:7b", "llama3:8b"],
                 on_change=lambda: st.session_state["llm_selection"].update(
                     {"selected_model": st.session_state["temp_selected_model"]}
                 ),
+                help="",
                 key="temp_selected_model",
             )
             if(st.session_state["llm_selection"]["selected_model"] == "GPT"):
@@ -259,9 +260,9 @@ if st.session_state['connected']:
 
                 
             elif(st.session_state["llm_selection"]["selected_model"] == "Mistral"):
-                st.success("Odabran model Mistral7B - lokalni deployment preko Ollama")
-            else:
-                pass
+                st.success("Odabran model Mistral7B - lokalni deployment preko Ollame🦙")
+            elif(st.session_state["llm_selection"]["selected_model"] == "Gemma"):
+                st.success("Odabran model Gemma - lokalni deployment preko Ollame🦙")
                 
         with st.expander("Postavke | Intent Recognition", expanded=False):
             intent_recognition_settings()

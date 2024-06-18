@@ -29,6 +29,14 @@ def render_chatbot():
         st.chat_message("user").write(prompt)
 
         with st.spinner("Razmišljam..." if st.session_state.debug_mode else "..."):
+            
+            if st.session_state.debug_mode:
+                
+                if st.session_state['llm_selection']['selected_model'] == "GPT":
+                    st.warning(f"Koristim LLM: {st.session_state['llm_selection']['selected_gpt']}🧠")
+                else:
+                    st.warning(f"Koristim LLM: {st.session_state['llm_selection']['selected_model']}🧠")
+            
             try:
                 # caching
                 if 'raptor' in st.session_state:
