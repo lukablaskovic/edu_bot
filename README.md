@@ -153,6 +153,7 @@ I would also like to thank the Faculty of Informatics Pula for providing me with
 - [Anthropic](https://www.anthropic.com/)
 - [Ollama](https://ollama.ai/)
 - [RAPTOR](https://arxiv.org/html/2401.18059v1)
+- [DB Browser for SQLite](https://sqlitebrowser.org/)
 
 ## License
 
