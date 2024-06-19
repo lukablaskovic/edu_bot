@@ -87,7 +87,9 @@ pip install -r requirements.txt
 
 4. Add the required environment variables to the `.env` file (you can use the `.env.example` file as a template):
 
-5. Run the Streamlit app (yes it [contains emojis in the file name](https://docs.streamlit.io/get-started/tutorials/create-a-multipage-app), you can run it like this):
+5. You must add `google_credentials.json` file to the root of the project. This file is used for Google authentication and it is required for fetching user's name and email. You can create a new project in the Google Cloud Console and download the credentials file from there. In the future, we will add the option to skip this step and use the chatbot without Google authentication.
+
+6. Run the Streamlit app (yes it [contains emojis in the file name](https://docs.streamlit.io/get-started/tutorials/create-a-multipage-app), you can run it like this):
 
 ```bash
 streamlit run 🤖EduBot.py
@@ -127,3 +129,31 @@ Note: The UI is currently only in Croatian language.
 #### EduBot may adjust its respone based on the user's programming knowledge and year of study. In this example, the user asks about recursion concept in JavaScript and the chatbot provided less details to the user who is in the first year of study with basic programming knowledge.
 
 <img src="demo/gifs/personalized_learning.gif" alt="Personalized learning" width="100%"/>
+
+#### The following gif demonstrates the chatbot's response when the user asks about students or points of course (Programming in Scripting languages) that are stored in the SQLite database. The SQL-RAG module is used in this case. "Under the hood" mode is enabled, so the user can see the generated SQL query.
+
+<img src="demo/gifs/sqlrag_demo.gif" alt="SQL-RAG demo" width="100%"/>
+
+#### Finally, the user asks about the latest news from the University of Pula - Faculty of Informatics. The chatbot uses the web-scraper module to scrape the news articles from the website and generate the response, utilizing Claude 3 Opus model.
+
+<img src="demo/gifs/webscraper.gif" alt="Web-scraper demo" width="100%"/>
+
+## Acknowledgements
+
+I would like to thank my mentor [prof. Nikola Tanković](https://www.tankovic.me/) for his guidance and support throughout the development of this project (as well for OpenAI credits 😇).
+
+I would also like to thank the Faculty of Informatics Pula for providing me with the opportunity to work on this project and for their support.
+
+## Tools and Technologies 🛠
+
+- [Python](https://www.python.org/)
+- [LlamaIndex](https://www.llamaindex.ai/)
+- [Streamlit](https://streamlit.io/)
+- [OpenAI](https://platform.openai.com/)
+- [Anthropic](https://www.anthropic.com/)
+- [Ollama](https://ollama.ai/)
+- [RAPTOR](https://arxiv.org/html/2401.18059v1)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
