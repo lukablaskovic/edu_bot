@@ -23,7 +23,7 @@ EduBot works by combining three (3) RAG modules to provide a seamless learning e
 
 1. **RAPTOR module**: This module utilizes [RAPTOR](https://arxiv.org/html/2401.18059v1) (Recursive Abstractive Processing for Tree-Organized Retrieval) technique which is a novel approach to enchance retrieval-augmented generation (RAG) models. RAPTOR creates a tree by recursively embedding, clustering, and summarizing text chunks, enabling retrieval at various abstraction levels. This hiearchical structure allows the chatbot to retrieve relevant information at different levels of abstraction, providing a more comprehensive and accurate answer to the user's query. RAPTOR was chosen as it is a novel approach and it achieves state-of-the-art performance on various benchmarks, such as QuALITY.
 
-   - **raptor_module.py**: This module, built specifically for EduBot, contains the [llamaindex implementation of RAPTOR](https://github.com/run-llama/llama_index/tree/main/llama-index-packs/llama-index-packs-raptor), which inlcudes RAPTOR Pack and RAPTOR Retrieval. RAPTOR Pack is responsible for embedding, clustering, and summarizing text chunks to create the RAPTOR tree, while RAPTOR Retrieval is responsible for retrieving relevant information from the RAPTOR tree based on the user's query. This implementation was further upgraded to support multi-document retrieval and reloading of the RAPTOR tree for performance and cost efficiency. Currently, this RAPTOR module utilizes only [OpenAI text embedding models](https://platform.openai.com/docs/guides/embeddings) for the purpose of embedding text chunks (text-embedding-3-small & text-embedding-3-large). However, it can be easily extended to support other text embedding models. As for retrieval, various models can be utilized, as shown later in this document.
+   - **raptor_module.py**: This module, built specifically for EduBot, contains the [llamaindex implementation of RAPTOR](https://github.com/run-llama/llama_index/tree/main/llama-index-packs/llama-index-packs-raptor), which inlcudes RAPTOR Pack and RAPTOR Retrieval. RAPTOR Pack is responsible for embedding, clustering, and summarizing text chunks to create the RAPTOR tree, while RAPTOR Retrieval is responsible for retrieving relevant information from the RAPTOR tree based on the user's query. This implementation was further upgraded to support multi-document retrieval and reloading of the RAPTOR tree for performance and cost efficiency. Currently, this RAPTOR module utilizes only [OpenAI text embedding models](https://platform.openai.com/docs/guides/embeddings) for the purpose of embedding text chunks (_text-embedding-3-small_ & _text-embedding-3-large_). However, it can be easily extended to support other text embedding models. As for retrieval, various models can be utilized, as shown later in this document.
 
 2. **SQL-RAG module**: This module utilizes custom built text-to-sql approach for retrieving the relevant data from SQL database (currently only SQLite connector, but more can be added easily). This module outputs the SQL query which is then executed on the database to retrieve the relevant information. Once it's executed, the retrieved data is then passed to the generation model (along with user query) to generate the final answer.
 
@@ -87,14 +87,43 @@ pip install -r requirements.txt
 
 4. Add the required environment variables to the `.env` file (you can use the `.env.example` file as a template):
 
-5. Run the Streamlit app (yes it contains emojis in the file name, you can run it like this):
+5. Run the Streamlit app (yes it [contains emojis in the file name](https://docs.streamlit.io/get-started/tutorials/create-a-multipage-app), you can run it like this):
 
 ```bash
 streamlit run 🤖EduBot.py
 ```
 
-<img src="screenshots/main_ui.png" alt="Main UI" width="100%"/>
+<img src="demo/screenshots/main_ui.png" alt="Main UI" width="100%"/>
 
 > Congratulations! You have successfully installed and run the EduBot app. You can now interact with the chatbot and explore its features.
 
 Note: The UI is currently only in Croatian language.
+
+## Demo
+
+#### Saying "Hi" to the chatbot will trigger triger the default query engine and the chatbot will respond with chit-chat response.
+
+<img src="demo/gifs/simple_hi.gif" alt="Chatbot Hi" width="100%"/>
+
+#### Wher user asks a question related to programming or IT in general, the EdoBot will use the RAPTOR module and try to retrieve knowledge from the uploaded learning resources.
+
+- in this example, the user asks how to create a function in JavaScript, and the chatbot retrieves the relevant information from the uploaded JavaScript learning resource. Moreover, "Under the hood" mode is enabled, so the user can see what the EduBot is doing in the background to answer the user's query.
+
+<img src="demo/gifs/raptor_example1.gif" alt="RAPTOR example 1" width="100%"/>
+
+#### This time, the user wants ask questions regarding the course "Software Engineering". User may easily upload course syllabus using drag and drop interface, select the files and build the RAPTOR knowledge graph out of those.
+
+- in this example, user uploads the course syllabus for the "Software Engineering" course builds the RAPTOR tree along with two other JavaScript learning resources hence the files are quite different (syllabus for course information and JavaScript script with examples and code snippets).
+
+<img src="demo/gifs/raptor_tree_building.gif" alt="RAPTOR tree building" width="100%"/>
+
+#### Now we can retrieve information from that syllabus. User asks about the college professor and what are the topics covered in the course.
+
+- "Who is the professor for the Software Engineering course?" query is being processed using gpt-4o model
+- "What are the topics covered in the Software Engineering course?" query is being processed using llama3:8b model (open source model running on Ollama)
+
+<img src="demo/gifs/llama.gif" alt="llama and gpt-4o" width="100%"/>
+
+#### EduBot may adjust its respone based on the user's programming knowledge and year of study. In this example, the user asks about recursion concept in JavaScript and the chatbot provided less details to the user who is in the first year of study with basic programming knowledge.
+
+<img src="demo/gifs/personalized_learning.gif" alt="Personalized learning" width="100%"/>

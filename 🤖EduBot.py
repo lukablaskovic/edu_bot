@@ -216,6 +216,25 @@ def intent_recognition_settings():
         
     st.button(label="Spremi", key="btn_save_sqlrag_settings", type="primary", on_click=lambda: save_prompt("./prompts/SQL_RAG_QUERY_TOOL_DESCRIPTION.txt", st.session_state["temp_sql_rag_query_tool_description"]))
 
+    use_web_scraper = st.checkbox("Koristi Web Scraper Engine", 
+                                value= st.session_state["intent_agent_settings"]["use_web_scraper"],
+                                on_change=lambda: st.session_state["intent_agent_settings"].update(
+                                    {"use_web_scraper": st.session_state["temp_use_web_scraper"]}
+                                ), 
+                                key="temp_use_web_scraper")
+    if use_web_scraper:
+        st.text_area(
+            label="Web Scraper Engine Description",
+            value=st.session_state["intent_agent_settings"]["web_scraper_query_tool_description"],
+            on_change=lambda: st.session_state["intent_agent_settings"].update(
+                {"sql_web_scraper_query_tool_description": st.session_state["temp_web_scraper_query_tool_description"]}
+            ),
+            key="temp_web_scraper_query_tool_description",
+            height=200
+        )
+        
+    st.button(label="Spremi", key="btn_save_webscraper_settings", type="primary", on_click=lambda: save_prompt("./prompts/WEB_SCRAPER_QUERY_TOOL_DESCRIPTION.txt", st.session_state["temp_web_scraper_query_tool_description"]))
+    
 if st.session_state['connected']:
     
     col1, col2 = st.columns([3, 1])
