@@ -56,7 +56,7 @@ EduBot supports the following LLMs (Large Language Models) for generation:
 - **Claude 3 Sonnet** (Anthropic)
 - **Claude 3 Haiku** (Anthropic)
 
-### Open Source LLMs run on Ollama
+### Open LLMs running on Ollama
 
 - **mistral:7b** (Mistral AI)
 - **gemma:7b** (Google)
