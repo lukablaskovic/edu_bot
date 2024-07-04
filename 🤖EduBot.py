@@ -27,7 +27,7 @@ st.sidebar.title('🤖🎓EduBot')
 st.sidebar.markdown("**Chatbot za personalizaciju nastavnih materijala**")
 
 st.sidebar.markdown(
-    "EduBot🤖🎓 je chatbot za studente i nastavnike Fakulteta informatike u Puli. Koristi velike jezične modele (LLM) za prepoznavanje namjera korisnika i generiranje odgovora.\n\n"
+    "EduBot🤖🎓 je chatbot za studente i nastavnike Fakulteta informatike u Puli. Koristi velike jezične modele (LLM) i moderne RAG tehnike za dohaćanje relevantnih informacija i generiranje odgovora.\n\n"
     "EduBot može odgovarati na pitanja iz dokumenata pohranjenih u bazi znanja (📚Datoteke). Korisnik može dodavati, brisati i definirati koje datoteke će se koristiti za obogaćivanje znanja EduBota.\n\n"
     "Korisnik može pohraniti informacije o sebi (👤Korisnički profil) kako bi EduBot prilagodio svoje odgovore, npr. prema korisnikovom znanju iz programiranja.\n\n"
     "EduBot također može dohvaćati podatke iz baze podataka i web stranice Sveučilišta u Puli."
@@ -242,8 +242,8 @@ if st.session_state['connected']:
     with col1:
         st.write(f"Hej, {st.session_state['user_info'].get('name')}👋🏻")
         st.write("Uspješna prijava! Huuray! 🎉")
-        st.write("""Tu sam da ti olakšam tvoju studentsku avanturu na [Fakultetu informatike](https://fipu.unipu.hr/). Mogu ti pomoći s pitanjima o studiju, predmetima, profesorima, projektima i još mnogo toga!""")
-        st.write("Nije ti jasan silabus nekog kolegija, teorija iz skripte, problem iz programiranja ili te pak zanima koliko ti nedostaje bodova za prolaz iz nekog kolegija? Pokušaj pitati mene!🤖")
+        st.write("""Tu sam da ti olakšam studentsku avanturu na [Fakultetu informatike](https://fipu.unipu.hr/). Bilo da imaš pitanja o studiju, predmetima, profesorima, projektima, ili nečemu drugome, tu sam da ti pomognem.""")
+        st.write("Ako ti nije jasan silabus nekog kolegija, tražiš objašnjenje teorije iz skripte, imaš problem s programiranjem, ili te zanima koliko ti bodova nedostaje za prolaz iz nekog kolegija, slobodno me pitaj!😊")
 
     with col2:
         debug_mode_on = st.toggle("Ispod haube", key="debug_mode", value=True)
