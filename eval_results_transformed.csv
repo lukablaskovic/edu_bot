@@ -1,0 +1,281 @@
+question,model,metric,evaluation1,evaluation2,evaluation3,avg,rag_technique
+Tko je nositelj kolegija Programsko inzenjerstvo?,gpt-4o,FAITH,1,1,1,1,RAPTOR
+Tko je nositelj kolegija Programsko inzenjerstvo?,gpt-4o,ANS_REL,1,1,1,1,RAPTOR
+Tko je nositelj kolegija Programsko inzenjerstvo?,gpt-3,FAITH,1,0.5,1,0.83,RAPTOR
+Tko je nositelj kolegija Programsko inzenjerstvo?,gpt-3.5-turbo,ANS_REL,1,1,1,1,RAPTOR
+Tko je nositelj kolegija Programsko inzenjerstvo?,gemma:7b,FAITH,1,1,1,1,RAPTOR
+Tko je nositelj kolegija Programsko inzenjerstvo?,gemma:7b,ANS_REL,1,1,1,1,RAPTOR
+Tko je nositelj kolegija Programsko inzenjerstvo?,llama3:8b,FAITH,0.5,1,1,0.83,RAPTOR
+Tko je nositelj kolegija Programsko inzenjerstvo?,llama3:8b,ANS_REL,0.5,0.5,0.5,0.5,RAPTOR
+Tko je nositelj kolegija Programsko inzenjerstvo?,mistral:7b,FAITH,1,1,1,1,RAPTOR
+Tko je nositelj kolegija Programsko inzenjerstvo?,mistral:7b,ANS_REL,0.29,0.2,0.27,0.25,RAPTOR
+Tko je nositelj kolegija Programsko inzenjerstvo?,Claude3 Opus,FAITH,0.83,1,0.75,0.86,RAPTOR
+Tko je nositelj kolegija Programsko inzenjerstvo?,Claude3 Opus,ANS_REL,0.3,0.4,0.4,0.37,RAPTOR
+Tko je nositelj kolegija Programsko inzenjerstvo?,Claude3 Sonnet,FAITH,1,1,1,1,RAPTOR
+Tko je nositelj kolegija Programsko inzenjerstvo?,Claude3 Sonnet,ANS_REL,0.83,0.75,0.5,0.69,RAPTOR
+Tko je nositelj kolegija UPP,gpt-4o,FAITH,1,1,1,1,RAPTOR
+Tko je nositelj kolegija UPP,gpt-4o,ANS_REL,1,1,1,1,RAPTOR
+Tko je nositelj kolegija UPP,gpt-3,FAITH,1,1,1,1,RAPTOR
+Tko je nositelj kolegija UPP,gpt-3.5-turbo,ANS_REL,1,1,1,1,RAPTOR
+Tko je nositelj kolegija UPP,gemma:7b,FAITH,0.8,0.7,0.75,0.75,RAPTOR
+Tko je nositelj kolegija UPP,gemma:7b,ANS_REL,0.75,0.5,1,0.75,RAPTOR
+Tko je nositelj kolegija UPP,llama3:8b,FAITH,0.85,1,1,0.95,RAPTOR
+Tko je nositelj kolegija UPP,llama3:8b,ANS_REL,0.5,0.75,0.75,0.67,RAPTOR
+Tko je nositelj kolegija UPP,mistral:7b,FAITH,0.75,0.75,0.8,0.77,RAPTOR
+Tko je nositelj kolegija UPP,mistral:7b,ANS_REL,0.5,0.5,0.5,0.5,RAPTOR
+Tko je nositelj kolegija UPP,Claude3 Opus,FAITH,0.4,0.2,0.5,0.37,RAPTOR
+Tko je nositelj kolegija UPP,Claude3 Opus,ANS_REL,1,0.67,0.85,0.84,RAPTOR
+Tko je nositelj kolegija UPP,Claude3 Sonnet,FAITH,1,1,1,1,RAPTOR
+Tko je nositelj kolegija UPP,Claude3 Sonnet,ANS_REL,0.43,0.5,0.45,0.46,RAPTOR
+Koji su ishodi ucenja na kolegiju PI?,gpt-4o,FAITH,1,1,1,1,RAPTOR
+Koji su ishodi ucenja na kolegiju PI?,gpt-4o,ANS_REL,1,1,1,1,RAPTOR
+Koji su ishodi ucenja na kolegiju PI?,gpt-3,FAITH,1,1,1,1,RAPTOR
+Koji su ishodi ucenja na kolegiju PI?,gpt-3.5-turbo,ANS_REL,1,1,1,1,RAPTOR
+Koji su ishodi ucenja na kolegiju PI?,gemma:7b,FAITH,0,0,0,0,RAPTOR
+Koji su ishodi ucenja na kolegiju PI?,gemma:7b,ANS_REL,0,0,0,0,RAPTOR
+Koji su ishodi ucenja na kolegiju PI?,llama3:8b,FAITH,0,0,0,0,RAPTOR
+Koji su ishodi ucenja na kolegiju PI?,llama3:8b,ANS_REL,0,0,0,0,RAPTOR
+Koji su ishodi ucenja na kolegiju PI?,mistral:7b,FAITH,0.64,0.4,0.5,0.51,RAPTOR
+Koji su ishodi ucenja na kolegiju PI?,mistral:7b,ANS_REL,0.81,0.46,0.62,0.63,RAPTOR
+Koji su ishodi ucenja na kolegiju PI?,Claude3 Opus,FAITH,1,1,1,1,RAPTOR
+Koji su ishodi ucenja na kolegiju PI?,Claude3 Opus,ANS_REL,1,1,1,1,RAPTOR
+Koji su ishodi ucenja na kolegiju PI?,Claude3 Sonnet,FAITH,0.78,0.86,0.78,0.81,RAPTOR
+Koji su ishodi ucenja na kolegiju PI?,Claude3 Sonnet,ANS_REL,0.85,1,0.82,0.89,RAPTOR
+Koje su studentske obaveze na kolegiju upravljanje poslovnim procesima?,gpt-4o,FAITH,1,1,1,1,RAPTOR
+Koje su studentske obaveze na kolegiju upravljanje poslovnim procesima?,gpt-4o,ANS_REL,1,1,1,1,RAPTOR
+Koje su studentske obaveze na kolegiju upravljanje poslovnim procesima?,gpt-3,FAITH,0.8,1,0.95,0.92,RAPTOR
+Koje su studentske obaveze na kolegiju upravljanje poslovnim procesima?,gpt-3.5-turbo,ANS_REL,1,1,1,1,RAPTOR
+Koje su studentske obaveze na kolegiju upravljanje poslovnim procesima?,gemma:7b,FAITH,1,0.67,1,0.89,RAPTOR
+Koje su studentske obaveze na kolegiju upravljanje poslovnim procesima?,gemma:7b,ANS_REL,1,0.75,1,0.92,RAPTOR
+Koje su studentske obaveze na kolegiju upravljanje poslovnim procesima?,llama3:8b,FAITH,0.7,1,0.76,0.82,RAPTOR
+Koje su studentske obaveze na kolegiju upravljanje poslovnim procesima?,llama3:8b,ANS_REL,0.9,0.88,0.85,0.88,RAPTOR
+Koje su studentske obaveze na kolegiju upravljanje poslovnim procesima?,mistral:7b,FAITH,1,0.85,0.67,0.84,RAPTOR
+Koje su studentske obaveze na kolegiju upravljanje poslovnim procesima?,mistral:7b,ANS_REL,0.86,0.61,0.44,0.64,RAPTOR
+Koje su studentske obaveze na kolegiju upravljanje poslovnim procesima?,Claude3 Opus,FAITH,1,1,1,1,RAPTOR
+Koje su studentske obaveze na kolegiju upravljanje poslovnim procesima?,Claude3 Opus,ANS_REL,0.67,0.73,0.69,0.7,RAPTOR
+Koje su studentske obaveze na kolegiju upravljanje poslovnim procesima?,Claude3 Sonnet,FAITH,1,1,1,1,RAPTOR
+Koje su studentske obaveze na kolegiju upravljanje poslovnim procesima?,Claude3 Sonnet,ANS_REL,0.77,0.92,0.89,0.86,RAPTOR
+Kako se radi funkcija u JavaScriptu? ,gpt-4o,FAITH,1,1,1,1,RAPTOR
+Kako se radi funkcija u JavaScriptu? ,gpt-4o,ANS_REL,1,1,1,1,RAPTOR
+Kako se radi funkcija u JavaScriptu? ,gpt-3,FAITH,1,0.8,1,0.93,RAPTOR
+Kako se radi funkcija u JavaScriptu? ,gpt-3.5-turbo,ANS_REL,0.73,0.67,0.78,0.73,RAPTOR
+Kako se radi funkcija u JavaScriptu? ,gemma:7b,FAITH,1,1,0.85,0.95,RAPTOR
+Kako se radi funkcija u JavaScriptu? ,gemma:7b,ANS_REL,1,1,1,1,RAPTOR
+Kako se radi funkcija u JavaScriptu? ,llama3:8b,FAITH,1,1,0.85,0.95,RAPTOR
+Kako se radi funkcija u JavaScriptu? ,llama3:8b,ANS_REL,1,0.94,0.76,0.9,RAPTOR
+Kako se radi funkcija u JavaScriptu? ,mistral:7b,FAITH,0.8,1,0.86,0.89,RAPTOR
+Kako se radi funkcija u JavaScriptu? ,mistral:7b,ANS_REL,1,1,0.82,0.94,RAPTOR
+Kako se radi funkcija u JavaScriptu? ,Claude3 Opus,FAITH,1,1,1,1,RAPTOR
+Kako se radi funkcija u JavaScriptu? ,Claude3 Opus,ANS_REL,1,1,0.93,0.98,RAPTOR
+Kako se radi funkcija u JavaScriptu? ,Claude3 Sonnet,FAITH,1,1,1,1,RAPTOR
+Kako se radi funkcija u JavaScriptu? ,Claude3 Sonnet,ANS_REL,1,1,1,1,RAPTOR
+Objasni mi koncept rekurzije u JavaScriptu kroz primjer.,gpt-4o,FAITH,1,1,1,1,RAPTOR
+Objasni mi koncept rekurzije u JavaScriptu kroz primjer.,gpt-4o,ANS_REL,1,1,1,1,RAPTOR
+Objasni mi koncept rekurzije u JavaScriptu kroz primjer.,gpt-3,FAITH,1,1,1,1,RAPTOR
+Objasni mi koncept rekurzije u JavaScriptu kroz primjer.,gpt-3.5-turbo,ANS_REL,1,1,1,1,RAPTOR
+Objasni mi koncept rekurzije u JavaScriptu kroz primjer.,gemma:7b,FAITH,1,0.87,0.91,0.93,RAPTOR
+Objasni mi koncept rekurzije u JavaScriptu kroz primjer.,gemma:7b,ANS_REL,1,0.66,0.82,0.83,RAPTOR
+Objasni mi koncept rekurzije u JavaScriptu kroz primjer.,llama3:8b,FAITH,0.92,1,1,0.97,RAPTOR
+Objasni mi koncept rekurzije u JavaScriptu kroz primjer.,llama3:8b,ANS_REL,0.83,1,1,0.94,RAPTOR
+Objasni mi koncept rekurzije u JavaScriptu kroz primjer.,mistral:7b,FAITH,1,0.95,1,0.98,RAPTOR
+Objasni mi koncept rekurzije u JavaScriptu kroz primjer.,mistral:7b,ANS_REL,0.9,0.78,0.95,0.88,RAPTOR
+Objasni mi koncept rekurzije u JavaScriptu kroz primjer.,Claude3 Opus,FAITH,1,1,1,1,RAPTOR
+Objasni mi koncept rekurzije u JavaScriptu kroz primjer.,Claude3 Opus,ANS_REL,0.92,1,0.95,0.96,RAPTOR
+Objasni mi koncept rekurzije u JavaScriptu kroz primjer.,Claude3 Sonnet,FAITH,1,1,1,1,RAPTOR
+Objasni mi koncept rekurzije u JavaScriptu kroz primjer.,Claude3 Sonnet,ANS_REL,1,1,1,1,RAPTOR
+Na kojim jezicima se izvodi online nastava na Sveucilistu?,gpt-4o,FAITH,1,1,1,1,RAPTOR
+Na kojim jezicima se izvodi online nastava na Sveucilistu?,gpt-4o,ANS_REL,1,1,1,1,RAPTOR
+Na kojim jezicima se izvodi online nastava na Sveucilistu?,gpt-3,FAITH,1,1,1,1,RAPTOR
+Na kojim jezicima se izvodi online nastava na Sveucilistu?,gpt-3.5-turbo,ANS_REL,1,1,1,1,RAPTOR
+Na kojim jezicima se izvodi online nastava na Sveucilistu?,gemma:7b,FAITH,1,1,1,1,RAPTOR
+Na kojim jezicima se izvodi online nastava na Sveucilistu?,gemma:7b,ANS_REL,1,1,1,1,RAPTOR
+Na kojim jezicima se izvodi online nastava na Sveucilistu?,llama3:8b,FAITH,1,1,1,1,RAPTOR
+Na kojim jezicima se izvodi online nastava na Sveucilistu?,llama3:8b,ANS_REL,0.5,1,0.8,0.77,RAPTOR
+Na kojim jezicima se izvodi online nastava na Sveucilistu?,mistral:7b,FAITH,0,0,0,0,RAPTOR
+Na kojim jezicima se izvodi online nastava na Sveucilistu?,mistral:7b,ANS_REL,0,0,0,0,RAPTOR
+Na kojim jezicima se izvodi online nastava na Sveucilistu?,Claude3 Opus,FAITH,0,0,0,0,RAPTOR
+Na kojim jezicima se izvodi online nastava na Sveucilistu?,Claude3 Opus,ANS_REL,0,0,0,0,RAPTOR
+Na kojim jezicima se izvodi online nastava na Sveucilistu?,Claude3 Sonnet,FAITH,1,1,1,1,RAPTOR
+Na kojim jezicima se izvodi online nastava na Sveucilistu?,Claude3 Sonnet,ANS_REL,0.83,0.56,0.78,0.72,RAPTOR
+Koji je maksimalni broj mentorstva po nastavniku?,gpt-4o,FAITH,1,1,1,1,RAPTOR
+Koji je maksimalni broj mentorstva po nastavniku?,gpt-4o,ANS_REL,0.5,0.5,0.5,0.5,RAPTOR
+Koji je maksimalni broj mentorstva po nastavniku?,gpt-3,FAITH,1,1,1,1,RAPTOR
+Koji je maksimalni broj mentorstva po nastavniku?,gpt-3.5-turbo,ANS_REL,1,1,1,1,RAPTOR
+Koji je maksimalni broj mentorstva po nastavniku?,gemma:7b,FAITH,0.5,0.5,0.5,0.5,RAPTOR
+Koji je maksimalni broj mentorstva po nastavniku?,gemma:7b,ANS_REL,0.5,0.5,0.5,0.5,RAPTOR
+Koji je maksimalni broj mentorstva po nastavniku?,llama3:8b,FAITH,0,0,0,0,RAPTOR
+Koji je maksimalni broj mentorstva po nastavniku?,llama3:8b,ANS_REL,0,0,0,0,RAPTOR
+Koji je maksimalni broj mentorstva po nastavniku?,mistral:7b,FAITH,0,0,0,0,RAPTOR
+Koji je maksimalni broj mentorstva po nastavniku?,mistral:7b,ANS_REL,0,0,0,0,RAPTOR
+Koji je maksimalni broj mentorstva po nastavniku?,Claude3 Opus,FAITH,0,0,0,0,RAPTOR
+Koji je maksimalni broj mentorstva po nastavniku?,Claude3 Opus,ANS_REL,0,0,0,0,RAPTOR
+Koji je maksimalni broj mentorstva po nastavniku?,Claude3 Sonnet,FAITH,1,1,0.88,0.96,RAPTOR
+Koji je maksimalni broj mentorstva po nastavniku?,Claude3 Sonnet,ANS_REL,0.44,0.33,0.36,0.38,RAPTOR
+Reci mi ime i prezime studenta s emailom ppetrovic@gmail.com,gpt-4o,FAITH,1,1,1,1,SQL-RAG
+Reci mi ime i prezime studenta s emailom ppetrovic@gmail.com,gpt-4o,ANS_REL,1,1,1,1,SQL-RAG
+Reci mi ime i prezime studenta s emailom ppetrovic@gmail.com,gpt-3,FAITH,1,1,1,1,SQL-RAG
+Reci mi ime i prezime studenta s emailom ppetrovic@gmail.com,gpt-3.5-turbo,ANS_REL,1,1,1,1,SQL-RAG
+Reci mi ime i prezime studenta s emailom ppetrovic@gmail.com,gemma:7b,FAITH,1,1,1,1,SQL-RAG
+Reci mi ime i prezime studenta s emailom ppetrovic@gmail.com,gemma:7b,ANS_REL,1,1,0.5,0.83,SQL-RAG
+Reci mi ime i prezime studenta s emailom ppetrovic@gmail.com,llama3:8b,FAITH,1,1,1,1,SQL-RAG
+Reci mi ime i prezime studenta s emailom ppetrovic@gmail.com,llama3:8b,ANS_REL,0.5,0.5,0.67,0.56,SQL-RAG
+Reci mi ime i prezime studenta s emailom ppetrovic@gmail.com,mistral:7b,FAITH,0,0,0,0,SQL-RAG
+Reci mi ime i prezime studenta s emailom ppetrovic@gmail.com,mistral:7b,ANS_REL,0,0,0,0,SQL-RAG
+Reci mi ime i prezime studenta s emailom ppetrovic@gmail.com,Claude3 Opus,FAITH,1,1,1,1,SQL-RAG
+Reci mi ime i prezime studenta s emailom ppetrovic@gmail.com,Claude3 Opus,ANS_REL,1,1,1,1,SQL-RAG
+Reci mi ime i prezime studenta s emailom ppetrovic@gmail.com,Claude3 Sonnet,FAITH,1,1,1,1,SQL-RAG
+Reci mi ime i prezime studenta s emailom ppetrovic@gmail.com,Claude3 Sonnet,ANS_REL,1,1,1,1,SQL-RAG
+Koliko bodova ima studentica Ana Anic iz PJS na 3. ispitu?,gpt-4o,FAITH,1,1,1,1,SQL-RAG
+Koliko bodova ima studentica Ana Anic iz PJS na 3. ispitu?,gpt-4o,ANS_REL,1,1,1,1,SQL-RAG
+Koliko bodova ima studentica Ana Anic iz PJS na 3. ispitu?,gpt-3,FAITH,1,1,1,1,SQL-RAG
+Koliko bodova ima studentica Ana Anic iz PJS na 3. ispitu?,gpt-3.5-turbo,ANS_REL,1,1,1,1,SQL-RAG
+Koliko bodova ima studentica Ana Anic iz PJS na 3. ispitu?,gemma:7b,FAITH,1,1,1,1,SQL-RAG
+Koliko bodova ima studentica Ana Anic iz PJS na 3. ispitu?,gemma:7b,ANS_REL,1,1,1,1,SQL-RAG
+Koliko bodova ima studentica Ana Anic iz PJS na 3. ispitu?,llama3:8b,FAITH,1,1,1,1,SQL-RAG
+Koliko bodova ima studentica Ana Anic iz PJS na 3. ispitu?,llama3:8b,ANS_REL,1,1,1,1,SQL-RAG
+Koliko bodova ima studentica Ana Anic iz PJS na 3. ispitu?,mistral:7b,FAITH,0.5,1,1,0.83,SQL-RAG
+Koliko bodova ima studentica Ana Anic iz PJS na 3. ispitu?,mistral:7b,ANS_REL,0.75,0.5,0.44,0.56,SQL-RAG
+Koliko bodova ima studentica Ana Anic iz PJS na 3. ispitu?,Claude3 Opus,FAITH,1,1,1,1,SQL-RAG
+Koliko bodova ima studentica Ana Anic iz PJS na 3. ispitu?,Claude3 Opus,ANS_REL,1,1,1,1,SQL-RAG
+Koliko bodova ima studentica Ana Anic iz PJS na 3. ispitu?,Claude3 Sonnet,FAITH,1,1,1,1,SQL-RAG
+Koliko bodova ima studentica Ana Anic iz PJS na 3. ispitu?,Claude3 Sonnet,ANS_REL,1,1,1,1,SQL-RAG
+Koji student ima najveci ukupni broj bodova iz predmeta PJS? ,gpt-4o,FAITH,1,1,1,1,SQL-RAG
+Koji student ima najveci ukupni broj bodova iz predmeta PJS? ,gpt-4o,ANS_REL,1,1,1,1,SQL-RAG
+Koji student ima najveci ukupni broj bodova iz predmeta PJS? ,gpt-3,FAITH,1,1,1,1,SQL-RAG
+Koji student ima najveci ukupni broj bodova iz predmeta PJS? ,gpt-3.5-turbo,ANS_REL,1,1,1,1,SQL-RAG
+Koji student ima najveci ukupni broj bodova iz predmeta PJS? ,gemma:7b,FAITH,1,1,1,1,SQL-RAG
+Koji student ima najveci ukupni broj bodova iz predmeta PJS? ,gemma:7b,ANS_REL,1,1,1,1,SQL-RAG
+Koji student ima najveci ukupni broj bodova iz predmeta PJS? ,llama3:8b,FAITH,1,1,0.5,0.83,SQL-RAG
+Koji student ima najveci ukupni broj bodova iz predmeta PJS? ,llama3:8b,ANS_REL,0.25,0.17,0.34,0.25,SQL-RAG
+Koji student ima najveci ukupni broj bodova iz predmeta PJS? ,mistral:7b,FAITH,1,1,1,1,SQL-RAG
+Koji student ima najveci ukupni broj bodova iz predmeta PJS? ,mistral:7b,ANS_REL,0.15,0.18,0.31,0.21,SQL-RAG
+Koji student ima najveci ukupni broj bodova iz predmeta PJS? ,Claude3 Opus,FAITH,1,1,1,1,SQL-RAG
+Koji student ima najveci ukupni broj bodova iz predmeta PJS? ,Claude3 Opus,ANS_REL,1,1,1,1,SQL-RAG
+Koji student ima najveci ukupni broj bodova iz predmeta PJS? ,Claude3 Sonnet,FAITH,1,1,1,1,SQL-RAG
+Koji student ima najveci ukupni broj bodova iz predmeta PJS? ,Claude3 Sonnet,ANS_REL,1,1,1,1,SQL-RAG
+Navedi mi obaveznu literaturu za kolegij Upravljanje poslovnim procesima.,gpt-4o,FAITH,1,1,1,1,RAPTOR
+Navedi mi obaveznu literaturu za kolegij Upravljanje poslovnim procesima.,gpt-4o,ANS_REL,1,1,1,1,RAPTOR
+Navedi mi obaveznu literaturu za kolegij Upravljanje poslovnim procesima.,gpt-3,FAITH,1,1,1,1,RAPTOR
+Navedi mi obaveznu literaturu za kolegij Upravljanje poslovnim procesima.,gpt-3.5-turbo,ANS_REL,1,1,1,1,RAPTOR
+Navedi mi obaveznu literaturu za kolegij Upravljanje poslovnim procesima.,gemma:7b,FAITH,1,1,1,1,RAPTOR
+Navedi mi obaveznu literaturu za kolegij Upravljanje poslovnim procesima.,gemma:7b,ANS_REL,1,1,1,1,RAPTOR
+Navedi mi obaveznu literaturu za kolegij Upravljanje poslovnim procesima.,llama3:8b,FAITH,0,0,0,0,RAPTOR
+Navedi mi obaveznu literaturu za kolegij Upravljanje poslovnim procesima.,llama3:8b,ANS_REL,0,0,0,0,RAPTOR
+Navedi mi obaveznu literaturu za kolegij Upravljanje poslovnim procesima.,mistral:7b,FAITH,1,1,1,1,RAPTOR
+Navedi mi obaveznu literaturu za kolegij Upravljanje poslovnim procesima.,mistral:7b,ANS_REL,0.5,0.6,0.56,0.55,RAPTOR
+Navedi mi obaveznu literaturu za kolegij Upravljanje poslovnim procesima.,Claude3 Opus,FAITH,1,1,1,1,RAPTOR
+Navedi mi obaveznu literaturu za kolegij Upravljanje poslovnim procesima.,Claude3 Opus,ANS_REL,0.73,0.73,0.8,0.75,RAPTOR
+Navedi mi obaveznu literaturu za kolegij Upravljanje poslovnim procesima.,Claude3 Sonnet,FAITH,1,1,1,1,RAPTOR
+Navedi mi obaveznu literaturu za kolegij Upravljanje poslovnim procesima.,Claude3 Sonnet,ANS_REL,0.6,1,0.88,0.83,RAPTOR
+Koji su preduvjeti za upis i cilj kolegija programsko inzenjerstvo?,gpt-4o,FAITH,1,1,1,1,RAPTOR
+Koji su preduvjeti za upis i cilj kolegija programsko inzenjerstvo?,gpt-4o,ANS_REL,1,1,1,1,RAPTOR
+Koji su preduvjeti za upis i cilj kolegija programsko inzenjerstvo?,gpt-3,FAITH,1,1,1,1,RAPTOR
+Koji su preduvjeti za upis i cilj kolegija programsko inzenjerstvo?,gpt-3.5-turbo,ANS_REL,1,1,1,1,RAPTOR
+Koji su preduvjeti za upis i cilj kolegija programsko inzenjerstvo?,gemma:7b,FAITH,1,1,1,1,RAPTOR
+Koji su preduvjeti za upis i cilj kolegija programsko inzenjerstvo?,gemma:7b,ANS_REL,1,1,1,1,RAPTOR
+Koji su preduvjeti za upis i cilj kolegija programsko inzenjerstvo?,llama3:8b,FAITH,0,0,0,0,RAPTOR
+Koji su preduvjeti za upis i cilj kolegija programsko inzenjerstvo?,llama3:8b,ANS_REL,0,0,0,0,RAPTOR
+Koji su preduvjeti za upis i cilj kolegija programsko inzenjerstvo?,mistral:7b,FAITH,0.67,0.67,0.32,0.55,RAPTOR
+Koji su preduvjeti za upis i cilj kolegija programsko inzenjerstvo?,mistral:7b,ANS_REL,1,1,1,1,RAPTOR
+Koji su preduvjeti za upis i cilj kolegija programsko inzenjerstvo?,Claude3 Opus,FAITH,0.8,0.77,0.91,0.83,RAPTOR
+Koji su preduvjeti za upis i cilj kolegija programsko inzenjerstvo?,Claude3 Opus,ANS_REL,0.86,0.93,0.9,0.9,RAPTOR
+Koji su preduvjeti za upis i cilj kolegija programsko inzenjerstvo?,Claude3 Sonnet,FAITH,1,0.8,0.8,0.87,RAPTOR
+Koji su preduvjeti za upis i cilj kolegija programsko inzenjerstvo?,Claude3 Sonnet,ANS_REL,1,1,1,1,RAPTOR
+Sto to su studenti duzni ispuniti za sudjelovanje u online nastavi?,gpt-4o,FAITH,1,1,1,1,RAPTOR
+Sto to su studenti duzni ispuniti za sudjelovanje u online nastavi?,gpt-4o,ANS_REL,1,1,1,1,RAPTOR
+Sto to su studenti duzni ispuniti za sudjelovanje u online nastavi?,gpt-3,FAITH,1,1,1,1,RAPTOR
+Sto to su studenti duzni ispuniti za sudjelovanje u online nastavi?,gpt-3.5-turbo,ANS_REL,1,1,1,1,RAPTOR
+Sto to su studenti duzni ispuniti za sudjelovanje u online nastavi?,gemma:7b,FAITH,1,1,1,1,RAPTOR
+Sto to su studenti duzni ispuniti za sudjelovanje u online nastavi?,gemma:7b,ANS_REL,0.75,0.8,1,0.85,RAPTOR
+Sto to su studenti duzni ispuniti za sudjelovanje u online nastavi?,llama3:8b,FAITH,0,0,0,0,RAPTOR
+Sto to su studenti duzni ispuniti za sudjelovanje u online nastavi?,llama3:8b,ANS_REL,0,0,0,0,RAPTOR
+Sto to su studenti duzni ispuniti za sudjelovanje u online nastavi?,mistral:7b,FAITH,1,1,1,1,RAPTOR
+Sto to su studenti duzni ispuniti za sudjelovanje u online nastavi?,mistral:7b,ANS_REL,0.74,0.88,0.88,0.83,RAPTOR
+Sto to su studenti duzni ispuniti za sudjelovanje u online nastavi?,Claude3 Opus,FAITH,1,1,1,1,RAPTOR
+Sto to su studenti duzni ispuniti za sudjelovanje u online nastavi?,Claude3 Opus,ANS_REL,0.62,0.8,0.54,0.65,RAPTOR
+Sto to su studenti duzni ispuniti za sudjelovanje u online nastavi?,Claude3 Sonnet,FAITH,1,1,1,1,RAPTOR
+Sto to su studenti duzni ispuniti za sudjelovanje u online nastavi?,Claude3 Sonnet,ANS_REL,0.67,0.75,0.8,0.74,RAPTOR
+Navedi mi tocke Clanka 9. Opterecenja studenata i provedbe ispita. ,gpt-4o,FAITH,1,1,1,1,RAPTOR
+Navedi mi tocke Clanka 9. Opterecenja studenata i provedbe ispita. ,gpt-4o,ANS_REL,1,1,1,1,RAPTOR
+Navedi mi tocke Clanka 9. Opterecenja studenata i provedbe ispita. ,gpt-3,FAITH,0,0,0,0,RAPTOR
+Navedi mi tocke Clanka 9. Opterecenja studenata i provedbe ispita. ,gpt-3.5-turbo,ANS_REL,0,0,0,0,RAPTOR
+Navedi mi tocke Clanka 9. Opterecenja studenata i provedbe ispita. ,gemma:7b,FAITH,0,0,0,0,RAPTOR
+Navedi mi tocke Clanka 9. Opterecenja studenata i provedbe ispita. ,gemma:7b,ANS_REL,0,0,0,0,RAPTOR
+Navedi mi tocke Clanka 9. Opterecenja studenata i provedbe ispita. ,llama3:8b,FAITH,0,0,0,0,RAPTOR
+Navedi mi tocke Clanka 9. Opterecenja studenata i provedbe ispita. ,llama3:8b,ANS_REL,0,0,0,0,RAPTOR
+Navedi mi tocke Clanka 9. Opterecenja studenata i provedbe ispita. ,mistral:7b,FAITH,0,0,0,0,RAPTOR
+Navedi mi tocke Clanka 9. Opterecenja studenata i provedbe ispita. ,mistral:7b,ANS_REL,0,0,0,0,RAPTOR
+Navedi mi tocke Clanka 9. Opterecenja studenata i provedbe ispita. ,Claude3 Opus,FAITH,1,1,1,1,RAPTOR
+Navedi mi tocke Clanka 9. Opterecenja studenata i provedbe ispita. ,Claude3 Opus,ANS_REL,1,1,1,1,RAPTOR
+Navedi mi tocke Clanka 9. Opterecenja studenata i provedbe ispita. ,Claude3 Sonnet,FAITH,1,1,1,1,RAPTOR
+Navedi mi tocke Clanka 9. Opterecenja studenata i provedbe ispita. ,Claude3 Sonnet,ANS_REL,1,1,1,1,RAPTOR
+"Kada se izvodi Programsko inz., a kada upravljanje poslovnim procesima?",gpt-4o,FAITH,1,1,1,1,RAPTOR
+"Kada se izvodi Programsko inz., a kada upravljanje poslovnim procesima?",gpt-4o,ANS_REL,1,1,1,1,RAPTOR
+"Kada se izvodi Programsko inz., a kada upravljanje poslovnim procesima?",gpt-3,FAITH,0.5,0.5,0.6,0.53,RAPTOR
+"Kada se izvodi Programsko inz., a kada upravljanje poslovnim procesima?",gpt-3.5-turbo,ANS_REL,0.25,0.27,0.31,0.28,RAPTOR
+"Kada se izvodi Programsko inz., a kada upravljanje poslovnim procesima?",gemma:7b,FAITH,0.25,0.25,0.5,0.33,RAPTOR
+"Kada se izvodi Programsko inz., a kada upravljanje poslovnim procesima?",gemma:7b,ANS_REL,0.1,0.11,0.09,0.1,RAPTOR
+"Kada se izvodi Programsko inz., a kada upravljanje poslovnim procesima?",llama3:8b,FAITH,0,0,0,0,RAPTOR
+"Kada se izvodi Programsko inz., a kada upravljanje poslovnim procesima?",llama3:8b,ANS_REL,0,0,0,0,RAPTOR
+"Kada se izvodi Programsko inz., a kada upravljanje poslovnim procesima?",mistral:7b,FAITH,0.5,0.5,0.61,0.54,RAPTOR
+"Kada se izvodi Programsko inz., a kada upravljanje poslovnim procesima?",mistral:7b,ANS_REL,0.24,0.28,0.45,0.32,RAPTOR
+"Kada se izvodi Programsko inz., a kada upravljanje poslovnim procesima?",Claude3 Opus,FAITH,1,0.8,1,0.93,RAPTOR
+"Kada se izvodi Programsko inz., a kada upravljanje poslovnim procesima?",Claude3 Opus,ANS_REL,0.1,0.22,0.15,0.16,RAPTOR
+"Kada se izvodi Programsko inz., a kada upravljanje poslovnim procesima?",Claude3 Sonnet,FAITH,0.89,0.85,0.75,0.83,RAPTOR
+"Kada se izvodi Programsko inz., a kada upravljanje poslovnim procesima?",Claude3 Sonnet,ANS_REL,0.86,0.86,0.71,0.81,RAPTOR
+Glavne razlike studentskih obaveza na kolegijima UPP i PI?,gpt-4o,FAITH,1,1,1,1,RAPTOR
+Glavne razlike studentskih obaveza na kolegijima UPP i PI?,gpt-4o,ANS_REL,1,1,1,1,RAPTOR
+Glavne razlike studentskih obaveza na kolegijima UPP i PI?,gpt-3,FAITH,0.8,0.8,"0,78",0.8,RAPTOR
+Glavne razlike studentskih obaveza na kolegijima UPP i PI?,gpt-3.5-turbo,ANS_REL,1,1,0.91,0.97,RAPTOR
+Glavne razlike studentskih obaveza na kolegijima UPP i PI?,gemma:7b,FAITH,1,1,0.96,0.99,RAPTOR
+Glavne razlike studentskih obaveza na kolegijima UPP i PI?,gemma:7b,ANS_REL,0.5,0.5,0.32,0.44,RAPTOR
+Glavne razlike studentskih obaveza na kolegijima UPP i PI?,llama3:8b,FAITH,0,0,0,0,RAPTOR
+Glavne razlike studentskih obaveza na kolegijima UPP i PI?,llama3:8b,ANS_REL,0,0,0,0,RAPTOR
+Glavne razlike studentskih obaveza na kolegijima UPP i PI?,mistral:7b,FAITH,0.86,0.88,0.94,0.89,RAPTOR
+Glavne razlike studentskih obaveza na kolegijima UPP i PI?,mistral:7b,ANS_REL,0.73,0.62,0.82,0.72,RAPTOR
+Glavne razlike studentskih obaveza na kolegijima UPP i PI?,Claude3 Opus,FAITH,0.89,1,1,0.96,RAPTOR
+Glavne razlike studentskih obaveza na kolegijima UPP i PI?,Claude3 Opus,ANS_REL,1,1,1,1,RAPTOR
+Glavne razlike studentskih obaveza na kolegijima UPP i PI?,Claude3 Sonnet,FAITH,1,1,1,1,RAPTOR
+Glavne razlike studentskih obaveza na kolegijima UPP i PI?,Claude3 Sonnet,ANS_REL,1,1,1,1,RAPTOR
+Koje su 3 najnovije vijesti sa Sveucilista Jurja Dobrile u Puli?,gpt-4o,FAITH,1,1,1,1,SCRAPER
+Koje su 3 najnovije vijesti sa Sveucilista Jurja Dobrile u Puli?,gpt-4o,ANS_REL,1,1,1,1,SCRAPER
+Koje su 3 najnovije vijesti sa Sveucilista Jurja Dobrile u Puli?,gpt-3,FAITH,1,1,1,1,SCRAPER
+Koje su 3 najnovije vijesti sa Sveucilista Jurja Dobrile u Puli?,gpt-3.5-turbo,ANS_REL,0.75,0.75,0.75,0.75,SCRAPER
+Koje su 3 najnovije vijesti sa Sveucilista Jurja Dobrile u Puli?,gemma:7b,FAITH,1,1,0.75,0.92,SCRAPER
+Koje su 3 najnovije vijesti sa Sveucilista Jurja Dobrile u Puli?,gemma:7b,ANS_REL,0.75,0.75,0.62,0.71,SCRAPER
+Koje su 3 najnovije vijesti sa Sveucilista Jurja Dobrile u Puli?,llama3:8b,FAITH,0.83,1,0.92,0.92,SCRAPER
+Koje su 3 najnovije vijesti sa Sveucilista Jurja Dobrile u Puli?,llama3:8b,ANS_REL,0.83,0.8,0.86,0.83,SCRAPER
+Koje su 3 najnovije vijesti sa Sveucilista Jurja Dobrile u Puli?,mistral:7b,FAITH,0.17,0.21,0.08,0.15,SCRAPER
+Koje su 3 najnovije vijesti sa Sveucilista Jurja Dobrile u Puli?,mistral:7b,ANS_REL,0.64,0.5,0.62,0.59,SCRAPER
+Koje su 3 najnovije vijesti sa Sveucilista Jurja Dobrile u Puli?,Claude3 Opus,FAITH,1,1,1,1,SCRAPER
+Koje su 3 najnovije vijesti sa Sveucilista Jurja Dobrile u Puli?,Claude3 Opus,ANS_REL,1,0.9,0.95,0.95,SCRAPER
+Koje su 3 najnovije vijesti sa Sveucilista Jurja Dobrile u Puli?,Claude3 Sonnet,FAITH,1,1,1,1,SCRAPER
+Koje su 3 najnovije vijesti sa Sveucilista Jurja Dobrile u Puli?,Claude3 Sonnet,ANS_REL,1,1,1,1,SCRAPER
+Koja je najnovija vijest na Fakultetu informatike u Puli?,gpt-4o,FAITH,1,1,1,1,SCRAPER
+Koja je najnovija vijest na Fakultetu informatike u Puli?,gpt-4o,ANS_REL,1,1,1,1,SCRAPER
+Koja je najnovija vijest na Fakultetu informatike u Puli?,gpt-3,FAITH,1,1,1,1,SCRAPER
+Koja je najnovija vijest na Fakultetu informatike u Puli?,gpt-3.5-turbo,ANS_REL,1,1,1,1,SCRAPER
+Koja je najnovija vijest na Fakultetu informatike u Puli?,gemma:7b,FAITH,0.5,0.21,0.32,0.34,SCRAPER
+Koja je najnovija vijest na Fakultetu informatike u Puli?,gemma:7b,ANS_REL,0.71,0.66,0.65,0.67,SCRAPER
+Koja je najnovija vijest na Fakultetu informatike u Puli?,llama3:8b,FAITH,0.75,0.75,0.68,0.73,SCRAPER
+Koja je najnovija vijest na Fakultetu informatike u Puli?,llama3:8b,ANS_REL,0.61,0.61,0.42,0.55,SCRAPER
+Koja je najnovija vijest na Fakultetu informatike u Puli?,mistral:7b,FAITH,1,1,1,1,SCRAPER
+Koja je najnovija vijest na Fakultetu informatike u Puli?,mistral:7b,ANS_REL,1,1,1,1,SCRAPER
+Koja je najnovija vijest na Fakultetu informatike u Puli?,Claude3 Opus,FAITH,1,1,1,1,SCRAPER
+Koja je najnovija vijest na Fakultetu informatike u Puli?,Claude3 Opus,ANS_REL,1,1,1,1,SCRAPER
+Koja je najnovija vijest na Fakultetu informatike u Puli?,Claude3 Sonnet,FAITH,1,1,1,1,SCRAPER
+Koja je najnovija vijest na Fakultetu informatike u Puli?,Claude3 Sonnet,ANS_REL,1,1,1,1,SCRAPER
+Koje su sifre kolegija Upravljanje poslovnim procesima i Programsko inzenjerstvo? ,gpt-4o,FAITH,1,1,1,1,RAPTOR
+Koje su sifre kolegija Upravljanje poslovnim procesima i Programsko inzenjerstvo? ,gpt-4o,ANS_REL,1,1,1,1,RAPTOR
+Koje su sifre kolegija Upravljanje poslovnim procesima i Programsko inzenjerstvo? ,gpt-3,FAITH,1,1,1,1,RAPTOR
+Koje su sifre kolegija Upravljanje poslovnim procesima i Programsko inzenjerstvo? ,gpt-3.5-turbo,ANS_REL,1,1,1,1,RAPTOR
+Koje su sifre kolegija Upravljanje poslovnim procesima i Programsko inzenjerstvo? ,gemma:7b,FAITH,0.85,0.74,0.88,0.82,RAPTOR
+Koje su sifre kolegija Upravljanje poslovnim procesima i Programsko inzenjerstvo? ,gemma:7b,ANS_REL,0.5,0.5,0.65,0.55,RAPTOR
+Koje su sifre kolegija Upravljanje poslovnim procesima i Programsko inzenjerstvo? ,llama3:8b,FAITH,0.5,1,1,0.83,RAPTOR
+Koje su sifre kolegija Upravljanje poslovnim procesima i Programsko inzenjerstvo? ,llama3:8b,ANS_REL,0,0,0,0,RAPTOR
+Koje su sifre kolegija Upravljanje poslovnim procesima i Programsko inzenjerstvo? ,mistral:7b,FAITH,0,0,0,0,RAPTOR
+Koje su sifre kolegija Upravljanje poslovnim procesima i Programsko inzenjerstvo? ,mistral:7b,ANS_REL,0,0,0,0,RAPTOR
+Koje su sifre kolegija Upravljanje poslovnim procesima i Programsko inzenjerstvo? ,Claude3 Opus,FAITH,0,0,0,0,RAPTOR
+Koje su sifre kolegija Upravljanje poslovnim procesima i Programsko inzenjerstvo? ,Claude3 Opus,ANS_REL,0,0,0,0,RAPTOR
+Koje su sifre kolegija Upravljanje poslovnim procesima i Programsko inzenjerstvo? ,Claude3 Sonnet,FAITH,1,1,1,1,RAPTOR
+Koje su sifre kolegija Upravljanje poslovnim procesima i Programsko inzenjerstvo? ,Claude3 Sonnet,ANS_REL,1,1,1,1,RAPTOR

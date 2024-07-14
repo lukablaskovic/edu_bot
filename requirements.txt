@@ -13,3 +13,4 @@ llama-index-llms-mistralai
 llama-index-llms-ollama
 llama-index-llms-anthropic
 deepeval==0.21.65
+ace_tools
