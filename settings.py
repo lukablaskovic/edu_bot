@@ -56,7 +56,7 @@ def initialize_settings():
         st.session_state["intent_agent_settings"]["use_web_scraper"] = True 
     
         # RAPTOR
-        st.session_state["intent_agent_settings"]["similarity_top_k"] = 5
+        st.session_state["intent_agent_settings"]["similarity_top_k"] = 6
         st.session_state["intent_agent_settings"]["retriever_mode"] = "collapsed"
     
      # sql-rag

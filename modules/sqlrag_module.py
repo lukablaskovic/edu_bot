@@ -132,7 +132,8 @@ def get_user_by_email(email):
 def run_query(query_str):
     try:
         engine = get_engine()
-        print(engine)
+        logger.debug(f"Engine created: {engine}")
+
         with engine.connect() as connection:
             logger.debug(f"Executing query: {query_str}")
 
@@ -141,7 +142,11 @@ def run_query(query_str):
             results = [row for row in result.fetchall()]
             
             logger.info(f"Query executed successfully: {query_str}")
+            logger.debug(f"Number of rows returned: {len(results)}")
             
+            for row in results:
+                logger.debug(f"Row: {row}")
+
             return results
     except Exception as e:
         logger.error(f"An error occurred while running the query: {e}")

@@ -152,7 +152,7 @@ def web_scraper_settings():
             )
 
 def intent_recognition_settings():
-    st.checkbox("Koristi cijeli razgovor kao kontekst", key="use_full_conversation", value=True)
+    st.checkbox("Koristi cijeli razgovor kao kontekst", key="use_full_conversation", value=False)
     st.checkbox("Koristi podatke o korisniku kao kontekst", key="user_context_included", value=True)
     st.text_area(
         label="Direct LLM Prompt",

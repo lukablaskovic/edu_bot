@@ -97,18 +97,25 @@ def intent_recognition(user_prompt: str, velociraptor: RAPTOR, sql_engine, web_s
         ],
     )
     
-    query = "<query>\n" + user_prompt + "\n</query>"
+    query = "********************************************\n\n<query>\n" + user_prompt + "\n</query>"
     
     print("*\n" + query + "\n*")
     
     response = router_query_engine.query(query)
     
+    ###### PRINT RAPTOR NODES
+    raptor_nodes = velociraptor.retriever.retrieve(query)
+    print("Retrieved Nodes from RaptorRetriever:")
+    for node in raptor_nodes:
+        print(node.text)
+    ######
+   
     print(f"""
           RESPONSE RouterQueryEngine
           *********************************************
           {response}
           *********************************************
-          """)
+          """) 
     
     intent = response.metadata["selector_result"].selections[0]
     

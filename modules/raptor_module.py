@@ -122,18 +122,6 @@ class RAPTOR:
             self.logger.error("An error occurred while setting up RetrieverQueryEngine: %s", e)
             raise
 
-    def get_response(self, prompt: str):
-        try:
-            self.logger.info("Querying with prompt: %s", prompt)
-            query_engine = self.query_engine
-            assert type(query_engine) == RetrieverQueryEngine
-            response = query_engine.query(prompt)
-            self.logger.info("Received response: %s", response)
-            return response
-        except Exception as e:
-            self.logger.error("An error occurred while getting response: %s", e)
-            raise
-
 def get_raptor(files, force_rebuild=False):
     velociraptor = RAPTOR(files=files, collection_name="edubot_raptor", force_rebuild=force_rebuild)
     return velociraptor
