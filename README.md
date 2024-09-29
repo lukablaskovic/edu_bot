@@ -2,7 +2,7 @@
 
 **EduBot** is a powerful RAG (Retrieval-Augmented Generation) chatbot that utilizes the latest SOTA models to provide a seamless and interactive learning experience. It is designed to help students learn and understand complex concepts in a more engaging and interactive way.
 
-This app is built for the purpose of my master's thesis at the [Faculty of Informatics Pula](https://fipu.unipu.hr/fipu/en), Croatia.
+This app is built for the purpose of my [Master's thesis](https://repozitorij.unipu.hr/islandora/object/unipu:9219) at the [Faculty of Informatics Pula](https://fipu.unipu.hr/fipu/en), Croatia.
 
 ## Features
 
