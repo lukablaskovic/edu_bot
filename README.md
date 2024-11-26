@@ -107,7 +107,7 @@ Note: The UI is currently only in Croatian language.
 
 <img src="demo/gifs/simple_hi.gif" alt="Chatbot Hi" width="100%"/>
 
-#### Wher user asks a question related to programming or IT in general, the EdoBot will use the RAPTOR module and try to retrieve knowledge from the uploaded learning resources.
+#### Wher user asks a question related to programming or IT in general, the EduBot will use the RAPTOR module and try to retrieve knowledge from the uploaded learning resources.
 
 - in this example, the user asks how to create a function in JavaScript, and the chatbot retrieves the relevant information from the uploaded JavaScript learning resource. Moreover, "Under the hood" mode is enabled, so the user can see what the EduBot is doing in the background to answer the user's query.
 
